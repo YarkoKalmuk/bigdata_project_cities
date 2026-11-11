@@ -200,7 +200,7 @@ if stage == "select":
         info = {
             "permutation_importance": pm.permutation_importance_eur(model, valid).round(3).to_dict(orient="records"),
             "property_type_other_or_missing_share": pm.property_other_share(model, valid),
-            "kept_property_types": model.regressor_.named_steps["prep"].named_transformers_["cat"]
+            "kept_property_types": model.regressor_.named_steps["prep"].named_transformers_["prop"]
             .named_steps["group"].kept_levels_["property_type"],
         }
         if family == "ridge_log":

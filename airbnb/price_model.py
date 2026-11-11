@@ -42,6 +42,8 @@ OTHER = "__other__"
 
 # Final allowlist. Booleans are treated as categories (true / false / __missing__).
 CATEGORICAL_FEATURES = ("room_type", "property_type", "bath_shared", "long_stay", "has_reviews", "host_is_superhost")
+GROUPED_FEATURES = ("property_type",)  # rare levels (< MIN_CATEGORY_COUNT fit rows) -> OTHER
+UNGROUPED_CATEGORICAL = tuple(c for c in CATEGORICAL_FEATURES if c not in GROUPED_FEATURES)
 SIZE_FEATURES = ("accommodates", "bedrooms", "beds", "bathrooms_n")
 OTHER_NUMERIC_FEATURES = ("minimum_nights", "dist_center_km", "log_host_listings_count")
 REVIEW_FEATURES = ("review_scores_rating", "review_scores_cleanliness", "review_scores_location")
@@ -51,11 +53,11 @@ FEATURES = CATEGORICAL_FEATURES + NUMERIC_FEATURES
 
 # Candidates from gold.PREDICTORS that are not in the allowlist, with the reason.
 EXCLUDED_FEATURES = {
-    "instant_bookable": "empty in training rows; a frozen model cannot learn it",
+    "instant_bookable": "100 % missing in Milan and Florence training rows; a frozen model cannot learn it",
     "review_scores_value": "rates quality relative to the price paid, so it partly encodes the target",
-    "review_scores_accuracy": "near-duplicate of review_scores_rating; no distinct price meaning",
-    "review_scores_checkin": "near-duplicate of review_scores_rating; host-service score",
-    "review_scores_communication": "near-duplicate of review_scores_rating; host-service score",
+    "review_scores_accuracy": "Spearman 0.81 with review_scores_rating on training rows; no distinct price meaning",
+    "review_scores_checkin": "Spearman 0.68 with review_scores_rating; host-service score",
+    "review_scores_communication": "Spearman 0.72 with review_scores_rating; host-service score",
 }
 
 # Never allowed as predictors (price-derived, target-derived or identifiers).
@@ -203,7 +205,10 @@ def build_preprocessor(scale):
 
     return ColumnTransformer(
         [
-            ("cat", Pipeline([("group", CategoryGrouper()), ("onehot", _one_hot())]), list(CATEGORICAL_FEATURES)),
+            # Only the long-tailed property_type is grouped; low-cardinality categories keep every
+            # level seen in fit rows (room_type has < 50 Hotel/Shared rows that must stay distinct).
+            ("prop", Pipeline([("group", CategoryGrouper(MIN_CATEGORY_COUNT)), ("onehot", _one_hot())]), list(GROUPED_FEATURES)),
+            ("cat", Pipeline([("group", CategoryGrouper(1)), ("onehot", _one_hot())]), list(UNGROUPED_CATEGORICAL)),
             # Missing indicators for size/other numerics; review scores are null exactly when
             # has_reviews is false, so has_reviews already plays the indicator role.
             ("num", numeric(SIZE_FEATURES + OTHER_NUMERIC_FEATURES, True), list(SIZE_FEATURES + OTHER_NUMERIC_FEATURES)),
@@ -369,12 +374,14 @@ def model_spec():
         "model_version": MODEL_VERSION,
         "features": list(FEATURES),
         "categorical_features": list(CATEGORICAL_FEATURES),
+        "grouped_categorical_features": list(GROUPED_FEATURES),
         "numeric_features_with_missing_indicator": list(SIZE_FEATURES + OTHER_NUMERIC_FEATURES),
         "review_features_no_indicator": list(REVIEW_FEATURES),
         "log1p_features": list(LOG1P_FEATURES),
         "excluded_features": EXCLUDED_FEATURES,
         "preprocessing": {
-            "categorical": f"missing -> {MISSING}; levels with < {MIN_CATEGORY_COUNT} fit rows or unseen -> {OTHER}; "
+            "categorical": f"missing -> {MISSING}; property_type levels with < {MIN_CATEGORY_COUNT} fit rows -> {OTHER}; "
+                           f"other categoricals keep every fit-row level; unseen levels -> {OTHER}; "
                            "one-hot with handle_unknown=ignore",
             "numeric": f"coerce to float; cap at fit-row p{int(CLIP_QUANTILE * 100)}; log1p on {list(LOG1P_FEATURES)}; "
                        "fit-row median imputation (+ missing indicator except review scores); "
@@ -443,8 +450,8 @@ def model_complexity(model, family):
 
 def property_other_share(model, df):
     """Share of rows whose property_type falls into OTHER or MISSING after the fitted grouping."""
-    grouper = model.regressor_.named_steps["prep"].named_transformers_["cat"].named_steps["group"]
-    grouped = grouper.transform(df[list(CATEGORICAL_FEATURES)])
+    grouper = model.regressor_.named_steps["prep"].named_transformers_["prop"].named_steps["group"]
+    grouped = grouper.transform(df[list(GROUPED_FEATURES)])
     return {c: float(grouped.loc[(df["city"] == c).to_numpy(), "property_type"].isin([OTHER, MISSING]).mean())
             for c in TRAINING_CITIES}
 

@@ -120,9 +120,12 @@ class PipelineTests(unittest.TestCase):
         after = pm.predict_eur(model, pd.concat([self.eval_rows, odd]))[0]
         np.testing.assert_allclose(after[: len(before)], before)
         self.assertTrue(np.isfinite(after).all())
-        grouper = model.regressor_.named_steps["prep"].named_transformers_["cat"].named_steps["group"]
-        counts = grouper.level_counts_["property_type"]
+        transformers = model.regressor_.named_steps["prep"].named_transformers_
+        counts = transformers["prop"].named_steps["group"].level_counts_["property_type"]
         self.assertEqual(sum(counts.values()), len(self.fit_rows))
+        # Small but meaningful room types are not merged into OTHER.
+        self.assertIn("Shared room", transformers["cat"].named_steps["group"].kept_levels_["room_type"])
+        self.assertNotIn("Rare milan type", transformers["prop"].named_steps["group"].kept_levels_["property_type"])
 
     def test_all_missing_optional_columns_do_not_fail(self):
         model, _ = pm.fit_model("hgb_log", pm.CANDIDATES[4]["params"], self.fit_rows)

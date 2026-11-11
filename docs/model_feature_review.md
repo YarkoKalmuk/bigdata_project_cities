@@ -5,12 +5,72 @@ schema in `airbnb/silver.py` on `yaropolk/feature3-eda-gold` (`d67faa9`). Missin
 from Maksym's [EDA handoff](eda_handoff.md) and EDA notebook; where the EDA gives no figure, the
 rate must be measured on **training rows** in MODEL-04 and is marked "measure".
 
-Status: draft sign-off. Blocker B1 is resolved: `workspace.airbnb_gold.model_features` now exists
-in the shared team workspace and its schema, keys and eligibility rule were checked against real
-Milan/Florence rows (see [the baseline run evidence](model_baseline_run.md)). Per-feature missingness
-marked "measure" is still to be measured on training rows in MODEL-04.
-`airbnb/gold.py` is Yaropolk's file and is not changed here: the later model selects the
-allowlist below by name from `model_features`.
+Status: signed off for MODEL-04. The "measure" items below are now measured on the persisted
+**official training rows only** (split `airbnb-v1`, 17,255 Milan + 9,684 Florence) by
+`notebooks/07_train_model.py` stage `profile`, run 633923351197764 at commit `c143b08`
+(`model_features` Delta v2, `model_split` v0). No test row was read. The final allowlist is in
+`airbnb/price_model.py` (`FEATURES`) and in the section "Final allowlist (price-v1)" below.
+`airbnb/gold.py` is Yaropolk's file and is not changed here: the model selects the allowlist by
+name from `model_features`.
+
+## Training-row measurements (profile run 633923351197764)
+
+Missing = null or blank. "Rare" = fewer than 50 training rows. All candidates are listing
+attributes in the same snapshot, so every one is available at prediction time, including for
+listings without a price; review scores exist only when the listing has reviews.
+
+| Feature | Missing Milan | Missing Florence | Levels | Rare levels (rows) | p01 / p50 / p99 | Max |
+|---|---|---|---|---|---|---|
+| `room_type` | 0 % | 0 % | 4 | 2 (91: Hotel 46, Shared 45) | – | – |
+| `property_type` | 0 % | 0 % | 55 | 42 (467 rows, 1.7 %) | – | – |
+| `accommodates` | 0 % | 0 % | 16 | – | 1 / 4 / 10 | 16 |
+| `bedrooms` | 0 % | 0 % | 13 | – | 0 / 1 / 4 | 12 |
+| `beds` | 2.1 % | 1.6 % | 18 | – | 1 / 2 / 6 | 20 |
+| `bathrooms_n` | 0 % | 0 % | 21 | – | 1 / 1 / 3 | 21 |
+| `bath_shared` | < 0.1 % | < 0.1 % | 2 (true 1,185; 4 rows missing in total) | 0 | – | – |
+| `minimum_nights` | 0.6 % | 3.0 % | 54 | – | 1 / 1 / 31 | 365 |
+| `long_stay` | 0.6 % | 3.0 % | 2 (true 2,494) | 0 | – | – |
+| `dist_center_km` | 0 % | 0 % | – | – | 0.16 / 2.03 / 7.07 | 9.73 |
+| `has_reviews` | 0 % | 0 % | 2 (false 3,194) | 0 | – | – |
+| `review_scores_*` (all seven) | 13.6 % | 8.7 % | – | – | rating 3.00 / 4.84 / 5.00 | 5 |
+| `log_host_listings_count` | 0 % | 0 % | – | – | 0.69 / 1.79 / 6.30 | 7.24 |
+| `host_is_superhost` | 0 % | 0 % | 2 (true 10,005) | 0 | – | – |
+| `instant_bookable` | **100 %** | **100 %** | 0 | – | – | – |
+
+Spearman correlation of review sub-scores with `review_scores_rating` (training rows with
+reviews): accuracy 0.81, value 0.80, cleanliness 0.75, communication 0.72, check-in 0.68,
+location 0.45.
+
+Property types with ≥ 50 training rows (13): Entire rental unit 16,471; Entire condo 5,039;
+Private room in rental unit 1,555; Private room in condo 584; Entire home 553; Private room in
+bed and breakfast 550; Entire loft 432; Room in hotel 415; Entire vacation home 328; Entire
+serviced apartment 225; Private room in home 145; Room in boutique hotel 125; Private room in
+vacation home 50. The grouping is refitted on whichever rows a model is fitted on (subtrain
+during selection, all training rows for the final model), so the kept list can differ slightly.
+
+## Final allowlist (price-v1)
+
+```
+categorical: room_type, property_type (grouped), bath_shared, long_stay, has_reviews, host_is_superhost
+numeric:     accommodates, bedrooms, beds, bathrooms_n, minimum_nights (log1p), dist_center_km (log1p),
+             log_host_listings_count, review_scores_rating, review_scores_cleanliness,
+             review_scores_location
+```
+
+Changes from the draft allowlist, all decided from the measurements above before any model was fitted:
+
+- `instant_bookable` dropped: 100 % missing in both training cities.
+- `review_scores_value` dropped: it rates value for the price paid (partly encodes the target).
+- `review_scores_accuracy`, `_checkin`, `_communication` dropped for compactness: they correlate
+  0.68–0.81 with the overall rating and describe host service, not the listing. `cleanliness`
+  and `location` (0.45, carries location information) are kept.
+- `room_type` is **not** rare-grouped: Hotel room (46) and Shared room (45) are below 50 rows but
+  have opposite price levels; merging them would be wrong. Only `property_type` is grouped.
+- Booleans are encoded as categories `true` / `false` / `__missing__`.
+- Every numeric feature is capped at its fit-row 99th percentile (limits linear extrapolation in a
+  new city); review scores are median-imputed without an indicator because `has_reviews` already
+  marks the missing rows; other numerics get median imputation plus a missing indicator when the
+  fit rows have missing values.
 
 ## Rules for every model
 
@@ -68,7 +128,7 @@ allowlist below by name from `model_features`.
 | ids, URLs, `host_id`, `name`, `description`, `license`, `scrape_id` | drop | Identifiers or free text that lead to memorisation |
 | `host_since`, `host_response_*`, `host_acceptance_rate`, `host_total_listings_count`, `bathrooms`, `calendar_updated` | drop | 100 % empty in both cities (EDA) |
 
-## Recommended allowlist for MODEL-04
+## Draft allowlist (MODEL-01; superseded by "Final allowlist (price-v1)" above)
 
 ```
 room_type, property_type (grouped), accommodates, bedrooms, beds, bathrooms_n, bath_shared,
