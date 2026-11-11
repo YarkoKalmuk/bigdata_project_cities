@@ -2,7 +2,7 @@
   "milan": {
     "display_name": "Milan",
     "snapshot_date": "2026-09-19",
-    "source_url": null
+    "source_url": "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz"
   },
   "florence": {
     "display_name": "Florence",

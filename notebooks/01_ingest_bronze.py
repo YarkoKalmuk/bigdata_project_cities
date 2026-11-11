@@ -23,10 +23,7 @@ dbutils.widgets.text("catalog", "workspace")
 dbutils.widgets.dropdown("city", "milan", ["milan", "florence"])
 dbutils.widgets.text("snapshot_date", "2026-09-19")
 
-dbutils.widgets.text(
-    "source_path",
-    "/Volumes/workspace/airbnb_bronze/raw_files/milan/2026-09-19/listings.csv.gz"
-)
+dbutils.widgets.text("source_path", "")
 
 dbutils.widgets.text("source_url", "")
 
@@ -34,7 +31,7 @@ catalog = dbutils.widgets.get("catalog").strip()
 city = dbutils.widgets.get("city").strip().lower()
 snapshot_date = dbutils.widgets.get("snapshot_date").strip()
 source_path = dbutils.widgets.get("source_path").strip()
-source_url = "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz"
+source_url = dbutils.widgets.get("source_url").strip()
 
 if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", catalog):
     raise ValueError("Invalid catalog identifier.")
@@ -56,6 +53,7 @@ if date.fromisoformat(snapshot_date).isoformat() != snapshot_date:
 expected_prefix = (
     f"/Volumes/{catalog}/airbnb_bronze/raw_files/{city}/{snapshot_date}/"
 )
+source_path = source_path or expected_prefix + "listings.csv.gz"
 if source_path != expected_prefix + "listings.csv.gz":
     raise ValueError(f"Upload the original file and set source_path to {expected_prefix}listings.csv.gz")
 url = urlparse(source_url)
