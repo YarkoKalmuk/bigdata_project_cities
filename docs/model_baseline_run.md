@@ -158,4 +158,5 @@ Workspace folder names (`airbnb_baseline_dc97efb`, `airbnb_baseline_13b50d8`) ke
   `MODIFY` for pipeline reruns) if they are not workspace admins.
 - The baseline notebook ran from a workspace import of the commit, not a Git folder; the
   imported folder name records the commit (`airbnb_baseline_13b50d8`).
-- No prediction table for every listing yet; that belongs to MODEL-04/05.
+- No prediction table for every listing yet (MODEL-06). The model and its held-out evaluation
+  are in [model_selection.md](model_selection.md).

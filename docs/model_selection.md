@@ -67,7 +67,7 @@ Florence row (room-type fallback).
 
 | Candidate | Milan | Florence | Milan+Florence | Gain vs baseline (M / F / both) | Fit s | Predict s | Size |
 |---|---:|---:|---:|---|---:|---:|---|
-| Baseline (subtrain medians) | 101.51 | 107.85 | 103.79 | – | – | – | 39-cell lookup |
+| Baseline (subtrain medians) | 101.51 | 107.85 | 103.79 | – | – | – | median lookup |
 | ridge α=0.1 | 88.93 | 94.58 | 90.96 | 12.4 / 12.3 / 12.4 % | 0.36 | 0.13 | 42 coefficients |
 | ridge α=1 | 88.93 | 94.58 | 90.96 | 12.4 / 12.3 / 12.4 % | 0.34 | 0.13 | 42 |
 | ridge α=10 | 88.94 | 94.62 | 90.98 | 12.4 / 12.3 / 12.3 % | 0.33 | 0.12 | 42 |
@@ -108,8 +108,8 @@ shared bath −11 %.
 
 - **Top price tail dominates the error.** Rows at or above the subtrain p95 (513 EUR; 144 Milan,
   133 Florence) have MAE 995 / 557 EUR with the selected model, and every model underpredicts
-  them (mean error −972 / −470). A log-target model predicts close to the conditional median, so
-  these rows cannot be fitted from listing attributes.
+  them (mean error −972 / −470). A log-target model predicts close to the conditional median, and
+  these prices are not explained by the listing attributes available.
 - **Underprediction overall** for Entire homes in Milan (mean error −46 EUR) and for private
   rooms in both cities; the cheapest quartile is overpredicted (+34 / +39 EUR).
 - **Hotel rooms** (3 Milan, 9 Florence validation rows) are worse than the baseline (58 vs 48 and
@@ -119,3 +119,78 @@ shared bath −11 %.
 - `property_type` falls into `__other__` for 1.7 % (Milan) and 3.2 % (Florence) of validation
   rows. The selected configuration is at the edge of its small grid (most leaves and trees); the
   grid was not widened after seeing results.
+
+## 3. Held-out test evaluation (run once)
+
+Run 1014284074152913 (`final`, commit `d1c2bd6`; the only change since `3f79eb9` is this
+document, and the notebook checked `spec_sha256` and the selection-record hash before reading
+test rows). The locked pipeline was refitted on all 26,939 official training rows (Milan 17,255,
+Florence 9,684; 13.6 s), written to the volume, reloaded from the file and used to score the
+6,863 test rows once. The baseline is the frozen `baseline_lookup` `airbnb-v1`.
+
+### Headline: every test row with a valid positive price (`test_all_valid_positive_price`)
+
+| Population | n | Baseline MAE | Model MAE | Absolute improvement | Percentage improvement |
+|---|---:|---:|---:|---:|---:|
+| Milan | 4,399 | 94.38 | **75.72** | 18.65 | 19.77 % |
+| Florence | 2,464 | 97.41 | **76.18** | 21.24 | 21.80 % |
+| Milan + Florence | 6,863 | 95.47 | **75.88** | 19.58 | 20.51 % |
+
+The baseline column reproduces the frozen baseline evaluation exactly (94.3754 / 97.4118 /
+95.4655). Model and baseline are scored on identical rows; no test row was dropped.
+
+### Supplementary only: test actual ≤ 1,156.62 EUR (p99 of training prices)
+
+| Population | n | Baseline MAE | Model MAE | Absolute improvement | Percentage improvement |
+|---|---:|---:|---:|---:|---:|
+| Milan | 4,363 | 75.83 | 57.78 | 18.05 | 23.80 % |
+| Florence | 2,448 | 82.54 | 62.93 | 19.61 | 23.76 % |
+| Milan + Florence | 6,811 | 78.24 | 59.63 | 18.61 | 23.78 % |
+
+The threshold is fitted on training rows only and is the same value as in the baseline run.
+It is not a headline number.
+
+### Test failure modes (reporting only)
+
+- The top price band (≥ 514 EUR, the training p95; 200 Milan, 146 Florence rows) still has MAE
+  726 / 474 EUR and strong underprediction (mean error −713 / −431). The model's gain is mostly
+  in the 250–514 EUR band (Milan 133 → 99, Florence 118 → 77 EUR).
+- The cheapest quartile is overpredicted (+30 Milan, +39 Florence); in Florence the 128–175 EUR
+  band is worse than the baseline (40.1 vs 27.2 EUR).
+- Shared rooms (11 Milan, 3 Florence) are worse than the baseline (31.5 vs 12.8; 47.8 vs 19.2
+  EUR), and Florence hotel rooms are level (67.7 vs 66.9): very few training rows.
+- Milan listings within 1 km of the centre remain the hardest location band (MAE 154 EUR,
+  mean error −108).
+- `property_type` is `__other__`/`__missing__` for 1.6 % (Milan) and 2.2 % (Florence) of test rows.
+
+## 4. Persisted artifacts (model identifier for the freeze)
+
+| Item | Value |
+|---|---|
+| Model file | `/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/model.joblib` (1,484,150 B) |
+| Model SHA-256 | `c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c` (recomputed from a download) |
+| Selection record copy | `/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/selection_record.json` |
+| MLflow run | `a08250c6bcb5415c9591c6427e3d6bf7`, experiment `/Users/<owner>/airbnb_price_model` (params, test metrics, both files) |
+| Tables | `airbnb_gold.model_selection` (1 row), `model_candidate_metrics` (48), `model_evaluation` (6), `model_artifacts` (1) |
+| Split / baseline | `model_split` `airbnb-v1` (Delta v0), `baseline_lookup` `airbnb-v1` (v0); `model_features` v2 |
+| Environment | Serverless environment 6, Python 3.12.3, scikit-learn 1.7.2, numpy 2.3.4, pandas 2.3.3, joblib 1.5.2, MLflow 3.12.0 (probe run 376778873486598) |
+
+Loading the file needs `airbnb/price_model.py` on the path (custom transformers). Stage `final`
+refuses a second evaluation of `price-v1`; any change needs a new `model_version`. No prediction
+table for every listing exists yet (MODEL-06), and no Git freeze tag has been created.
+
+## Runs
+
+| Stage | Commit | Job run | Task run | Result |
+|---|---|---|---|---|
+| Environment probe | – | – | 376778873486598 | SUCCESS |
+| `profile` | `c143b08` | 602761094288982 | 633923351197764 | SUCCESS (training rows only) |
+| `select` | `3f79eb9` | 507329454375587 | 417986478430148 | SUCCESS; selection locked |
+| `final` | `d1c2bd6` | 906579585632281 | 1014284074152913 | SUCCESS; test evaluated once |
+
+Each run executed an exact `git archive` of its commit imported to
+`/Users/<owner>/airbnb_model_<commit>/` in the shared workspace.
+
+Local tests (Windows, Python 3.12.14, scikit-learn 1.7.2, numpy 2.3.4, pandas 2.3.3):
+`python -m unittest tests.test_price_model tests.test_model` → 49 run, 49 passed. Silver and
+bronze tests need PySpark and were not rerun here.
