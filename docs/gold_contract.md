@@ -1,6 +1,6 @@
 # Gold handoff for Maksym and Nazar
 
-Branch: `yaropolk/feature3-eda-gold`. Execution is pending; announce tables as ready only after notebook 03 succeeds for both cities. Freeze the A/B pipeline and model before Week 2 and Venice.
+Current integration branch: `yaropolk/feature6-integration`. Earlier ETL and model runs are recorded separately in the run logs; integrated workspace acceptance is pending. Freeze the A/B pipeline and model before Week 2 and Venice.
 
 ## Run
 
@@ -14,7 +14,7 @@ All outputs are in `<catalog>.airbnb_gold`. Each run replaces only its city/snap
 | `room_type_metrics` | city/snapshot/room_type | Room mix/prices |
 | `neighbourhood_metrics` | city/snapshot/neighbourhood_cleansed | Neighbourhood comparisons |
 | `model_features` | city/snapshot/listing_id | Nazar's model input |
-| `predictions` | Proposed: city/snapshot/listing_id/model_version | Nazar publishes after evaluation |
+| `predictions` | city/snapshot/listing_id/model_version | Nazar's frozen scorer; 38,909 candidate rows reported |
 
 ## Metric populations
 
@@ -35,7 +35,7 @@ Do not sum medians/distinct host counts or average shares across groups. Use cit
 
 `price_eur` is the target. City/snapshot/listing ID, currency and eligibility are metadata. Predictors are explicitly listed in `airbnb/gold.py`; select them by name. Raw fields, price quotes, estimated revenue/occupancy, source identifiers and descriptive p99/price classes are absent. No imputation is fitted here. City categories still need unseen-city handling.
 
-Suggested prediction fields to finalise with Nazar: keys, `model_version`, `run_id`, `evaluation_split` (`train`, `test`, `unseen`), `actual_price_eur`, `baseline_prediction_eur`, `prediction_eur`, `absolute_error_eur`, and a nullable scoring-exclusion reason. Cover every listing, using null predictions and reasons when scoring is impossible. This branch does not create fake predictions or an empty prediction table.
+The implemented 25-column `predictions-v1` schema is authoritative in `airbnb/scoring.py` (`PREDICTION_SCHEMA`). Use `model_prediction_eur` (not `prediction_eur`) and `scoring_run_id` (not `run_id`). It includes actual/baseline/model prices, errors, residuals, split labels, exclusion/status fields and artifact/run provenance. Key: city/snapshot/listing/model version. See [prediction evidence](model_predictions_run.md). The model's final feature selection is `airbnb/price_model.py::FEATURES`, a subset of the storage allowlist; in particular it excludes `review_scores_value`.
 
 Snapshot-wide p99/classes must not filter headline test MAE. Fit percentile-based training treatment on training rows only. Report model and baseline on identical full valid-price holdout rows; optional filtered results must be labelled separately.
 

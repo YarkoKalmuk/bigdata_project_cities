@@ -23,6 +23,7 @@
 # COMMAND ----------
 
 import json
+import hashlib
 import re
 import sys
 import tempfile
@@ -43,6 +44,7 @@ import sklearn
 from airbnb import price_model as pm
 from airbnb import scoring as sc
 from airbnb.model import LOOKUP_COLUMNS
+from airbnb.inputs import load_sources, resolve_snapshot
 
 dbutils.widgets.text("catalog", "workspace")
 dbutils.widgets.text("cities", "milan,florence")
@@ -51,6 +53,7 @@ dbutils.widgets.text("model_version", pm.MODEL_VERSION)
 dbutils.widgets.text("output_table", "predictions")
 dbutils.widgets.text("code_revision", "")
 dbutils.widgets.text("scoring_run_id", "")
+dbutils.widgets.text("sources_config_path", "")
 catalog = dbutils.widgets.get("catalog").strip()
 cities = [c.strip().lower() for c in dbutils.widgets.get("cities").split(",") if c.strip()]
 snapshot_override = dbutils.widgets.get("snapshot_date").strip()
@@ -69,14 +72,14 @@ if not re.fullmatch(r"[0-9a-f]{7,40}", code_revision):
 if not cities or len(set(cities)) != len(cities):
     raise ValueError("cities must be a non-empty comma-separated list without repeats.")
 
-sources = json.loads((root / "config/sources.json").read_text())
-unknown = [c for c in cities if c not in sources]
-if unknown:
-    raise ValueError(f"Cities not in config/sources.json: {unknown}")
-snapshots = {c: date.fromisoformat(sources[c]["snapshot_date"]).isoformat() for c in cities}
-if snapshot_override:
-    if len(cities) != 1 or date.fromisoformat(snapshot_override).isoformat() != snapshots[cities[0]]:
-        raise ValueError("snapshot_date must be the configured snapshot of the single city being scored.")
+sources_config_path = dbutils.widgets.get("sources_config_path").strip()
+sources = load_sources(root, catalog, sources_config_path)
+if snapshot_override and len(cities) != 1:
+    raise ValueError("snapshot_date override requires a single city.")
+snapshots = {
+    c: resolve_snapshot(sources, catalog, c, snapshot_override).snapshot_date
+    for c in cities
+}
 
 frozen = sc.frozen_model(model_version)
 gold = f"{catalog}.airbnb_gold"
@@ -89,6 +92,8 @@ summary = {
     "output_table": table, "code_revision": code_revision, "scoring_run_id": scoring_run_id,
     "scored_at": scored_at.isoformat(), "sklearn": sklearn.__version__, "numpy": np.__version__,
     "pandas": pd.__version__, "python": sys.version.split()[0],
+    "sources_config_path": sources_config_path or "repo:config/sources.json",
+    "sources_config_sha256": hashlib.sha256(json.dumps(sources, sort_keys=True).encode()).hexdigest(),
 }
 print(json.dumps(summary, indent=1))
 

@@ -1,5 +1,7 @@
 # Yaropolk's engineering handoff
 
+Current next step: [feature 6 integration readiness](integration_readiness.md). Feature 5 has two recorded successful A/B runs; its repeat/external-manifest details still need recording. This handoff's input contract remains valid, and scorer 08 now accepts the same manifest path.
+
 ## Current status
 
 - Setup, parameterised ingestion, EDA cleaning, gold metrics/model inputs, architecture and the four-task Job are implemented.

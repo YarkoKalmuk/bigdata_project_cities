@@ -1,5 +1,7 @@
 # Week 1 integration check (pipeline + model)
 
+Historical check at `f8e0eba`, before feature 5. For the current merged engineering/model candidate and runtime-manifest support, see [integration readiness](integration_readiness.md). Findings below describe the workspace/revisions at that earlier check; they are preserved as evidence.
+
 Owner: Mykolaichuk Nazar. Recorded 2026-11-11 (UTC). Status: **integration candidate, not the freeze**.
 No freeze tag exists. Venice was not downloaded, configured, queried or run. No model was retrained,
 no prediction was rewritten and no Databricks object was created or modified for this check.

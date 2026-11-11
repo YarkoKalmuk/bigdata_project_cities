@@ -43,6 +43,9 @@ to an unseen city (Venice).
 - [Parameterised Job setup and execution](docs/pipeline_job.md)
 - [Pipeline run evidence](docs/pipeline_run_log.md)
 - [Generic city inputs and engineering handoff](docs/engineering_handoff.md)
+- [Integrated system and remaining freeze checks](docs/integration_readiness.md)
+- [Model selection and held-out evaluation](docs/model_selection.md)
+- [Prediction schema and run evidence](docs/model_predictions_run.md)
 
 Yaropolk reports successful execution of the initial silver notebook. Maksym's
 completed EDA records 25,338 Milan listings and 13,571 Florence listings for
@@ -56,3 +59,9 @@ Both source URLs and city centres are recorded in `config/sources.json`.
 `yaropolk/feature5-city-inputs` removes hardcoded city restrictions and accepts
 an optional runtime JSON manifest. Its A/B workspace acceptance is pending.
 Venice stays unseen; the joint pipeline/model freeze is not complete.
+
+`yaropolk/feature6-integration` combines the engineering/EDA line with Nazar's
+price-v1 model candidate. Its 99 local tests pass. Scorer 08 now accepts runtime
+input manifests alongside ETL; read-only notebook 09 helps reconcile model data,
+workspace identity and reference versions before the joint freeze. Integration
+workspace acceptance and merge into main are still pending.

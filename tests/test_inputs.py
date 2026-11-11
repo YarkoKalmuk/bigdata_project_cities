@@ -75,3 +75,16 @@ class InputTests(unittest.TestCase):
                 exec(compile(code, filename, 'exec'), scope)
             self.assertEqual(scope['city'], 'synthetic_city')
             self.assertEqual(scope['snapshot_date'], '2026-01-02')
+
+    def test_frozen_scorer_uses_the_same_external_manifest(self):
+        from types import SimpleNamespace
+        from test_bronze_parameters import Widgets
+        code = Path('notebooks/08_score_predictions.py').read_text().split('# COMMAND ----------')[1]
+        widgets = Widgets(cities='synthetic_city', snapshot_date='2026-01-02', code_revision='b' * 40,
+                          sources_config_path='/Volumes/workspace/airbnb_bronze/raw_files/config/synthetic.json')
+        with patch('airbnb.inputs.load_sources', return_value=SYNTHETIC), patch('builtins.print'):
+            scope = {'dbutils': SimpleNamespace(widgets=widgets)}
+            exec(compile(code, '08_score_predictions.py', 'exec'), scope)
+        self.assertEqual(scope['snapshots'], {'synthetic_city': '2026-01-02'})
+        self.assertEqual(scope['summary']['sources_config_path'], widgets.get('sources_config_path'))
+        self.assertEqual(len(scope['summary']['sources_config_sha256']), 64)

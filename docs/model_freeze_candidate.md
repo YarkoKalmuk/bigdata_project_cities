@@ -1,5 +1,7 @@
 # Model freeze candidate: price-v1
 
+The model identity below is preserved. Later code integration and workspace reconciliation are tracked in [integration readiness](integration_readiness.md); this document is not evidence that the full-system freeze has occurred. Access findings below are historical and were superseded by the later [workspace check](week1_integration_check.md#permissions-yaropolk-kalmukpn-maksym-matseliukhpn).
+
 Status: **freeze candidate, not the Week 1 freeze.** No Git freeze tag exists. The final freeze
 needs feature3, feature4 and `nazar/model-baseline` integrated into `main`, then a tag on the
 integrated commit and an entry in `plan.md` (M1). Recorded 2026-11-11 by Mykolaichuk Nazar.
