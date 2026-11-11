@@ -21,13 +21,16 @@ Bronze → Silver → Gold → Validation
 
 ## Row Count Verification
 
-Previously verified Silver counts:
+Post-repeat SQL results supplied by Yaropolk:
 
-- Milan: 25,338 listings
-- Florence: 13,571 listings
+| City | Snapshot | Rows | Distinct listing IDs |
+|---|---|---|---|
+| Milan | 2026-09-19 | 25,338 | 25,338 |
+| Florence | 2026-09-19 | 13,571 | 13,571 |
 
-**Post-repeat row-count verification:** Pending  
-**Duplicate listing-key check:** Pending
+The counts match the previously recorded totals; no duplicate listing IDs exist
+within either city/snapshot. Resolved Git SHAs and workspace run URLs still need
+to be copied from Job history; they were not supplied with these SQL results.
 
 ## Additional Notes
 
@@ -37,4 +40,7 @@ The `source_path` and `source_url` Job parameters were left empty. All three run
 
 ## Conclusion
 
-The automated pipeline executed successfully for both training cities and completed a repeated Milan run. Final confirmation of idempotency requires checking that row counts remain unchanged and that duplicate listing keys are absent.
+The feature 4 Job executed successfully for both training cities and a repeated
+Milan run. The reported post-repeat counts and unique keys support repeatability.
+Feature 5 introduces runtime input manifests and still requires new A/B acceptance
+runs; do not attribute the feature 4 run IDs above to the new implementation.

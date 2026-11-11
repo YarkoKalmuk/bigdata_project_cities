@@ -4,23 +4,21 @@
 # environment_version = "6"
 # ///
 # MAGIC %md
-# MAGIC # Ingest one training-city snapshot into bronze
+# MAGIC # Ingest one configured city snapshot into bronze
 # MAGIC Read the setup guide before running. Original files remain in the managed
 # MAGIC volume. All source CSV columns stay strings; cleaning belongs in silver.
-# MAGIC Run this same notebook separately for Milan and Florence.
+# MAGIC Add cities through input configuration; keep the test city unseen until the freeze.
 
 # COMMAND ----------
 
-import json
-import re
-from datetime import date
+import sys
 from pathlib import Path
-from urllib.parse import urlparse
 
 from pyspark.sql import functions as F
 
 dbutils.widgets.text("catalog", "workspace")
-dbutils.widgets.dropdown("city", "milan", ["milan", "florence"])
+dbutils.widgets.text("city", "milan")
+dbutils.widgets.text("sources_config_path", "")
 dbutils.widgets.text("snapshot_date", "2026-09-19")
 
 dbutils.widgets.text("source_path", "")
@@ -33,41 +31,19 @@ snapshot_date = dbutils.widgets.get("snapshot_date").strip()
 source_path = dbutils.widgets.get("source_path").strip()
 source_url = dbutils.widgets.get("source_url").strip()
 
-if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", catalog):
-    raise ValueError("Invalid catalog identifier.")
 root = next(
     (p for p in [Path.cwd(), *Path.cwd().parents] if (p / "config/sources.json").is_file()),
     None,
 )
 if root is None:
     raise ValueError("Run this notebook inside the project's Databricks Git folder.")
-sources = json.loads((root / "config/sources.json").read_text())
-if city not in sources:
-    raise ValueError("Week 1 ingestion is restricted to Milan and Florence.")
-configured_url = sources[city].get("source_url")
-source_url = source_url or configured_url or ""
-if configured_url and source_url != configured_url:
-    raise ValueError("source_url differs from config/sources.json; reconcile provenance before loading.")
-if date.fromisoformat(snapshot_date).isoformat() != snapshot_date:
-    raise ValueError("snapshot_date must be YYYY-MM-DD.")
-expected_prefix = (
-    f"/Volumes/{catalog}/airbnb_bronze/raw_files/{city}/{snapshot_date}/"
-)
-source_path = source_path or expected_prefix + "listings.csv.gz"
-if source_path != expected_prefix + "listings.csv.gz":
-    raise ValueError(f"Upload the original file and set source_path to {expected_prefix}listings.csv.gz")
-url = urlparse(source_url)
-if (
-    url.scheme != "https"
-    or url.hostname != "data.insideairbnb.com"
-    or not url.path.endswith(f"/{snapshot_date}/data/listings.csv.gz")
-    or f"/{city}/" not in url.path
-    or url.query
-    or url.fragment
-):
-    raise ValueError("Copy the matching city's dated detailed listings.csv.gz link from Inside Airbnb.")
-if snapshot_date != sources[city]["snapshot_date"]:
-    raise ValueError("Update config/sources.json and README.md to the verified snapshot date first.")
+sys.path.insert(0, str(root))
+from airbnb.inputs import load_sources, resolve_snapshot, resolve_source
+
+sources = load_sources(root, catalog, dbutils.widgets.get("sources_config_path"))
+parameters = resolve_snapshot(sources, catalog, city, snapshot_date)
+catalog, city, snapshot_date = parameters.catalog, parameters.city, parameters.snapshot_date
+source_path, source_url = resolve_source(parameters, source_path, source_url)
 
 # COMMAND ----------
 

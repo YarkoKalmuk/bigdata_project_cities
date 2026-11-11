@@ -1,6 +1,12 @@
 # Run the parameterised ETL Job
 
-Branch: `yaropolk/feature4-pipeline`. Code is prepared and locally tested; Job creation and execution in Databricks are pending. No workspace Job is created merely by pulling this branch.
+Current branch: `yaropolk/feature5-city-inputs`. Feature 4 Job creation/execution succeeded according to the run log. Feature 5 still needs workspace validation. No live Job setting changes merely by pulling this branch.
+
+## Update the existing Job for feature 5
+
+Do not rerun registration or create a duplicate Job. Open `airbnb-cities-etl` (ID `721102111883860`) and change its **remote Git branch** to `yaropolk/feature5-city-inputs`. Add the Job parameter `sources_config_path` with an empty default. Leave the four tasks, existing catalog/date/source parameters and concurrency setting unchanged. Select/pull the same branch in your workspace Git folder for interactive notebook work; this is separate from the Job's Git setting.
+
+Run Milan, Florence and a Milan repeat with blank `sources_config_path` to verify the repository defaults. Record new run IDs/SHAs separately from feature 4's evidence. Notebook 04 adds the input manifest's canonical JSON SHA-256 to successful validation records through additive schema evolution.
 
 ## Register once
 
@@ -23,6 +29,7 @@ Use **Run now with different parameters**. Job parameters are automatically pass
 | `snapshot_date` | `2026-09-19` | `2026-09-19` |
 | `source_path` | leave empty to derive the configured volume path | leave empty |
 | `source_url` | leave empty to use recorded config URL | leave empty |
+| `sources_config_path` | leave empty to use repo config | leave empty |
 
 Graph: **bronze → silver → gold → validate**. Only one task runs at a time. A failure prevents downstream tasks from running. There is no automatic schedule or automatic retry; errors remain visible. Runs are queued when this Job is already active. Avoid manually running the same writers alongside it: the concurrency limit applies to this Job only.
 
@@ -41,7 +48,7 @@ Failed tasks remain in Job history. A run that never reaches validation does not
 
 After the acceptance runs, give Maksym the metric table locations and give Nazar `model_features` plus its contract. Do not create fake predictions; Nazar must publish those from evaluated model artifacts.
 
-The current input guards/config allow Milan and Florence. Before the Week 1 freeze, finish the transfer-ready input interface so the same frozen code can accept a new city's source/date/centre as parameters without code edits. This is a remaining readiness task, not permission to inspect Venice now. Also wait for Nazar's baseline, held-out results and reproducible scoring entry point.
+Feature 5 resolves configured cities generically: a new city's metadata can be supplied using a JSON manifest under `/Volumes/<catalog>/airbnb_bronze/raw_files/config/`. This avoids editing frozen code or moving the Job's pinned revision. See the [input contract](engineering_handoff.md). The runtime-manifest route is locally tested with synthetic input; it still needs an A/B workspace check before freezing. Wait for Nazar's baseline, held-out results and scoring entry point too.
 
 Once the full A/B system is ready, record an immutable Git revision and model artifacts and configure the Job to that Git **commit**, rather than a moving feature branch. Preserve that exact definition for the first Venice run. Do not freeze now or run Venice yet.
 

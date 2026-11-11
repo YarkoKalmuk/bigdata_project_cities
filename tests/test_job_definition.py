@@ -28,7 +28,8 @@ class JobDefinitionTests(unittest.TestCase):
     def test_parameters_have_no_city_specific_path_or_url(self):
         job = json.loads(Path('jobs/airbnb_etl.job.json').read_text())
         params = {p['name']: p['default'] for p in job['parameters']}
-        self.assertEqual(set(params), {'catalog', 'city', 'snapshot_date', 'source_path', 'source_url'})
+        self.assertEqual(set(params), {'catalog', 'city', 'snapshot_date', 'source_path', 'source_url', 'sources_config_path'})
+        self.assertEqual(params['sources_config_path'], '')
         self.assertEqual(params['source_path'], '')
         self.assertEqual(params['source_url'], '')
         self.assertEqual(job['tasks'][-1]['notebook_task']['base_parameters']['job_run_id'], '{{job.run_id}}')

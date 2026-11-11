@@ -86,6 +86,19 @@ class SilverTests(unittest.TestCase):
         self.assertEqual(row.days_since_last_review, 10)
         self.assertAlmostEqual(row.dist_center_km, 0.0)
 
+    def test_synthetic_city_runs_through_silver_and_gold(self):
+        raw = self.spark.createDataFrame(
+            [('1', '$100.00', 'Unknown room type', '2', '0', '0', 'synthetic_city', '2026-01-02')],
+            'id string, price string, room_type string, accommodates string, latitude string, longitude string, _city string, _snapshot_date string',
+        )
+        silver = prepare_listings(raw, {'synthetic_city': (0, 0)})
+        self.assertEqual(silver.first().dist_center_km, 0.0)
+        gold = build_gold(silver)
+        row = gold['city_metrics'].first()
+        self.assertEqual(row.city, 'synthetic_city')
+        self.assertEqual(row.listings, 1)
+        self.assertEqual(gold['model_features'].first().room_type, 'Unknown room type')
+
     def test_eda_classification_gold_populations_and_feature_safety(self):
         rows = [(str(i), "100", "2", "1", "0", "5", "2", "1", "Centro") for i in range(1, 201)]
         rows += [

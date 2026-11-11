@@ -6,7 +6,7 @@ Build the Northern Italy Airbnb analytics project on Databricks Free Edition, us
 
 Sources: [README.md](README.md) and [assignment instructions](group_assignment_2.pdf).
 
-This document is a plan only. Start implementation after the team has switched to working branches.
+Implementation is under way on working branches. The responsibilities and milestone gates below remain the agreed plan.
 
 - Use detailed `listings.csv.gz` snapshots. Verify Milan and Florence's recorded dates, and record Venice's snapshot in Week 2.
 - Do not download or explore Venice before Week 1 is complete.
@@ -98,3 +98,9 @@ For Venice:
 - **Submission:** Only the team admin submits the repository link.
 
 Defaults: use relative working days because no deadline was supplied; keep all three city choices from the README; use no optional reviews/calendar datasets unless the required work is complete.
+
+## Yaropolk's current engineering status
+
+- Feature 4 Job: three reported successful runs (Milan, Florence, Milan repeat). Post-repeat silver rows/distinct IDs: 25,338/25,338 and 13,571/13,571. Evidence: [run log](docs/pipeline_run_log.md).
+- Feature 5: configuration-driven city inputs implemented and locally tested. A/B acceptance of the updated Job and external manifest path remains pending; follow the [engineering handoff](docs/engineering_handoff.md).
+- Shared-data access, integration into main and the joint code/model freeze must be confirmed with the team. Venice remains unseen. Week 2 work is not marked complete.

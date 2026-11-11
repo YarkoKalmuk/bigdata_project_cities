@@ -10,10 +10,7 @@
 
 # COMMAND ----------
 
-import json
-import re
 import sys
-from datetime import date
 from pathlib import Path
 
 from pyspark.sql import functions as F
@@ -23,20 +20,19 @@ if root is None:
     raise ValueError("Run inside the project's Databricks Git folder.")
 sys.path.insert(0, str(root))
 from airbnb.silver import prepare_listings
+from airbnb.inputs import load_sources, resolve_snapshot
 
 dbutils.widgets.text("catalog", "workspace")
-dbutils.widgets.dropdown("city", "milan", ["milan", "florence"])
+dbutils.widgets.text("city", "milan")
+dbutils.widgets.text("sources_config_path", "")
 dbutils.widgets.text("snapshot_date", "2026-09-19")
 catalog = dbutils.widgets.get("catalog").strip()
 city = dbutils.widgets.get("city").strip().lower()
 snapshot_date = dbutils.widgets.get("snapshot_date").strip()
-if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", catalog):
-    raise ValueError("Invalid catalog identifier.")
-sources = json.loads((root / "config/sources.json").read_text())
-if city not in sources:
-    raise ValueError("Week 1 inputs are Milan and Florence only.")
-if date.fromisoformat(snapshot_date).isoformat() != snapshot_date or snapshot_date != sources[city]["snapshot_date"]:
-    raise ValueError("Use the snapshot date recorded in config/sources.json.")
+sources = load_sources(root, catalog, dbutils.widgets.get("sources_config_path"))
+parameters = resolve_snapshot(sources, catalog, city, snapshot_date)
+catalog, city, snapshot_date = parameters.catalog, parameters.city, parameters.snapshot_date
+
 predicate = f"_city = '{city}' AND _snapshot_date = '{snapshot_date}'"
 
 # COMMAND ----------
@@ -50,7 +46,7 @@ manifest = spark.table(f"{catalog}.airbnb_bronze.ingestion_manifest").where(
 ).collect()
 if len(manifest) != 1 or manifest[0]["row_count"] != source_count:
     raise ValueError("Bronze manifest is missing or inconsistent; complete notebook 01 first.")
-centres = {name: (source["centre_latitude"], source["centre_longitude"]) for name, source in sources.items()}
+centres = {city: parameters.centre} if parameters.centre is not None else {}
 silver = prepare_listings(bronze, centres)
 if silver.where(F.col("listing_id").isNull() | (F.col("listing_id") <= 0)).limit(1).count():
     raise ValueError("Listing IDs cannot form the silver key; inspect bronze before writing.")

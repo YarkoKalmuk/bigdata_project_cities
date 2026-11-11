@@ -10,10 +10,7 @@
 
 # COMMAND ----------
 
-import json
-import re
 import sys
-from datetime import date
 from pathlib import Path
 
 from pyspark.sql import functions as F
@@ -23,18 +20,18 @@ if root is None:
     raise ValueError("Run inside the project's Databricks Git folder.")
 sys.path.insert(0, str(root))
 from airbnb.gold import build_gold
+from airbnb.inputs import load_sources, resolve_snapshot
 
 dbutils.widgets.text("catalog", "workspace")
-dbutils.widgets.dropdown("city", "milan", ["milan", "florence"])
+dbutils.widgets.text("city", "milan")
+dbutils.widgets.text("sources_config_path", "")
 dbutils.widgets.text("snapshot_date", "2026-09-19")
 catalog = dbutils.widgets.get("catalog").strip()
 city = dbutils.widgets.get("city").strip().lower()
 snapshot_date = dbutils.widgets.get("snapshot_date").strip()
-sources = json.loads((root / "config/sources.json").read_text())
-if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", catalog):
-    raise ValueError("Invalid catalog identifier.")
-if city not in sources or date.fromisoformat(snapshot_date).isoformat() != sources[city]["snapshot_date"]:
-    raise ValueError("Select the configured Milan or Florence snapshot.")
+sources = load_sources(root, catalog, dbutils.widgets.get("sources_config_path"))
+parameters = resolve_snapshot(sources, catalog, city, snapshot_date)
+catalog, city, snapshot_date = parameters.catalog, parameters.city, parameters.snapshot_date
 
 # COMMAND ----------
 
