@@ -63,7 +63,8 @@ summary = {"catalog": catalog, "training_snapshots": training_snapshots, "split_
 def publish_once(frame, table, predicate):
     """Write ``frame`` unless ``predicate`` already selects rows; then require identical content."""
     if not spark.catalog.tableExists(table):
-        frame.write.format("delta").mode("errorifexists").saveAsTable(table)
+        # "error" (not "errorifexists"): Spark Connect on serverless accepts only the short name.
+        frame.write.format("delta").mode("error").saveAsTable(table)
         return "created"
     existing = spark.table(table).where(predicate)
     if not existing.limit(1).count():
