@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # MAGIC %md
 # MAGIC # Ingest one training-city snapshot into bronze
 # MAGIC Read the setup guide before running. Original files remain in the managed
@@ -6,6 +10,7 @@
 # MAGIC Run this same notebook separately for Milan and Florence.
 
 # COMMAND ----------
+
 import json
 import re
 from datetime import date
@@ -17,14 +22,19 @@ from pyspark.sql import functions as F
 dbutils.widgets.text("catalog", "workspace")
 dbutils.widgets.dropdown("city", "milan", ["milan", "florence"])
 dbutils.widgets.text("snapshot_date", "2026-09-19")
-dbutils.widgets.text("source_path", "")
+
+dbutils.widgets.text(
+    "source_path",
+    "/Volumes/workspace/airbnb_bronze/raw_files/milan/2026-09-19/listings.csv.gz"
+)
+
 dbutils.widgets.text("source_url", "")
 
 catalog = dbutils.widgets.get("catalog").strip()
 city = dbutils.widgets.get("city").strip().lower()
 snapshot_date = dbutils.widgets.get("snapshot_date").strip()
 source_path = dbutils.widgets.get("source_path").strip()
-source_url = dbutils.widgets.get("source_url").strip()
+source_url = "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz"
 
 if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", catalog):
     raise ValueError("Invalid catalog identifier.")
@@ -62,6 +72,7 @@ if snapshot_date != sources[city]["snapshot_date"]:
     raise ValueError("Update config/sources.json and README.md to the verified snapshot date first.")
 
 # COMMAND ----------
+
 # Multi-line descriptions and doubled CSV quotes are common in detailed listings.
 # FAILFAST avoids silently discarding malformed CSV records.
 raw = (
@@ -101,6 +112,7 @@ bronze = (
 )
 
 # COMMAND ----------
+
 table = f"{catalog}.airbnb_bronze.listings"
 predicate = f"_city = '{city}' AND _snapshot_date = '{snapshot_date}'"
 # replaceWhere replaces only this snapshot, retaining the other city and dates.
@@ -117,6 +129,7 @@ if stored_count != row_count:
     raise RuntimeError(f"Row-count mismatch: source={row_count}, bronze={stored_count}")
 
 # COMMAND ----------
+
 # This manifest describes the current successful load of each snapshot.
 # Delta table history retains prior writes; a repeat run updates this manifest row.
 manifest = f"{catalog}.airbnb_bronze.ingestion_manifest"

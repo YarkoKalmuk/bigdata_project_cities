@@ -1,10 +1,15 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # MAGIC %md
 # MAGIC # Create the Airbnb lakehouse namespaces
 # MAGIC Run once on serverless compute. Select an existing catalog you can write to.
 # MAGIC This creates empty schemas and a managed volume; it does not load any city.
 
 # COMMAND ----------
+
 import re
 
 dbutils.widgets.text("catalog", "workspace")
