@@ -48,3 +48,74 @@ fitted step is inside one scikit-learn pipeline (`TransformedTargetRegressor` �
 
 The rule, candidate list, features and preprocessing are hashed into `spec_sha256`. Stage
 `final` refuses to run if the code's `spec_sha256` differs from the locked record.
+
+## 2. Validation results and locked selection
+
+Run 417986478430148 (`select`, commit `3f79eb9`, serverless environment 6: Python 3.12.3,
+scikit-learn 1.7.2, numpy 2.3.4, pandas 2.3.3). Inputs: `model_features` v2, `model_split` v0.
+Only official training rows were loaded.
+
+| Fold | Milan | Florence |
+|---|---|---|
+| Subtrain | 13,821 | 7,757 |
+| Validation | 3,434 | 1,927 |
+
+Validation baseline (refitted on subtrain): cell level for every validation row except 1
+Florence row (room-type fallback).
+
+### Validation MAE (EUR; all validation rows with a valid positive price)
+
+| Candidate | Milan | Florence | Milan+Florence | Gain vs baseline (M / F / both) | Fit s | Predict s | Size |
+|---|---:|---:|---:|---|---:|---:|---|
+| Baseline (subtrain medians) | 101.51 | 107.85 | 103.79 | – | – | – | 39-cell lookup |
+| ridge α=0.1 | 88.93 | 94.58 | 90.96 | 12.4 / 12.3 / 12.4 % | 0.36 | 0.13 | 42 coefficients |
+| ridge α=1 | 88.93 | 94.58 | 90.96 | 12.4 / 12.3 / 12.4 % | 0.34 | 0.13 | 42 |
+| ridge α=10 | 88.94 | 94.62 | 90.98 | 12.4 / 12.3 / 12.3 % | 0.33 | 0.12 | 42 |
+| ridge α=100 | 89.00 | 94.72 | 91.05 | 12.3 / 12.2 / 12.3 % | 0.29 | 0.13 | 42 |
+| hgb 15 leaves × 200 | 86.16 | 88.37 | 86.96 | 15.1 / 18.1 / 16.2 % | 5.45 | 0.13 | 200 trees |
+| hgb 15 leaves × 400 | 85.59 | 87.71 | 86.35 | 15.7 / 18.7 / 16.8 % | 7.09 | 0.39 | 400 trees |
+| hgb 31 leaves × 200 | 85.47 | 87.54 | 86.21 | 15.8 / 18.8 / 16.9 % | 5.22 | 0.48 | 200 trees |
+| **hgb 31 leaves × 400** | **85.26** | **87.45** | **86.05** | **16.0 / 18.9 / 17.1 %** | 8.71 | 0.35 | 400 trees × ≤ 31 leaves |
+
+Supplementary (validation actual ≤ 1,162.93 EUR, the subtrain p99; Milan 3,405, Florence 1,908 rows):
+baseline 75.62 / 85.18 / 79.05; best ridge 61.87 / 71.94 / 65.48; selected hgb 58.81 / 66.57 / 61.59.
+
+### Decision (applied by `select_candidate`, recorded in `airbnb_gold.model_selection`)
+
+- Best per family: `ridge_alpha_0.1` and `hgb_leaves_31_iter_400`. Both qualify (≥ 5 % better
+  than the baseline in Milan, Florence and pooled).
+- `hgb_leaves_31_iter_400` beats the best ridge by 4.1 % (Milan), 7.5 % (Florence) and 5.4 %
+  (pooled), all ≥ 3 %, so the rule selects gradient boosting.
+- **Locked:** `HistGradientBoostingRegressor(learning_rate=0.05, max_iter=400, max_leaf_nodes=31,
+  min_samples_leaf=40, l2_regularization=1.0, early_stopping=False, random_state=20261111)` on
+  `log1p(price_eur)`, with the price-v1 features and preprocessing above.
+- `spec_sha256` `acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99`;
+  selection `record_sha256` `9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db`.
+  Per-candidate rows are in `airbnb_gold.model_candidate_metrics`.
+
+### What drives the model (validation permutation importance, MAE increase in EUR)
+
+Selected hgb: `dist_center_km` 13.6, `accommodates` 8.7, `minimum_nights` 5.9, `bathrooms_n` 5.7,
+`bedrooms` 5.4, `log_host_listings_count` 5.0; every other feature ≤ 1.6
+(`review_scores_location` 1.5, `property_type` 1.5, `room_type` 0.8).
+
+Ridge (for interpretation; % price effect per one training SD or vs. the reference level):
+Shared room −32 %, Room in hotel +44 %, Entire home/apt +31 %, Room in boutique hotel +28 %,
+distance −16 % per SD of log distance, minimum nights −14 % per SD, accommodates +15 % per SD,
+shared bath −11 %.
+
+### Failure modes seen on validation (no decision was changed by these)
+
+- **Top price tail dominates the error.** Rows at or above the subtrain p95 (513 EUR; 144 Milan,
+  133 Florence) have MAE 995 / 557 EUR with the selected model, and every model underpredicts
+  them (mean error −972 / −470). A log-target model predicts close to the conditional median, so
+  these rows cannot be fitted from listing attributes.
+- **Underprediction overall** for Entire homes in Milan (mean error −46 EUR) and for private
+  rooms in both cities; the cheapest quartile is overpredicted (+34 / +39 EUR).
+- **Hotel rooms** (3 Milan, 9 Florence validation rows) are worse than the baseline (58 vs 48 and
+  71 vs 55 EUR MAE): too few training rows for the model to separate them.
+- **Distance 4–8 km in Florence** (75 rows) has MAE 341 EUR and mean error −286: a few expensive
+  villas outside the centre.
+- `property_type` falls into `__other__` for 1.7 % (Milan) and 3.2 % (Florence) of validation
+  rows. The selected configuration is at the edge of its small grid (most leaves and trees); the
+  grid was not widened after seeing results.
