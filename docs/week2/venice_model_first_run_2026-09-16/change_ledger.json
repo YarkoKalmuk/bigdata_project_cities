@@ -1,0 +1,14 @@
+{
+  "first_model_run": {
+    "job_run_id": 65362888524059,
+    "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run"
+  },
+  "pipeline_etl_first_run": 782550938914199,
+  "freeze_tag": "M1-freeze",
+  "pipeline_fixes_applied": [],
+  "model_changes_applied": [],
+  "retraining_runs": 0,
+  "scoring_reruns": 0,
+  "status": "STOPPED_AFTER_FIRST_SCORING",
+  "future_rule": "Any later fix or model change uses a new model_version/scoring_run_id and a new evidence directory; this directory and the scoring_run_id rows above are never overwritten."
+}

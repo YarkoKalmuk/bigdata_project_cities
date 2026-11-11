@@ -1,0 +1,25 @@
+{
+  "submitted_at_utc": "2026-11-11T20:45:19.226483+00:00",
+  "run_name": "airbnb-venice-score-v1-first-run-M1-freeze",
+  "git_source": {
+    "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+    "git_provider": "gitHub",
+    "git_commit": "7f76cbe6936e76fa3a7685ac90b40c1ce1c253df"
+  },
+  "task": {
+    "task_key": "score_venice",
+    "notebook_path": "notebooks/08_score_predictions.py",
+    "source": "GIT",
+    "base_parameters": {
+      "catalog": "workspace",
+      "cities": "venice",
+      "snapshot_date": "2026-09-16",
+      "model_version": "price-v1",
+      "output_table": "predictions",
+      "code_revision": "7f76cbe6936e76fa3a7685ac90b40c1ce1c253df",
+      "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run",
+      "sources_config_path": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json"
+    }
+  },
+  "idempotency_token": "venice-score-first-ab7aeb06edbd4cda98f3a00fec622414"
+}

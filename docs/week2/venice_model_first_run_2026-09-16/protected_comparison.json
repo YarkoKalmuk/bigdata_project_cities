@@ -1,0 +1,30 @@
+{
+  "protected_objects": 15,
+  "before_vs_etl_after_differences": {},
+  "before_vs_after_scoring_differences": {},
+  "frozen_identity_checks_differing_before_vs_after": [],
+  "file_hashes_equal_before_after": true,
+  "table_versions_before": {
+    "model_features": "5",
+    "model_split": "0",
+    "baseline_lookup": "0",
+    "model_artifacts": "0",
+    "model_selection": "0",
+    "model_candidate_metrics": "0",
+    "model_evaluation": "0",
+    "predictions": "2",
+    "pipeline_validations": "5"
+  },
+  "table_versions_after": {
+    "model_features": "5",
+    "model_split": "0",
+    "baseline_lookup": "0",
+    "model_artifacts": "0",
+    "model_selection": "0",
+    "model_candidate_metrics": "0",
+    "model_evaluation": "0",
+    "predictions": "3",
+    "pipeline_validations": "5"
+  },
+  "note": "Same 15 server-side full-row fingerprints the Venice ETL evidence used (A/B slices of ETL and prediction tables, pooled model/reference tables). Only workspace.airbnb_gold.predictions gained a version (2 -> 3), an append of Venice rows by job run 65362888524059; its A/B slice fingerprint is unchanged."
+}

@@ -1,0 +1,46 @@
+{
+  "run_id": 65362888524059,
+  "task_run_id": 793825231802478,
+  "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/794227027925555/run/65362888524059",
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "task_state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "start_time": 1794429919812,
+  "end_time": 1794430002418,
+  "git_source": null,
+  "task_git_source": {
+    "git_commit": "7f76cbe6936e76fa3a7685ac90b40c1ce1c253df",
+    "git_provider": "gitHub",
+    "git_snapshot": {
+      "used_commit": "7f76cbe6936e76fa3a7685ac90b40c1ce1c253df"
+    },
+    "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git"
+  },
+  "transitions": [
+    {
+      "at_utc": "2026-11-11T20:45:20.638771+00:00",
+      "life_cycle": "RUNNING",
+      "result": null,
+      "message": ""
+    },
+    {
+      "at_utc": "2026-11-11T20:46:52.371326+00:00",
+      "life_cycle": "TERMINATED",
+      "result": "SUCCESS",
+      "message": ""
+    }
+  ],
+  "error": null,
+  "error_trace": null,
+  "notebook_exit": "{\"catalog\": \"workspace\", \"cities\": [\"venice\"], \"snapshots\": {\"venice\": \"2026-09-16\"}, \"model_version\": \"price-v1\", \"scoring_version\": \"score-v1\", \"prediction_schema_version\": \"predictions-v1\", \"output_table\": \"workspace.airbnb_gold.predictions\", \"code_revision\": \"7f76cbe6936e76fa3a7685ac90b40c1ce1c253df\", \"scoring_run_id\": \"venice-2026-09-16-price-v1-score-v1-first-run\", \"scored_at\": \"2026-11-11T20:45:38+00:00\", \"sklearn\": \"1.7.2\", \"numpy\": \"2.3.4\", \"pandas\": \"2.3.3\", \"python\": \"3.12.3\", \"sources_config_path\": \"/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json\", \"sources_config_sha256\": \"84d3e54441a104cb6640b20e8bef56fdbdc97f26ee246608bd60f42f647fee02\", \"artifact\": {\"path\": \"/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/model.joblib\", \"sha256\": \"c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c\", \"bytes\": 1484150, \"mlflow_run_id\": \"a08250c6bcb5415c9591c6427e3d6bf7\", \"mlflow_copy_sha256\": \"c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c\", \"selection_record_sha256\": \"9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db\", \"spec_sha256\": \"acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99\", \"selected_candidate\": \"hgb_leaves_31_iter_400\", \"contract\": \"features, hyperparameters, spec and sklearn match\"}, \"baseline_lookup_fingerprint\": \"0ca4b685a4b85babccc0810105eb35c074b34808f28d1a54d4012149b987b65c\", \"split_fingerprint\": \"d4625414b6181cecf5de7548b376d77377b500b5e758f0a49236a356ae00a880\", \"split_counts\": {\"florence\": {\"train\": 9684, \"test\": 2464, \"excluded\": 1423}, \"milan\": {\"train\": 17255, \"test\": 4399, \"excluded\": 3684}}, \"input_versions\": {\"model_features\": 5, \"model_split\": 0, \"baseline_lookup\": 0, \"model_artifacts\": 0, \"model_selection\": 0, \"model_evaluation\": 0}, \"output_version_before\": 2, \"pre_write_checks\": {\"reconciliation\": {\"feature_rows\": 8844, \"prediction_rows\": 8844, \"duplicate_keys\": 0, \"missing_from_predictions\": 0, \"extra_in_predictions\": 0, \"baseline_null\": 0}}, \"writes\": {\"venice\": \"append\"}, \"reconciliation\": {\"feature_rows\": 8844, \"prediction_rows\": 8844, \"duplicate_keys\": 0, \"missing_from_predictions\": 0, \"extra_in_predictions\": 0, \"baseline_null\": 0}, \"rows_by_city\": {\"venice\": 8844}, \"by_split\": {\"venice|unseen\": 8844}, \"by_status\": {\"venice|unseen|scored_no_actual\": 700, \"venice|unseen|scored_with_actual\": 8144}, \"by_fallback\": {\"venice|room_type\": 5, \"venice|room_type_x_accommodates\": 8839}, \"by_scoring_exclusion\": {\"venice|NULL\": 8844}, \"by_evaluation_exclusion\": {\"venice|NULL\": 8144, \"venice|no_valid_actual_price\": 700}, \"stored_run_ids\": {\"venice-2026-09-16-price-v1-score-v1-first-run\": 8844}, \"model_null\": 0, \"cities_in_table\": [\"florence\", \"milan\", \"venice\"], \"model_versions_in_table\": [\"price-v1\"], \"output_version_after\": 3}",
+  "notebook_exit_truncated": false
+}

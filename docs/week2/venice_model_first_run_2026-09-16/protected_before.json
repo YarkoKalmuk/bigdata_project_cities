@@ -1,0 +1,92 @@
+{
+  "airbnb_bronze.listings": [
+    {
+      "rows": "38909",
+      "fingerprint": "572406e10dcd704bffc8b039ba9bf3b966f476e5600666a9d032d08acdb84b08"
+    }
+  ],
+  "airbnb_bronze.ingestion_manifest": [
+    {
+      "rows": "2",
+      "fingerprint": "af99416249cc7ecb4c607365a0ba72b379057ac615481a42fdeedcf66e4eb662"
+    }
+  ],
+  "airbnb_silver.listings": [
+    {
+      "rows": "38909",
+      "fingerprint": "1fb549a929cd33c51a09b662ada344dac57ad2832286406938eba1658b6c9d18"
+    }
+  ],
+  "airbnb_gold.city_metrics": [
+    {
+      "rows": "2",
+      "fingerprint": "7f7ccea322ac3b64c05053cc5a0862927dbcf0f9f39108cd87c87e34b76686a1"
+    }
+  ],
+  "airbnb_gold.room_type_metrics": [
+    {
+      "rows": "8",
+      "fingerprint": "4d840117d0c96b0f708f7cad3185c9c479d6d7c24fd499c3a517c4ac32bdca2a"
+    }
+  ],
+  "airbnb_gold.neighbourhood_metrics": [
+    {
+      "rows": "92",
+      "fingerprint": "d20552884c2c68f73189d0b545d446045841d6babfcec8432a90d703e07b8ea8"
+    }
+  ],
+  "airbnb_gold.model_features": [
+    {
+      "rows": "38909",
+      "fingerprint": "27ba8a7e301c55d4855853ae129c0416f174d2619a08a3fbf13081498272a883"
+    }
+  ],
+  "airbnb_gold.pipeline_validations": [
+    {
+      "rows": "5",
+      "fingerprint": "7ee831099f39cffef8038eed7c2979136dee388c7c812d977b6dae951d9cb882"
+    }
+  ],
+  "airbnb_gold.predictions": [
+    {
+      "rows": "38909",
+      "fingerprint": "6b56aea6dda729070b43b3935fbadceb48cafde96b7a230d9cbc909523ce26cc"
+    }
+  ],
+  "airbnb_gold.model_split": [
+    {
+      "rows": "38909",
+      "fingerprint": "0dc48064ce6d4fd5e322f733c95e92c52e7d8deca31b60d2dbdfec2a16afe205"
+    }
+  ],
+  "airbnb_gold.baseline_lookup": [
+    {
+      "rows": "44",
+      "fingerprint": "d6ee42e5d0297c5071a887ccf9ebfc2a533479bf571e88013270b58bb65e39d8"
+    }
+  ],
+  "airbnb_gold.model_selection": [
+    {
+      "rows": "1",
+      "fingerprint": "4f9bee7a85456d257e122043ca0a65f6a34ba1138b3d282af0622356ada6b4ce"
+    }
+  ],
+  "airbnb_gold.model_candidate_metrics": [
+    {
+      "rows": "48",
+      "fingerprint": "b6e9044f98a8096b5d7bee6f16c5b9dac90178c91440e3c4441cc1422e1fc5bd"
+    }
+  ],
+  "airbnb_gold.model_artifacts": [
+    {
+      "rows": "1",
+      "fingerprint": "f804415bf6dfed82fd95f62e8f653ba03f930418ae79cb7f507a86bf334b4d8e"
+    }
+  ],
+  "airbnb_gold.model_evaluation": [
+    {
+      "rows": "6",
+      "fingerprint": "71e3bddc3bf2bbf57c5f620cd8d00b887ab163612d2b25c90be4ba7cb9622061"
+    }
+  ]
+}

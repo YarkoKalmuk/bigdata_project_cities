@@ -1,0 +1,1456 @@
+{
+  "identity": [
+    {
+      "n": "8844",
+      "keys": "8844",
+      "scoring_versions": "[\"score-v1\"]",
+      "schema_versions": "[\"predictions-v1\"]",
+      "artifacts": "[\"c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c\"]",
+      "mlflow": "[\"a08250c6bcb5415c9591c6427e3d6bf7\"]",
+      "baselines": "[\"airbnb-v1\"]",
+      "salts": "[\"airbnb-v1\"]",
+      "splits": "[\"unseen\"]",
+      "feature_versions": "[\"5\"]",
+      "scored_at": "2026-11-11T20:45:38.000Z"
+    }
+  ],
+  "all_venice_prediction_rows": [
+    {
+      "model_version": "price-v1",
+      "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run",
+      "n": "8844"
+    }
+  ],
+  "keys_vs_features": [
+    {
+      "extra_in_predictions": "0",
+      "missing_from_predictions": "0",
+      "actual_mismatch": "0"
+    }
+  ],
+  "row_checks": [
+    {
+      "model_null": "0",
+      "model_nonpos": "0",
+      "baseline_null": "0",
+      "evaluable_with_errors": "8144",
+      "unpriced_null_errors": "700",
+      "unpriced_with_errors": "0",
+      "residual_formula_bad": "0",
+      "abs_formula_bad": "0",
+      "baseline_formula_bad": "0",
+      "scoring_excluded": "0"
+    }
+  ],
+  "baseline_lookup_reproduction": [
+    {
+      "n": "8844",
+      "value_mismatch": "0",
+      "level_mismatch": "0"
+    }
+  ],
+  "by_status": [
+    {
+      "prediction_status": "scored_no_actual",
+      "evaluation_exclusion_reason": "no_valid_actual_price",
+      "scoring_exclusion_reason": null,
+      "n": "700"
+    },
+    {
+      "prediction_status": "scored_with_actual",
+      "evaluation_exclusion_reason": null,
+      "scoring_exclusion_reason": null,
+      "n": "8144"
+    }
+  ],
+  "by_fallback": [
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Hotel room",
+      "accommodates": "6",
+      "n": "1",
+      "priced": "1"
+    },
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Hotel room",
+      "accommodates": "7",
+      "n": "1",
+      "priced": "1"
+    },
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Hotel room",
+      "accommodates": "9",
+      "n": "1",
+      "priced": "1"
+    },
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Shared room",
+      "accommodates": "7",
+      "n": "2",
+      "priced": "2"
+    }
+  ],
+  "by_fallback_level": [
+    {
+      "baseline_fallback_level": "room_type",
+      "n": "5",
+      "priced": "5"
+    },
+    {
+      "baseline_fallback_level": "room_type_x_accommodates",
+      "n": "8839",
+      "priced": "8139"
+    }
+  ],
+  "by_room_type_counts": [
+    {
+      "room_type": "Entire home/apt",
+      "n": "6826",
+      "priced": "6336",
+      "unpriced": "490"
+    },
+    {
+      "room_type": "Private room",
+      "n": "1970",
+      "priced": "1762",
+      "unpriced": "208"
+    },
+    {
+      "room_type": "Hotel room",
+      "n": "36",
+      "priced": "35",
+      "unpriced": "1"
+    },
+    {
+      "room_type": "Shared room",
+      "n": "12",
+      "priced": "11",
+      "unpriced": "1"
+    }
+  ],
+  "by_property_status_counts": [
+    {
+      "model_view": "OTHER_never_in_AB_train",
+      "vs_ab_snapshots": "unseen_in_AB_snapshots",
+      "n": "18",
+      "priced": "18"
+    },
+    {
+      "model_view": "OTHER_rare_in_AB_train",
+      "vs_ab_snapshots": "seen_in_AB_snapshots",
+      "n": "311",
+      "priced": "275"
+    },
+    {
+      "model_view": "kept_level",
+      "vs_ab_snapshots": "seen_in_AB_snapshots",
+      "n": "8515",
+      "priced": "7851"
+    }
+  ],
+  "unseen_property_types": [
+    {
+      "property_type": "Private room in tower",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "4",
+      "priced": "4"
+    },
+    {
+      "property_type": "Private room in boat",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "3",
+      "priced": "3"
+    },
+    {
+      "property_type": "Houseboat",
+      "room_type": "Entire home/apt",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "3",
+      "priced": "3"
+    },
+    {
+      "property_type": "Private room in pension",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "3",
+      "priced": "3"
+    },
+    {
+      "property_type": "Private room in castle",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "2",
+      "priced": "2"
+    },
+    {
+      "property_type": "Room in heritage hotel",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "1",
+      "priced": "1"
+    },
+    {
+      "property_type": "Dammuso",
+      "room_type": "Entire home/apt",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "1",
+      "priced": "1"
+    },
+    {
+      "property_type": "Private room in houseboat",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "1",
+      "priced": "1"
+    }
+  ],
+  "other_property_types_top": [
+    {
+      "property_type": "Private room in guesthouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "84"
+    },
+    {
+      "property_type": "Entire townhouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "38"
+    },
+    {
+      "property_type": "Entire villa",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "24"
+    },
+    {
+      "property_type": "Private room in guest suite",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "23"
+    },
+    {
+      "property_type": "Entire guest suite",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "23"
+    },
+    {
+      "property_type": "Private room in serviced apartment",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "16"
+    },
+    {
+      "property_type": "Private room in villa",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "12"
+    },
+    {
+      "property_type": "Private room",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "10"
+    },
+    {
+      "property_type": "Private room in casa particular",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "7"
+    },
+    {
+      "property_type": "Private room in farm stay",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "7"
+    },
+    {
+      "property_type": "Entire place",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "7"
+    },
+    {
+      "property_type": "Private room in townhouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "7"
+    },
+    {
+      "property_type": "Entire guesthouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "5"
+    },
+    {
+      "property_type": "Shared room in hostel",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "5"
+    },
+    {
+      "property_type": "Tiny home",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "5"
+    },
+    {
+      "property_type": "Room in aparthotel",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "4"
+    },
+    {
+      "property_type": "Room in bed and breakfast",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "4"
+    },
+    {
+      "property_type": "Shared room in rental unit",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "4"
+    },
+    {
+      "property_type": "Boat",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "4"
+    },
+    {
+      "property_type": "Room in serviced apartment",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "4"
+    },
+    {
+      "property_type": "Private room in tower",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "4"
+    },
+    {
+      "property_type": "Private room in boat",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "3"
+    },
+    {
+      "property_type": "Shared room in home",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "3"
+    },
+    {
+      "property_type": "Casa particular",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "3"
+    },
+    {
+      "property_type": "Private room in pension",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "3"
+    }
+  ],
+  "priced_vs_unpriced": [
+    {
+      "k": "unpriced",
+      "n": "700",
+      "mean_model_pred": "199.17997593130164",
+      "mean_baseline_pred": "180.57128571428566"
+    },
+    {
+      "k": "priced",
+      "n": "8144",
+      "mean_model_pred": "224.1779366761374",
+      "mean_baseline_pred": "191.11429948428304"
+    }
+  ],
+  "above_training_caps": [
+    {
+      "n": "8844",
+      "above_cap_accommodates": "64",
+      "above_cap_bedrooms": "74",
+      "above_cap_beds": "116",
+      "above_cap_bathrooms_n": "117",
+      "above_cap_minimum_nights": "6",
+      "above_cap_dist_center_km": "2105",
+      "dist_null": "0",
+      "dist_max": "18.901956272823814"
+    }
+  ],
+  "ab_above_dist_cap": [
+    {
+      "city": "milan",
+      "n": "25338",
+      "above_dist_cap": "378"
+    },
+    {
+      "city": "florence",
+      "n": "13571",
+      "above_dist_cap": "12"
+    }
+  ],
+  "headline": [
+    {
+      "n": "8144",
+      "model_mae": "106.06768526451864",
+      "baseline_mae": "142.45822016208285",
+      "model_mean_residual": "-77.09013552425543",
+      "baseline_mean_residual": "-110.15377271611075",
+      "model_median_ae": "46.769108829828276",
+      "mean_actual": "301.26807220039296",
+      "median_actual": "231.34",
+      "mean_model_pred": "224.1779366761374",
+      "model_under_rate": "0.66613",
+      "model_beats_baseline_rate": "0.73797",
+      "model_rmse": "297.5499520028042",
+      "baseline_rmse": "336.3816731509281",
+      "baseline_median_ae": "72.5",
+      "model_under": "5425",
+      "model_over": "2719",
+      "model_exact": "0",
+      "baseline_under": "5640",
+      "baseline_over": "2500",
+      "baseline_exact": "4"
+    }
+  ],
+  "ab_test_headline": [
+    {
+      "g": "florence",
+      "n": "2464",
+      "model_mae": "76.17608368869574",
+      "baseline_mae": "97.41181412337652",
+      "model_mean_residual": "-12.463683030918553",
+      "baseline_mean_residual": "-60.219586038961396",
+      "model_median_ae": "37.99344711159472",
+      "mean_actual": "253.86036525974072",
+      "median_actual": "195.5",
+      "mean_model_pred": "241.39668222882216",
+      "model_under_rate": "0.40666",
+      "model_beats_baseline_rate": "0.61323",
+      "model_over": "1462"
+    },
+    {
+      "g": "milan+florence",
+      "n": "6863",
+      "model_mae": "75.8844478189808",
+      "baseline_mae": "95.4655238234008",
+      "model_mean_residual": "-27.23178319404152",
+      "baseline_mean_residual": "-47.09399970858124",
+      "model_median_ae": "33.98980343008003",
+      "mean_actual": "231.33063529068912",
+      "median_actual": "175.67",
+      "mean_model_pred": "204.09885209664728",
+      "model_under_rate": "0.43975",
+      "model_beats_baseline_rate": "0.64156",
+      "model_over": "3845"
+    },
+    {
+      "g": "milan",
+      "n": "4399",
+      "model_mae": "75.7210946062105",
+      "baseline_mae": "94.37535348942961",
+      "model_mean_residual": "-35.50379928904839",
+      "baseline_mean_residual": "-39.742000454648654",
+      "model_median_ae": "32.33968640360601",
+      "mean_actual": "218.71111843600832",
+      "median_actual": "165.0",
+      "mean_model_pred": "183.2073191469601",
+      "model_under_rate": "0.45829",
+      "model_beats_baseline_rate": "0.65742",
+      "model_over": "2383"
+    }
+  ],
+  "by_room_type": [
+    {
+      "room_type": "Entire home/apt",
+      "n": "6336",
+      "model_mae": "113.17388035013063",
+      "baseline_mae": "152.32149226641468",
+      "model_mean_residual": "-83.05140825156607",
+      "baseline_mean_residual": "-124.18385495580887",
+      "model_median_ae": "53.59453781531873",
+      "mean_actual": "330.54978377525265",
+      "median_actual": "255.32",
+      "mean_model_pred": "247.49837552368638",
+      "model_under_rate": "0.68703",
+      "model_beats_baseline_rate": "0.74763"
+    },
+    {
+      "room_type": "Private room",
+      "n": "1762",
+      "model_mae": "81.5567544601785",
+      "baseline_mae": "108.34767026106697",
+      "model_mean_residual": "-56.56360530849655",
+      "baseline_mean_residual": "-62.24929341657193",
+      "model_median_ae": "29.90286488888826",
+      "mean_actual": "199.27963110102158",
+      "median_actual": "137.0",
+      "mean_model_pred": "142.71602579252496",
+      "model_under_rate": "0.59364",
+      "model_beats_baseline_rate": "0.70715"
+    },
+    {
+      "room_type": "Hotel room",
+      "n": "35",
+      "model_mae": "77.1172652081654",
+      "baseline_mae": "107.304",
+      "model_mean_residual": "-60.25106294579824",
+      "baseline_mean_residual": "-23.162857142857145",
+      "model_median_ae": "42.85018667940642",
+      "mean_actual": "212.17714285714288",
+      "median_actual": "174.0",
+      "mean_model_pred": "151.9260799113446",
+      "model_under_rate": "0.65714",
+      "model_beats_baseline_rate": "0.62857"
+    },
+    {
+      "room_type": "Shared room",
+      "n": "11",
+      "model_mae": "31.219750426565444",
+      "baseline_mae": "36.95772727272727",
+      "model_mean_residual": "15.047157187283547",
+      "baseline_mean_residual": "20.95772727272727",
+      "model_median_ae": "16.050876184226247",
+      "mean_actual": "55.16727272727273",
+      "median_actual": "52.0",
+      "mean_model_pred": "70.21442991455628",
+      "model_under_rate": "0.27273",
+      "model_beats_baseline_rate": "0.45455"
+    }
+  ],
+  "ab_by_room_type": [
+    {
+      "room_type": "Entire home/apt",
+      "n": "5968",
+      "model_mae": "79.63840318804132",
+      "baseline_mae": "98.94058394772117",
+      "model_mean_residual": "-29.28183134007321",
+      "baseline_mean_residual": "-50.37151055630055",
+      "model_median_ae": "35.43658506527515",
+      "mean_actual": "242.8433729892759",
+      "median_actual": "183.0",
+      "mean_model_pred": "213.5615416492031",
+      "model_under_rate": "0.44219",
+      "model_beats_baseline_rate": "0.63455"
+    },
+    {
+      "room_type": "Private room",
+      "n": "868",
+      "model_mae": "50.95812207947973",
+      "baseline_mae": "73.38068548387096",
+      "model_mean_residual": "-14.72965629050898",
+      "baseline_mean_residual": "-26.126284562211953",
+      "model_median_ae": "25.896576505543578",
+      "mean_actual": "156.11327188940092",
+      "median_actual": "119.66",
+      "mean_model_pred": "141.3836155988919",
+      "model_under_rate": "0.42972",
+      "model_beats_baseline_rate": "0.69585"
+    },
+    {
+      "room_type": "Shared room",
+      "n": "14",
+      "model_mae": "34.981911612152395",
+      "baseline_mae": "14.12857142857143",
+      "model_mean_residual": "31.769535396451282",
+      "baseline_mean_residual": "2.922857142857143",
+      "model_median_ae": "17.8292565335241",
+      "mean_actual": "49.36285714285714",
+      "median_actual": "43.0",
+      "mean_model_pred": "81.13239253930841",
+      "model_under_rate": "0.14286",
+      "model_beats_baseline_rate": "0.21429"
+    },
+    {
+      "room_type": "Hotel room",
+      "n": "13",
+      "model_mae": "60.89064829824106",
+      "baseline_mae": "62.32692307692308",
+      "model_mean_residual": "15.600733958651208",
+      "baseline_mean_residual": "3.673076923076923",
+      "model_median_ae": "38.128258715523",
+      "mean_actual": "164.26923076923077",
+      "median_actual": "144.0",
+      "mean_model_pred": "179.86996472788198",
+      "model_under_rate": "0.30769",
+      "model_beats_baseline_rate": "0.69231"
+    }
+  ],
+  "by_price_band": [
+    {
+      "band": "00 [0, 128)",
+      "n": "1252",
+      "model_mae": "26.867702527974693",
+      "baseline_mae": "55.27972444089461",
+      "model_mean_residual": "20.959112250683827",
+      "baseline_mean_residual": "53.42616214057511",
+      "model_median_ae": "20.427111860917385",
+      "mean_actual": "92.9781230031949",
+      "median_actual": "95.0",
+      "mean_model_pred": "113.93723525387873",
+      "model_under_rate": "0.23163",
+      "model_beats_baseline_rate": "0.81230"
+    },
+    {
+      "band": "01 [128, 174.6)",
+      "n": "1229",
+      "model_mae": "30.07370505614756",
+      "baseline_mae": "33.702721724979675",
+      "model_mean_residual": "8.96758497385331",
+      "baseline_mean_residual": "19.37337266069977",
+      "model_median_ae": "21.68614899560899",
+      "mean_actual": "152.74487388120423",
+      "median_actual": "153.5",
+      "mean_model_pred": "161.71245885505752",
+      "model_under_rate": "0.46786",
+      "model_beats_baseline_rate": "0.53295"
+    },
+    {
+      "band": "02 [174.6, 249)",
+      "n": "1996",
+      "model_mae": "41.58138387595317",
+      "baseline_mae": "50.50288577154302",
+      "model_mean_residual": "-13.2054579301119",
+      "baseline_mean_residual": "-30.506878757514997",
+      "model_median_ae": "33.9180390192837",
+      "mean_actual": "210.78823647294587",
+      "median_actual": "211.0",
+      "mean_model_pred": "197.58277854283395",
+      "model_under_rate": "0.68788",
+      "model_beats_baseline_rate": "0.63377"
+    },
+    {
+      "band": "03 [249, 513)",
+      "n": "2859",
+      "model_mae": "95.47564045473163",
+      "baseline_mae": "140.0254826862545",
+      "model_mean_residual": "-77.0033516878932",
+      "baseline_mean_residual": "-134.16346449807682",
+      "model_median_ae": "85.09246064976313",
+      "mean_actual": "335.7117033927947",
+      "median_actual": "320.0",
+      "mean_model_pred": "258.7083517049015",
+      "model_under_rate": "0.84890",
+      "model_beats_baseline_rate": "0.82232"
+    },
+    {
+      "band": "04 [513, inf)",
+      "n": "808",
+      "model_mae": "541.1571577212005",
+      "baseline_mae": "678.7280569306937",
+      "model_mean_residual": "-518.03633375751",
+      "baseline_mean_residual": "-672.4340099009906",
+      "model_median_ae": "354.8782424593139",
+      "mean_actual": "951.5619306930694",
+      "median_actual": "718.0",
+      "mean_model_pred": "433.5255969355592",
+      "model_under_rate": "0.94059",
+      "model_beats_baseline_rate": "0.89356"
+    }
+  ],
+  "ab_by_price_band": [
+    {
+      "band": "00 [0, 128)",
+      "n": "1630",
+      "model_mae": "35.89453444601663",
+      "baseline_mae": "57.77034049079692",
+      "model_mean_residual": "32.6073565722071",
+      "baseline_mean_residual": "56.572720858895124",
+      "model_median_ae": "29.205037718812584",
+      "mean_actual": "94.51365030674856",
+      "median_actual": "100.0",
+      "mean_model_pred": "127.12100687895551",
+      "model_under_rate": "0.12147",
+      "model_beats_baseline_rate": "0.77485"
+    },
+    {
+      "band": "01 [128, 174.6)",
+      "n": "1756",
+      "model_mae": "30.70268462366571",
+      "baseline_mae": "29.2349572892936",
+      "model_mean_residual": "19.413051874954082",
+      "baseline_mean_residual": "20.835031321184175",
+      "model_median_ae": "21.81979004795538",
+      "mean_actual": "150.72036446469255",
+      "median_actual": "150.035",
+      "mean_model_pred": "170.13341633964663",
+      "model_under_rate": "0.30125",
+      "model_beats_baseline_rate": "0.50228"
+    },
+    {
+      "band": "02 [174.6, 249)",
+      "n": "1689",
+      "model_mae": "39.42411713730907",
+      "baseline_mae": "42.02830669034973",
+      "model_mean_residual": "3.2847208126163543",
+      "baseline_mean_residual": "-19.76662522202504",
+      "model_median_ae": "30.032123376358385",
+      "mean_actual": "205.76858496151573",
+      "median_actual": "203.0",
+      "mean_model_pred": "209.05330577413238",
+      "model_under_rate": "0.53760",
+      "model_beats_baseline_rate": "0.55121"
+    },
+    {
+      "band": "03 [249, 513)",
+      "n": "1440",
+      "model_mae": "87.99228131593726",
+      "baseline_mae": "125.40643055555587",
+      "model_mean_residual": "-50.930252568869236",
+      "baseline_mean_residual": "-112.00705555555601",
+      "model_median_ae": "69.9746773389786",
+      "mean_actual": "328.40664583333324",
+      "median_actual": "308.975",
+      "mean_model_pred": "277.4763932644642",
+      "model_under_rate": "0.73750",
+      "model_beats_baseline_rate": "0.72986"
+    },
+    {
+      "band": "04 [513, inf)",
+      "n": "348",
+      "model_mae": "618.036612343784",
+      "baseline_mae": "741.6855747126435",
+      "model_mean_residual": "-592.9292187332193",
+      "baseline_mean_residual": "-739.4539655172413",
+      "model_median_ae": "347.69132504331105",
+      "mean_actual": "1001.2966379310341",
+      "median_actual": "708.335",
+      "mean_model_pred": "408.3674191978148",
+      "model_under_rate": "0.92241",
+      "model_beats_baseline_rate": "0.79310"
+    }
+  ],
+  "by_property_status": [
+    {
+      "model_view": "OTHER_never_in_AB_train",
+      "n": "18",
+      "model_mae": "193.4240744428555",
+      "baseline_mae": "246.4994444444445",
+      "model_mean_residual": "-173.06625429430582",
+      "baseline_mean_residual": "-241.56055555555557",
+      "model_median_ae": "59.10320519725737",
+      "mean_actual": "420.24611111111113",
+      "median_actual": "313.5",
+      "mean_model_pred": "247.1798568168053",
+      "model_under_rate": "0.72222",
+      "model_beats_baseline_rate": "0.88889"
+    },
+    {
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": "275",
+      "model_mae": "99.82860587447496",
+      "baseline_mae": "118.91334545454546",
+      "model_mean_residual": "-54.020046555461214",
+      "baseline_mean_residual": "-88.59967272727275",
+      "model_median_ae": "42.69400436751724",
+      "mean_actual": "260.47",
+      "median_actual": "174.0",
+      "mean_model_pred": "206.44995344453878",
+      "model_under_rate": "0.57455",
+      "model_beats_baseline_rate": "0.60727"
+    },
+    {
+      "model_view": "kept_level",
+      "n": "7851",
+      "model_mae": "106.08594177032067",
+      "baseline_mae": "143.04440007642376",
+      "model_mean_residual": "-77.67817581575429",
+      "baseline_mean_residual": "-110.60747993886203",
+      "model_median_ae": "46.95446108306166",
+      "mean_actual": "302.4243408482996",
+      "median_actual": "233.35",
+      "mean_model_pred": "224.74616503254518",
+      "model_under_rate": "0.66921",
+      "model_beats_baseline_rate": "0.74220"
+    }
+  ],
+  "by_unseen_ab": [
+    {
+      "vs_ab_snapshots": "seen_in_AB_snapshots",
+      "n": "8126",
+      "model_mae": "105.87418107977706",
+      "baseline_mae": "142.22775719911428",
+      "model_mean_residual": "-76.8775376731773",
+      "baseline_mean_residual": "-109.86269197637286",
+      "model_median_ae": "46.769108829828276",
+      "mean_actual": "301.0045225203052",
+      "median_actual": "231.0",
+      "mean_model_pred": "224.12698484712777",
+      "model_under_rate": "0.66601",
+      "model_beats_baseline_rate": "0.73763"
+    },
+    {
+      "vs_ab_snapshots": "unseen_in_AB_snapshots",
+      "n": "18",
+      "model_mae": "193.4240744428555",
+      "baseline_mae": "246.4994444444445",
+      "model_mean_residual": "-173.06625429430582",
+      "baseline_mean_residual": "-241.56055555555557",
+      "model_median_ae": "59.10320519725737",
+      "mean_actual": "420.24611111111113",
+      "median_actual": "313.5",
+      "mean_model_pred": "247.1798568168053",
+      "model_under_rate": "0.72222",
+      "model_beats_baseline_rate": "0.88889"
+    }
+  ],
+  "by_fallback_mae": [
+    {
+      "baseline_fallback_level": "room_type",
+      "n": "5",
+      "model_mae": "107.1610079752522",
+      "baseline_mae": "77.13199999999999",
+      "model_mean_residual": "-58.96821240647198",
+      "baseline_mean_residual": "-54.468",
+      "model_median_ae": "112.75517182837558",
+      "mean_actual": "189.868",
+      "median_actual": "246.0",
+      "mean_model_pred": "130.89978759352803",
+      "model_under_rate": "0.60000",
+      "model_beats_baseline_rate": "0.00000"
+    },
+    {
+      "baseline_fallback_level": "room_type_x_accommodates",
+      "n": "8139",
+      "model_mae": "106.06701360785888",
+      "baseline_mae": "142.4983517631162",
+      "model_mean_residual": "-77.1012682943241",
+      "baseline_mean_residual": "-110.18798193881386",
+      "model_median_ae": "46.75723663935224",
+      "mean_actual": "301.33650817053694",
+      "median_actual": "231.33",
+      "mean_model_pred": "224.23523987621272",
+      "model_under_rate": "0.66618",
+      "model_beats_baseline_rate": "0.73842"
+    }
+  ],
+  "by_distance_band": [
+    {
+      "dist_band_km": "[0, 1)",
+      "n": "3366",
+      "model_mae": "142.88890124509422",
+      "baseline_mae": "199.78154931669712",
+      "model_mean_residual": "-113.13165209990534",
+      "baseline_mean_residual": "-192.29108585858665",
+      "model_median_ae": "65.46732097361625",
+      "mean_actual": "388.32525549613786",
+      "median_actual": "290.0",
+      "mean_model_pred": "275.19360339623256",
+      "model_under_rate": "0.72252",
+      "model_beats_baseline_rate": "0.80036"
+    },
+    {
+      "dist_band_km": "[1, 2)",
+      "n": "2382",
+      "model_mae": "107.76209298049744",
+      "baseline_mae": "132.23246221662492",
+      "model_mean_residual": "-88.21172950245185",
+      "baseline_mean_residual": "-122.7955982367761",
+      "model_median_ae": "56.48290617363928",
+      "mean_actual": "309.3802434928632",
+      "median_actual": "249.0",
+      "mean_model_pred": "221.16851399041133",
+      "model_under_rate": "0.76700",
+      "model_beats_baseline_rate": "0.70781"
+    },
+    {
+      "dist_band_km": "[2, 4)",
+      "n": "373",
+      "model_mae": "103.39200531184625",
+      "baseline_mae": "110.05253351206433",
+      "model_mean_residual": "-72.48194383286021",
+      "baseline_mean_residual": "-75.98631367292222",
+      "model_median_ae": "45.330800659466775",
+      "mean_actual": "276.90951742627345",
+      "median_actual": "213.67",
+      "mean_model_pred": "204.42757359341323",
+      "model_under_rate": "0.67292",
+      "model_beats_baseline_rate": "0.51206"
+    },
+    {
+      "dist_band_km": "[4, 8)",
+      "n": "171",
+      "model_mae": "71.47851420820054",
+      "baseline_mae": "70.96122807017544",
+      "model_mean_residual": "-35.68440299522024",
+      "baseline_mean_residual": "-8.37964912280701",
+      "model_median_ae": "33.78152273199265",
+      "mean_actual": "205.73450292397663",
+      "median_actual": "171.0",
+      "mean_model_pred": "170.05009992875634",
+      "model_under_rate": "0.61988",
+      "model_beats_baseline_rate": "0.51462"
+    },
+    {
+      "dist_band_km": "[8, inf)",
+      "n": "1852",
+      "model_mae": "40.69861652958259",
+      "baseline_mae": "64.55365010799143",
+      "model_mean_residual": "-2.031741417157207",
+      "baseline_mean_residual": "39.111447084233305",
+      "model_median_ae": "23.109863684511538",
+      "mean_actual": "146.33519438444924",
+      "median_actual": "126.0",
+      "mean_model_pred": "144.3034529672921",
+      "model_under_rate": "0.43683",
+      "model_beats_baseline_rate": "0.72948"
+    }
+  ],
+  "by_dist_cap": [
+    {
+      "k": "beyond_AB_train_cap",
+      "n": "1912",
+      "model_mae": "40.70227499265062",
+      "baseline_mae": "63.8720763598327",
+      "model_mean_residual": "-2.083108881674571",
+      "baseline_mean_residual": "38.89054916317996",
+      "model_median_ae": "23.32886159728674",
+      "mean_actual": "146.68169979079497",
+      "median_actual": "126.2",
+      "mean_model_pred": "144.59859090912045",
+      "model_under_rate": "0.44090",
+      "model_beats_baseline_rate": "0.72333"
+    },
+    {
+      "k": "within_cap_or_missing",
+      "n": "6232",
+      "model_mae": "126.12202808220343",
+      "baseline_mae": "166.56873154685553",
+      "model_mean_residual": "-100.10256089983541",
+      "baseline_mean_residual": "-155.8811063863936",
+      "model_median_ae": "59.642031858746165",
+      "mean_actual": "348.69572689345324",
+      "median_actual": "266.0",
+      "mean_model_pred": "248.5931659936177",
+      "model_under_rate": "0.73524",
+      "model_beats_baseline_rate": "0.74246"
+    }
+  ],
+  "by_price_class": [
+    {
+      "price_class": "normal",
+      "n": "8062",
+      "model_mae": "86.33174877914408",
+      "baseline_mae": "120.96498573554993",
+      "model_mean_residual": "-57.05946335558868",
+      "baseline_mean_residual": "-88.33196415281647",
+      "model_median_ae": "46.26386438045118",
+      "mean_actual": "277.7832808236171",
+      "median_actual": "229.67",
+      "mean_model_pred": "220.72381746802816",
+      "model_under_rate": "0.66274",
+      "model_beats_baseline_rate": "0.73679"
+    },
+    {
+      "price_class": "high_tail",
+      "n": "39",
+      "model_mae": "1669.9129094976302",
+      "baseline_mae": "1906.056923076923",
+      "model_mean_residual": "-1669.9129094976302",
+      "baseline_mean_residual": "-1906.056923076923",
+      "model_median_ae": "1528.7804671041954",
+      "mean_actual": "2331.16",
+      "median_actual": "2111.0",
+      "mean_model_pred": "661.24709050237",
+      "model_under_rate": "1.00000",
+      "model_beats_baseline_rate": "0.89744"
+    },
+    {
+      "price_class": "stale_high",
+      "n": "29",
+      "model_mae": "1566.2452268585669",
+      "baseline_mae": "1790.7305172413794",
+      "model_mean_residual": "-1566.2452268585669",
+      "baseline_mean_residual": "-1790.7305172413794",
+      "model_median_ae": "1515.7965752526716",
+      "mean_actual": "2111.788620689655",
+      "median_actual": "1851.0",
+      "mean_model_pred": "545.5433938310882",
+      "model_under_rate": "1.00000",
+      "model_beats_baseline_rate": "0.86207"
+    },
+    {
+      "price_class": "extreme_high",
+      "n": "14",
+      "model_mae": "4090.068220533871",
+      "baseline_mae": "4192.330357142857",
+      "model_mean_residual": "-4090.068220533871",
+      "baseline_mean_residual": "-4192.330357142857",
+      "model_median_ae": "3330.507942356653",
+      "mean_actual": "4420.089999999999",
+      "median_actual": "3887.0",
+      "mean_model_pred": "330.0217794661283",
+      "model_under_rate": "1.00000",
+      "model_beats_baseline_rate": "0.71429"
+    }
+  ],
+  "residual_percentiles": [
+    {
+      "model_p01": "-1107.6328434908423",
+      "baseline_p01": "-1204.8190999999997",
+      "model_p05": "-348.43538450914025",
+      "baseline_p05": "-472.90999999999997",
+      "model_p10": "-199.7108359222816",
+      "baseline_p10": "-286.894",
+      "model_p25": "-89.37631490621924",
+      "baseline_p25": "-139.28249999999997",
+      "model_p50": "-26.862407037613337",
+      "baseline_p50": "-52.219999999999985",
+      "model_p75": "12.486640815568755",
+      "baseline_p75": "14.833750000000013",
+      "model_p90": "46.51755050617192",
+      "baseline_p90": "61.42700000000002",
+      "model_p95": "74.98721142915815",
+      "baseline_p95": "84.49249999999998",
+      "model_p99": "167.74452660893854",
+      "baseline_p99": "145.50184999999982",
+      "model_min": "-11676.181707369713",
+      "model_max": "685.6580826775842",
+      "model_sd": "287.4077726405638"
+    }
+  ],
+  "residual_histogram": [
+    {
+      "bucket": "00 < -500",
+      "model_n": "226"
+    },
+    {
+      "bucket": "01 [-500,-200)",
+      "model_n": "586"
+    },
+    {
+      "bucket": "02 [-200,-100)",
+      "model_n": "1022"
+    },
+    {
+      "bucket": "03 [-100,-50)",
+      "model_n": "1320"
+    },
+    {
+      "bucket": "04 [-50,0)",
+      "model_n": "2271"
+    },
+    {
+      "bucket": "06 (0,50)",
+      "model_n": "1984"
+    },
+    {
+      "bucket": "07 [50,100)",
+      "model_n": "497"
+    },
+    {
+      "bucket": "08 [100,200)",
+      "model_n": "184"
+    },
+    {
+      "bucket": "09 [200,500)",
+      "model_n": "48"
+    },
+    {
+      "bucket": "10 >= 500",
+      "model_n": "6"
+    }
+  ],
+  "baseline_residual_histogram": [
+    {
+      "bucket": "00 < -500",
+      "baseline_n": "372"
+    },
+    {
+      "bucket": "01 [-500,-200)",
+      "baseline_n": "953"
+    },
+    {
+      "bucket": "02 [-200,-100)",
+      "baseline_n": "1446"
+    },
+    {
+      "bucket": "03 [-100,-50)",
+      "baseline_n": "1354"
+    },
+    {
+      "bucket": "04 [-50,0)",
+      "baseline_n": "1515"
+    },
+    {
+      "bucket": "05 0",
+      "baseline_n": "4"
+    },
+    {
+      "bucket": "06 (0,50)",
+      "baseline_n": "1426"
+    },
+    {
+      "bucket": "07 [50,100)",
+      "baseline_n": "811"
+    },
+    {
+      "bucket": "08 [100,200)",
+      "baseline_n": "232"
+    },
+    {
+      "bucket": "09 [200,500)",
+      "baseline_n": "25"
+    },
+    {
+      "bucket": "10 >= 500",
+      "baseline_n": "6"
+    }
+  ],
+  "ab_residual_percentiles": [
+    {
+      "model_p05": "-198.60997785917456",
+      "model_p25": "-31.967342267252405",
+      "model_p50": "6.498725165965311",
+      "model_p75": "35.38953439150525",
+      "model_p95": "93.47670842074727"
+    }
+  ],
+  "largest_underpredictions": [
+    {
+      "listing_id": "1560209843287885749",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "5",
+      "bedrooms": "2.0",
+      "dist_center_km": "0.71",
+      "minimum_nights": "2",
+      "actual_price_eur": "12047.0",
+      "model_pred": "370.82",
+      "baseline_pred": "213.0",
+      "residual": "-11676.18",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "1648395065584291951",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "10",
+      "bedrooms": "5.0",
+      "dist_center_km": "0.67",
+      "minimum_nights": "2",
+      "actual_price_eur": "7473.0",
+      "model_pred": "1079.2",
+      "baseline_pred": "501.0",
+      "residual": "-6393.8",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "1642556995479157505",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "5",
+      "bedrooms": "1.0",
+      "dist_center_km": "3.35",
+      "minimum_nights": "2",
+      "actual_price_eur": "5734.5",
+      "model_pred": "160.48",
+      "baseline_pred": "213.0",
+      "residual": "-5574.02",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "1105544393883648175",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire condo",
+      "accommodates": "6",
+      "bedrooms": "3.0",
+      "dist_center_km": "0.8",
+      "minimum_nights": "2",
+      "actual_price_eur": "5477.07",
+      "model_pred": "306.71",
+      "baseline_pred": "271.1",
+      "residual": "-5170.36",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "1184026459257008703",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "4",
+      "bedrooms": "1.0",
+      "dist_center_km": "1.34",
+      "minimum_nights": "31",
+      "actual_price_eur": "5508.93",
+      "model_pred": "342.28",
+      "baseline_pred": "185.09",
+      "residual": "-5166.65",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "1747385255838470015",
+      "room_type": "Private room",
+      "property_type": "Room in hotel",
+      "accommodates": "2",
+      "bedrooms": "1.0",
+      "dist_center_km": "0.13",
+      "minimum_nights": "1",
+      "actual_price_eur": "5019.0",
+      "model_pred": "399.24",
+      "baseline_pred": "125.45",
+      "residual": "-4619.76",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "51030242",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "16",
+      "bedrooms": "6.0",
+      "dist_center_km": "1.25",
+      "minimum_nights": "1",
+      "actual_price_eur": "4754.0",
+      "model_pred": "960.97",
+      "baseline_pred": "778.5",
+      "residual": "-3793.03",
+      "price_class": "extreme_high"
+    },
+    {
+      "listing_id": "805026065623230078",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire vacation home",
+      "accommodates": "16",
+      "bedrooms": "11.0",
+      "dist_center_km": "1.16",
+      "minimum_nights": "2",
+      "actual_price_eur": "4300.0",
+      "model_pred": "1060.64",
+      "baseline_pred": "778.5",
+      "residual": "-3239.36",
+      "price_class": "high_tail"
+    },
+    {
+      "listing_id": "33467054",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "4",
+      "bedrooms": "1.0",
+      "dist_center_km": "0.71",
+      "minimum_nights": "2",
+      "actual_price_eur": "3449.5",
+      "model_pred": "216.47",
+      "baseline_pred": "185.09",
+      "residual": "-3233.03",
+      "price_class": "high_tail"
+    },
+    {
+      "listing_id": "1649137290849297199",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "8",
+      "bedrooms": "4.0",
+      "dist_center_km": "0.66",
+      "minimum_nights": "2",
+      "actual_price_eur": "3960.0",
+      "model_pred": "869.38",
+      "baseline_pred": "377.435",
+      "residual": "-3090.62",
+      "price_class": "stale_high"
+    }
+  ],
+  "largest_overpredictions": [
+    {
+      "listing_id": "1722428384412839314",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire home",
+      "accommodates": "12",
+      "bedrooms": "4.0",
+      "dist_center_km": "9.99",
+      "minimum_nights": "1",
+      "actual_price_eur": "620.0",
+      "model_pred": "1305.66",
+      "baseline_pred": "654.5",
+      "residual": "685.66",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "43251320",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire rental unit",
+      "accommodates": "16",
+      "bedrooms": "3.0",
+      "dist_center_km": "0.63",
+      "minimum_nights": "31",
+      "actual_price_eur": "171.47",
+      "model_pred": "845.77",
+      "baseline_pred": "778.5",
+      "residual": "674.3",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "1703676690772241856",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire home",
+      "accommodates": "10",
+      "bedrooms": "5.0",
+      "dist_center_km": "4.53",
+      "minimum_nights": "3",
+      "actual_price_eur": "731.33",
+      "model_pred": "1375.32",
+      "baseline_pred": "501.0",
+      "residual": "643.99",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "1714460968216525852",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire home",
+      "accommodates": "9",
+      "bedrooms": "4.0",
+      "dist_center_km": "0.55",
+      "minimum_nights": "1",
+      "actual_price_eur": "518.0",
+      "model_pred": "1089.8",
+      "baseline_pred": "380.0",
+      "residual": "571.8",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "1772702468055124356",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire condo",
+      "accommodates": "8",
+      "bedrooms": "3.0",
+      "dist_center_km": "9.84",
+      "minimum_nights": "1",
+      "actual_price_eur": "194.0",
+      "model_pred": "735.25",
+      "baseline_pred": "377.435",
+      "residual": "541.25",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "1069360839089815303",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire home",
+      "accommodates": "14",
+      "bedrooms": "7.0",
+      "dist_center_km": "10.38",
+      "minimum_nights": "2",
+      "actual_price_eur": "659.0",
+      "model_pred": "1169.49",
+      "baseline_pred": "591.0",
+      "residual": "510.49",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "31062519",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire condo",
+      "accommodates": "8",
+      "bedrooms": "4.0",
+      "dist_center_km": "0.9",
+      "minimum_nights": "2",
+      "actual_price_eur": "376.33",
+      "model_pred": "872.87",
+      "baseline_pred": "377.435",
+      "residual": "496.54",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "13627670",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire home",
+      "accommodates": "12",
+      "bedrooms": "6.0",
+      "dist_center_km": "1.43",
+      "minimum_nights": "3",
+      "actual_price_eur": "582.0",
+      "model_pred": "1031.28",
+      "baseline_pred": "654.5",
+      "residual": "449.28",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "1725188782046061193",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire home",
+      "accommodates": "14",
+      "bedrooms": "4.0",
+      "dist_center_km": "10.06",
+      "minimum_nights": "1",
+      "actual_price_eur": "628.0",
+      "model_pred": "1075.77",
+      "baseline_pred": "591.0",
+      "residual": "447.77",
+      "price_class": "normal"
+    },
+    {
+      "listing_id": "552573882894829155",
+      "room_type": "Entire home/apt",
+      "property_type": "Entire condo",
+      "accommodates": "9",
+      "bedrooms": "4.0",
+      "dist_center_km": "9.65",
+      "minimum_nights": "3",
+      "actual_price_eur": "434.0",
+      "model_pred": "880.81",
+      "baseline_pred": "380.0",
+      "residual": "446.81",
+      "price_class": "normal"
+    }
+  ],
+  "error_concentration": [
+    {
+      "top1pct_share": "0.19723050837571907",
+      "top5pct_share": "0.40750495523761554",
+      "mae_without_top1pct_abs_errors": "86.00328811564735"
+    }
+  ],
+  "threshold_recomputed_from_ab_train": [
+    {
+      "n_train_priced": "26939",
+      "p99": "1156.619999999999"
+    }
+  ],
+  "ab_supplementary_reproduced": [
+    {
+      "g": "florence",
+      "n": "2448",
+      "model_mae": "62.93026354620996",
+      "baseline_mae": "82.53962418300652"
+    },
+    {
+      "g": "milan+florence",
+      "n": "6811",
+      "model_mae": "59.633579216759465",
+      "baseline_mae": "78.24294890618123"
+    },
+    {
+      "g": "milan",
+      "n": "4363",
+      "model_mae": "57.7838695586126",
+      "baseline_mae": "75.8321625028651"
+    }
+  ],
+  "venice_supplementary": [
+    {
+      "n": "7999",
+      "model_mae": "80.9546209053351",
+      "baseline_mae": "114.10128766095808",
+      "above_threshold": "0"
+    }
+  ],
+  "_meta": {
+    "run_filter": "(SELECT * FROM workspace.airbnb_gold.predictions WHERE city='venice' AND snapshot_date=DATE '2026-09-16' AND model_version='price-v1' AND scoring_run_id='venice-2026-09-16-price-v1-score-v1-first-run')",
+    "price_band_edges_frozen_ab": [
+      0.0,
+      128.0,
+      174.6,
+      249.0,
+      513.0
+    ],
+    "dist_cap_km": 7.068462416182617,
+    "numeric_caps": {
+      "accommodates": 10.0,
+      "bedrooms": 4.0,
+      "beds": 6.0,
+      "bathrooms_n": 3.0,
+      "minimum_nights": 31.0,
+      "dist_center_km": 7.068462416182617,
+      "log_host_listings_count": 6.302618975744905
+    },
+    "kept_property_levels": [
+      "Entire condo",
+      "Entire home",
+      "Entire loft",
+      "Entire rental unit",
+      "Entire serviced apartment",
+      "Entire vacation home",
+      "Private room in bed and breakfast",
+      "Private room in condo",
+      "Private room in home",
+      "Private room in rental unit",
+      "Private room in vacation home",
+      "Room in boutique hotel",
+      "Room in hotel"
+    ],
+    "threshold_eur": 1156.619999999999
+  }
+}
