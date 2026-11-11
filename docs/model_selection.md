@@ -176,8 +176,10 @@ It is not a headline number.
 | Environment | Serverless environment 6, Python 3.12.3, scikit-learn 1.7.2, numpy 2.3.4, pandas 2.3.3, joblib 1.5.2, MLflow 3.12.0 (probe run 376778873486598) |
 
 Loading the file needs `airbnb/price_model.py` on the path (custom transformers). Stage `final`
-refuses a second evaluation of `price-v1`; any change needs a new `model_version`. No prediction
-table for every listing exists yet (MODEL-06), and no Git freeze tag has been created.
+refuses a second evaluation of `price-v1`; any change needs a new `model_version`. Predictions for
+every listing are in `airbnb_gold.predictions` ([model_predictions_run.md](model_predictions_run.md));
+the freeze candidate is in [model_freeze_candidate.md](model_freeze_candidate.md). No Git freeze tag
+has been created.
 
 ## Runs
 
