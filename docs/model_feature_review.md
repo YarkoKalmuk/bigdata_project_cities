@@ -5,8 +5,10 @@ schema in `airbnb/silver.py` on `yaropolk/feature3-eda-gold` (`d67faa9`). Missin
 from Maksym's [EDA handoff](eda_handoff.md) and EDA notebook; where the EDA gives no figure, the
 rate must be measured on **training rows** in MODEL-04 and is marked "measure".
 
-Status: draft sign-off. It has not been checked against real gold rows because
-`<catalog>.airbnb_gold.model_features` is not reachable from Nazar's workspace (blocker B1).
+Status: draft sign-off. Blocker B1 is resolved: `workspace.airbnb_gold.model_features` now exists
+in the shared team workspace and its schema, keys and eligibility rule were checked against real
+Milan/Florence rows (see [the baseline run evidence](model_baseline_run.md)). Per-feature missingness
+marked "measure" is still to be measured on training rows in MODEL-04.
 `airbnb/gold.py` is Yaropolk's file and is not changed here: the later model selects the
 allowlist below by name from `model_features`.
 
