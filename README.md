@@ -46,6 +46,7 @@ to an unseen city (Venice).
 - [Integrated system and remaining freeze checks](docs/integration_readiness.md)
 - [Model selection and held-out evaluation](docs/model_selection.md)
 - [Prediction schema and run evidence](docs/model_predictions_run.md)
+- [Dashboard and Genie Agent](docs/dashboard_genie.md)
 
 Yaropolk reports successful execution of the initial silver notebook. Maksym's
 completed EDA records 25,338 Milan listings and 13,571 Florence listings for
