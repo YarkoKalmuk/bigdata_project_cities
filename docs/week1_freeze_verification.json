@@ -1,0 +1,1471 @@
+{
+  "verified_at_utc": "2026-11-11T19:41:54.003836+00:00",
+  "workspace_host": "https://dbc-1766f78b-980d.cloud.databricks.com",
+  "source_commit": "2ceb9c35e0a356bfc74b3e0f45260d596de3dbc1",
+  "queries": [
+    {
+      "label": "schemas",
+      "statement_id": "01f1de07-f2f6-1617-9cc9-47476b0aeba1",
+      "statement": "SELECT schema_name FROM workspace.information_schema.schemata WHERE schema_name IN ('airbnb_bronze','airbnb_silver','airbnb_gold')"
+    },
+    {
+      "label": "bronze",
+      "statement_id": "01f1de07-f379-130e-a12e-f562c1dfaf41",
+      "statement": "SELECT _city city, count(*) n, count(DISTINCT id) unique_ids FROM workspace.airbnb_bronze.listings WHERE _city IN ('milan','florence') AND _snapshot_date = DATE '2026-09-19' GROUP BY _city"
+    },
+    {
+      "label": "silver",
+      "statement_id": "01f1de07-f447-195c-a59e-7e0ba5dbcfbf",
+      "statement": "SELECT city city, count(*) n, count(DISTINCT listing_id) unique_ids FROM workspace.airbnb_silver.listings WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' GROUP BY city"
+    },
+    {
+      "label": "features",
+      "statement_id": "01f1de07-f51f-1ac8-9f8e-739b060efb00",
+      "statement": "SELECT city city, count(*) n, count(DISTINCT listing_id) unique_ids FROM workspace.airbnb_gold.model_features WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' GROUP BY city"
+    },
+    {
+      "label": "city_metrics",
+      "statement_id": "01f1de07-f5d7-1edb-985d-5c497bee895f",
+      "statement": "SELECT city, sum(listings) n, sum(priced_listings) priced FROM workspace.airbnb_gold.city_metrics WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' GROUP BY city"
+    },
+    {
+      "label": "room_type_metrics",
+      "statement_id": "01f1de07-f672-155c-92bd-4a4b93e43a37",
+      "statement": "SELECT city, sum(listings) n, sum(priced_listings) priced FROM workspace.airbnb_gold.room_type_metrics WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' GROUP BY city"
+    },
+    {
+      "label": "neighbourhood_metrics",
+      "statement_id": "01f1de07-f708-1483-b248-e7b6383e29dc",
+      "statement": "SELECT city, sum(listings) n, sum(priced_listings) priced FROM workspace.airbnb_gold.neighbourhood_metrics WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' GROUP BY city"
+    },
+    {
+      "label": "features_vs_silver",
+      "statement_id": "01f1de07-f7a4-1ea3-8954-6e3e44d9ed6b",
+      "statement": "SELECT count(*) differences FROM workspace.airbnb_gold.model_features f\n            FULL OUTER JOIN workspace.airbnb_silver.listings s USING (city,snapshot_date,listing_id)\n            WHERE coalesce(f.city,s.city) IN ('milan','florence') AND coalesce(f.snapshot_date,s.snapshot_date) = DATE '2026-09-19'\n            AND (f.listing_id IS NULL OR s.listing_id IS NULL OR NOT (f.price_eur <=> s.price_eur) OR NOT (f.eligible_for_training <=> s.eligible_for_training))"
+    },
+    {
+      "label": "feature_columns",
+      "statement_id": "01f1de07-f875-12c9-a522-d7e6aac13fbe",
+      "statement": "DESCRIBE workspace.airbnb_gold.model_features"
+    },
+    {
+      "label": "ingestion_manifest",
+      "statement_id": "01f1de07-f8fa-1f54-8247-c97a973b895e",
+      "statement": "SELECT city,row_count,source_url FROM workspace.airbnb_bronze.ingestion_manifest WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19'"
+    },
+    {
+      "label": "pipeline_validations",
+      "statement_id": "01f1de07-f9a6-18bb-a1b9-feeb056d4731",
+      "statement": "SELECT * FROM workspace.airbnb_gold.pipeline_validations WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19'"
+    },
+    {
+      "label": "version:airbnb_bronze.listings",
+      "statement_id": "01f1de07-fa3e-16b3-b792-a3f5ec18ecc6",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_bronze.listings LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_silver.listings",
+      "statement_id": "01f1de07-faf7-1b95-a857-739b06c6638c",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_silver.listings LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.city_metrics",
+      "statement_id": "01f1de07-fbb1-1ab4-884a-400182fcb42a",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.city_metrics LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.room_type_metrics",
+      "statement_id": "01f1de07-fd81-1257-9e66-949144b01343",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.room_type_metrics LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.neighbourhood_metrics",
+      "statement_id": "01f1de07-fe31-11e8-b567-e100e1ad402a",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.neighbourhood_metrics LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.model_features",
+      "statement_id": "01f1de07-fee3-1d9c-bb40-5b4467602ffc",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.model_features LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.model_split",
+      "statement_id": "01f1de08-0022-1d48-987b-70c3a73baac5",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.model_split LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.baseline_lookup",
+      "statement_id": "01f1de08-00e9-161c-8561-9ba83dcffb3c",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.baseline_lookup LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.model_selection",
+      "statement_id": "01f1de08-01b3-1736-96d1-f5b1920d5f89",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.model_selection LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.model_candidate_metrics",
+      "statement_id": "01f1de08-027d-1d1e-a0cc-9b4fd901e66f",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.model_candidate_metrics LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.model_artifacts",
+      "statement_id": "01f1de08-033f-10bb-bb0c-9cdaafac7614",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.model_artifacts LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.model_evaluation",
+      "statement_id": "01f1de08-0402-1379-a3e7-44bb76e7b513",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.model_evaluation LIMIT 1"
+    },
+    {
+      "label": "version:airbnb_gold.predictions",
+      "statement_id": "01f1de08-04ce-1ba5-a927-1194d19208b7",
+      "statement": "DESCRIBE HISTORY workspace.airbnb_gold.predictions LIMIT 1"
+    },
+    {
+      "label": "split_fingerprint",
+      "statement_id": "01f1de08-058b-1c29-a257-08896efc2c97",
+      "statement": "SELECT count(*) n, sha2(concat_ws('\\n', array_sort(collect_list(concat_ws('|',city,cast(snapshot_date AS string),cast(listing_id AS string),coalesce(evaluation_split,''))))),256) fingerprint FROM workspace.airbnb_gold.model_split WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND split_salt='airbnb-v1'"
+    },
+    {
+      "label": "baseline_fingerprint",
+      "statement_id": "01f1de08-05e9-1662-a24c-e3697d8965ec",
+      "statement": "SELECT count(*) n, sha2(concat_ws('\\n', array_sort(collect_list(concat_ws('|',baseline_level,coalesce(room_type,''),coalesce(cast(cast(accommodates AS bigint) AS string),''),cast(cast(round(median_price_eur*1000000) AS bigint) AS string),cast(n_train AS string))))),256) fingerprint FROM workspace.airbnb_gold.baseline_lookup WHERE baseline_version='airbnb-v1'"
+    },
+    {
+      "label": "prediction_coverage",
+      "statement_id": "01f1de08-0656-12d6-a93f-4dacd8c95364",
+      "statement": "SELECT count(*) n, count(DISTINCT struct(city,snapshot_date,listing_id,model_version)) unique_keys, count_if(baseline_prediction_eur IS NULL) baseline_null FROM workspace.airbnb_gold.predictions WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND model_version='price-v1'"
+    },
+    {
+      "label": "prediction_keys_vs_features",
+      "statement_id": "01f1de08-0712-12f1-ae59-5e511cdf794c",
+      "statement": "SELECT count(*) differences FROM workspace.airbnb_gold.model_features f FULL OUTER JOIN (SELECT * FROM workspace.airbnb_gold.predictions WHERE model_version='price-v1') p USING(city,snapshot_date,listing_id) WHERE coalesce(f.city,p.city) IN ('milan','florence') AND coalesce(f.snapshot_date,p.snapshot_date)=DATE '2026-09-19' AND (f.listing_id IS NULL OR p.listing_id IS NULL OR NOT(f.price_eur <=> p.actual_price_eur))"
+    },
+    {
+      "label": "official_test_mae",
+      "statement_id": "01f1de08-07af-1933-a1fb-274c58360466",
+      "statement": "SELECT CASE WHEN grouping(city)=1 THEN 'milan+florence' ELSE city END city_group, count(*) n, avg(abs(model_prediction_eur-actual_price_eur)) model_mae_eur, avg(abs(baseline_prediction_eur-actual_price_eur)) baseline_mae_eur, count_if(model_prediction_eur IS NULL OR baseline_prediction_eur IS NULL OR actual_price_eur IS NULL) invalid FROM workspace.airbnb_gold.predictions WHERE city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND model_version='price-v1' AND evaluation_split='test' GROUP BY GROUPING SETS ((city),())"
+    },
+    {
+      "label": "model_evaluation",
+      "statement_id": "01f1de08-086d-1b15-9e35-77a0019fd67e",
+      "statement": "SELECT city_group,n,model_mae_eur,baseline_mae_eur FROM workspace.airbnb_gold.model_evaluation WHERE model_version = 'price-v1' AND evaluation_population = 'test_all_valid_positive_price'"
+    },
+    {
+      "label": "model_artifacts",
+      "statement_id": "01f1de08-08d7-1da6-bb09-c846fd829b69",
+      "statement": "SELECT * FROM workspace.airbnb_gold.model_artifacts WHERE model_version = 'price-v1'"
+    },
+    {
+      "label": "artifact_file_hash",
+      "statement_id": "01f1de08-0932-1d88-8dff-75218aa04762",
+      "statement": "SELECT length bytes,sha2(content,256) sha256 FROM read_files('/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/model.joblib',format=>'binaryFile')"
+    },
+    {
+      "label": "model_selection_hash",
+      "statement_id": "01f1de08-09f4-1d8a-941d-227a5e2a5c04",
+      "statement": "SELECT sha2(record_json,256) computed_sha256,record_sha256,spec_sha256 FROM workspace.airbnb_gold.model_selection WHERE model_version='price-v1'"
+    },
+    {
+      "label": "selection_file_hash",
+      "statement_id": "01f1de08-0a4e-1e25-9da9-a9efd80a6f36",
+      "statement": "SELECT length bytes,sha2(content,256) sha256 FROM read_files('/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/selection_record.json',format=>'binaryFile')"
+    },
+    {
+      "label": "raw_file_hash:milan",
+      "statement_id": "01f1de08-0aea-1bad-a9e6-62a6718a3a40",
+      "statement": "SELECT length bytes,sha2(content,256) sha256 FROM read_files('/Volumes/workspace/airbnb_bronze/raw_files/milan/2026-09-19/listings.csv.gz',format=>'binaryFile')"
+    },
+    {
+      "label": "raw_file_hash:florence",
+      "statement_id": "01f1de08-0bb5-1a6e-8de3-0c85b86104e6",
+      "statement": "SELECT length bytes,sha2(content,256) sha256 FROM read_files('/Volumes/workspace/airbnb_bronze/raw_files/florence/2026-09-19/listings.csv.gz',format=>'binaryFile')"
+    }
+  ],
+  "checks": {
+    "schemas": {
+      "passed": true,
+      "evidence": [
+        {
+          "schema_name": "airbnb_bronze"
+        },
+        {
+          "schema_name": "airbnb_gold"
+        },
+        {
+          "schema_name": "airbnb_silver"
+        }
+      ]
+    },
+    "bronze": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "florence",
+          "n": 13571,
+          "unique_ids": 13571
+        },
+        {
+          "city": "milan",
+          "n": 25338,
+          "unique_ids": 25338
+        }
+      ]
+    },
+    "silver": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "florence",
+          "n": 13571,
+          "unique_ids": 13571
+        },
+        {
+          "city": "milan",
+          "n": 25338,
+          "unique_ids": 25338
+        }
+      ]
+    },
+    "features": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "florence",
+          "n": 13571,
+          "unique_ids": 13571
+        },
+        {
+          "city": "milan",
+          "n": 25338,
+          "unique_ids": 25338
+        }
+      ]
+    },
+    "city_metrics": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "florence",
+          "n": 13571,
+          "priced": 12086
+        },
+        {
+          "city": "milan",
+          "n": 25338,
+          "priced": 21522
+        }
+      ]
+    },
+    "room_type_metrics": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "florence",
+          "n": 13571,
+          "priced": 12086
+        },
+        {
+          "city": "milan",
+          "n": 25338,
+          "priced": 21522
+        }
+      ]
+    },
+    "neighbourhood_metrics": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "milan",
+          "n": 25338,
+          "priced": 21522
+        },
+        {
+          "city": "florence",
+          "n": 13571,
+          "priced": 12086
+        }
+      ]
+    },
+    "features_vs_silver": {
+      "passed": true,
+      "evidence": [
+        {
+          "differences": 0
+        }
+      ]
+    },
+    "feature_contract": {
+      "passed": true,
+      "evidence": [
+        "accommodates",
+        "bath_shared",
+        "bathrooms_n",
+        "bedrooms",
+        "beds",
+        "city",
+        "currency",
+        "dist_center_km",
+        "eligible_for_training",
+        "has_reviews",
+        "host_is_superhost",
+        "instant_bookable",
+        "listing_id",
+        "log_host_listings_count",
+        "long_stay",
+        "minimum_nights",
+        "price_eur",
+        "property_type",
+        "review_scores_accuracy",
+        "review_scores_checkin",
+        "review_scores_cleanliness",
+        "review_scores_communication",
+        "review_scores_location",
+        "review_scores_rating",
+        "review_scores_value",
+        "room_type",
+        "snapshot_date"
+      ]
+    },
+    "ingestion_manifest": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "florence",
+          "row_count": 13571,
+          "source_url": "https://data.insideairbnb.com/italy/toscana/florence/2026-09-19/data/listings.csv.gz"
+        },
+        {
+          "city": "milan",
+          "row_count": 25338,
+          "source_url": "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz"
+        }
+      ]
+    },
+    "pipeline_validations": {
+      "passed": true,
+      "evidence": [
+        {
+          "job_id": "816607442908043",
+          "job_run_id": "367666271706452",
+          "city": "florence",
+          "snapshot_date": "2026-09-19",
+          "bronze_rows": 13571,
+          "silver_rows": 13571,
+          "feature_rows": 13571,
+          "analytical_rows": 12086,
+          "validated_at": "2026-11-11T19:41:24.249Z",
+          "sources_config_path": "repo:config/sources.json",
+          "sources_config_sha256": "12edf1761d9828422f9e963647ce84279c669bed8c6a9434a9e2b8df50640c7a"
+        },
+        {
+          "job_id": "816607442908043",
+          "job_run_id": "27941700122958",
+          "city": "milan",
+          "snapshot_date": "2026-09-19",
+          "bronze_rows": 25338,
+          "silver_rows": 25338,
+          "feature_rows": 25338,
+          "analytical_rows": 21522,
+          "validated_at": "2026-11-11T19:39:35.320Z",
+          "sources_config_path": "repo:config/sources.json",
+          "sources_config_sha256": "12edf1761d9828422f9e963647ce84279c669bed8c6a9434a9e2b8df50640c7a"
+        },
+        {
+          "job_id": "771472732713812",
+          "job_run_id": "334832161613071",
+          "city": "florence",
+          "snapshot_date": "2026-09-19",
+          "bronze_rows": 13571,
+          "silver_rows": 13571,
+          "feature_rows": 13571,
+          "analytical_rows": 12086,
+          "validated_at": "2026-11-11T15:58:32.332Z",
+          "sources_config_path": null,
+          "sources_config_sha256": null
+        },
+        {
+          "job_id": "930131963779370",
+          "job_run_id": "768192587578562",
+          "city": "milan",
+          "snapshot_date": "2026-09-19",
+          "bronze_rows": 25338,
+          "silver_rows": 25338,
+          "feature_rows": 25338,
+          "analytical_rows": 21522,
+          "validated_at": "2026-11-11T16:28:53.940Z",
+          "sources_config_path": null,
+          "sources_config_sha256": null
+        },
+        {
+          "job_id": "55362627585488",
+          "job_run_id": "399786082243961",
+          "city": "milan",
+          "snapshot_date": "2026-09-19",
+          "bronze_rows": 25338,
+          "silver_rows": 25338,
+          "feature_rows": 25338,
+          "analytical_rows": 21522,
+          "validated_at": "2026-11-11T15:56:36.638Z",
+          "sources_config_path": null,
+          "sources_config_sha256": null
+        }
+      ]
+    },
+    "reference_fingerprints": {
+      "passed": true,
+      "evidence": {
+        "split": {
+          "n": 38909,
+          "fingerprint": "d4625414b6181cecf5de7548b376d77377b500b5e758f0a49236a356ae00a880"
+        },
+        "baseline": {
+          "n": 44,
+          "fingerprint": "0ca4b685a4b85babccc0810105eb35c074b34808f28d1a54d4012149b987b65c"
+        }
+      }
+    },
+    "prediction_coverage": {
+      "passed": true,
+      "evidence": {
+        "counts": {
+          "n": 38909,
+          "unique_keys": 38909,
+          "baseline_null": 0
+        },
+        "key_target_differences": {
+          "differences": 0
+        }
+      }
+    },
+    "official_test_mae": {
+      "passed": true,
+      "evidence": {
+        "n": {
+          "florence": 2464,
+          "milan+florence": 6863,
+          "milan": 4399
+        },
+        "model": {
+          "florence": 76.17608368869574,
+          "milan+florence": 75.8844478189808,
+          "milan": 75.7210946062105
+        },
+        "baseline": {
+          "florence": 97.41181412337652,
+          "milan+florence": 95.4655238234008,
+          "milan": 94.37535348942961
+        }
+      }
+    },
+    "model_evaluation": {
+      "passed": true,
+      "evidence": [
+        {
+          "city_group": "florence",
+          "n": 2464,
+          "model_mae_eur": 76.17608368869547,
+          "baseline_mae_eur": 97.41181412337663
+        },
+        {
+          "city_group": "milan",
+          "n": 4399,
+          "model_mae_eur": 75.72109460621044,
+          "baseline_mae_eur": 94.37535348942943
+        },
+        {
+          "city_group": "milan+florence",
+          "n": 6863,
+          "model_mae_eur": 75.88444781898083,
+          "baseline_mae_eur": 95.46552382340084
+        }
+      ]
+    },
+    "artifact_file": {
+      "passed": true,
+      "evidence": {
+        "file": {
+          "bytes": 1484150,
+          "sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+        },
+        "record": {
+          "model_version": "price-v1",
+          "artifact_path": "/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/model.joblib",
+          "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c",
+          "selected_candidate": "hgb_leaves_31_iter_400",
+          "selected_family": "hgb_log",
+          "selected_params_json": "{\"l2_regularization\":1.0,\"learning_rate\":0.05,\"max_iter\":400,\"max_leaf_nodes\":31,\"min_samples_leaf\":40}",
+          "spec_sha256": "acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99",
+          "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+          "code_revision": "d1c2bd6",
+          "training_snapshots": "milan=2026-09-19;florence=2026-09-19",
+          "split_salt": "airbnb-v1",
+          "train_rows": 26939,
+          "sklearn_version": "1.7.2",
+          "fit_seconds": 13.63319346999998,
+          "mlflow_run_id": "a08250c6bcb5415c9591c6427e3d6bf7"
+        }
+      }
+    },
+    "selection": {
+      "passed": true,
+      "evidence": {
+        "record": [
+          {
+            "computed_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+            "record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+            "spec_sha256": "acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99"
+          }
+        ],
+        "file": {
+          "bytes": 41385,
+          "sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db"
+        }
+      }
+    },
+    "model_spec": {
+      "passed": true,
+      "evidence": "acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99"
+    },
+    "raw_file:milan": {
+      "passed": true,
+      "evidence": {
+        "bytes": 14955780,
+        "sha256": "23f51e357f0a779522ca4bdb5fb6fc1f7f98aa93c2711200085c813721368bd3"
+      }
+    },
+    "raw_file:florence": {
+      "passed": true,
+      "evidence": {
+        "bytes": 7989275,
+        "sha256": "a3392ba7e26760536ee6c399f15c550625276cecd618483ae07af16a93c3f0a1"
+      }
+    },
+    "job_source": {
+      "passed": true,
+      "evidence": {
+        "job_id": 816607442908043,
+        "git_source": {
+          "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+          "git_provider": "gitHub",
+          "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git"
+        },
+        "max_concurrent_runs": 1
+      }
+    },
+    "reference_run_history": {
+      "passed": true,
+      "evidence": [
+        {
+          "run_id": 399786082243961,
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          },
+          "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/55362627585488/run/399786082243961",
+          "git_source": null
+        },
+        {
+          "run_id": 334832161613071,
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          },
+          "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/771472732713812/run/334832161613071",
+          "git_source": null
+        },
+        {
+          "run_id": 768192587578562,
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          },
+          "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/930131963779370/run/768192587578562",
+          "git_source": null
+        }
+      ]
+    },
+    "immutable_job_ab_execution": {
+      "passed": true,
+      "evidence": [
+        {
+          "city": "milan",
+          "run_id": 27941700122958,
+          "parameters": {
+            "catalog": "workspace",
+            "city": "milan",
+            "snapshot_date": "2026-09-19",
+            "source_path": "",
+            "source_url": "",
+            "sources_config_path": ""
+          },
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          },
+          "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/27941700122958",
+          "git_source": null,
+          "tasks": [
+            {
+              "task_key": "validate",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            },
+            {
+              "task_key": "bronze",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            },
+            {
+              "task_key": "silver",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            },
+            {
+              "task_key": "gold",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            }
+          ],
+          "task_git_sources": [
+            {
+              "task_key": "validate",
+              "task_run_id": 843533251590558,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            },
+            {
+              "task_key": "bronze",
+              "task_run_id": 316644577915335,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            },
+            {
+              "task_key": "silver",
+              "task_run_id": 209099107303425,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            },
+            {
+              "task_key": "gold",
+              "task_run_id": 912196092046359,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            }
+          ],
+          "verified_used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+        },
+        {
+          "city": "florence",
+          "run_id": 367666271706452,
+          "parameters": {
+            "catalog": "workspace",
+            "city": "florence",
+            "snapshot_date": "2026-09-19",
+            "source_path": "",
+            "source_url": "",
+            "sources_config_path": ""
+          },
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          },
+          "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/367666271706452",
+          "git_source": null,
+          "tasks": [
+            {
+              "task_key": "validate",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            },
+            {
+              "task_key": "bronze",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            },
+            {
+              "task_key": "silver",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            },
+            {
+              "task_key": "gold",
+              "state": {
+                "life_cycle_state": "TERMINATED",
+                "result_state": "SUCCESS",
+                "state_message": "",
+                "user_cancelled_or_timedout": false
+              }
+            }
+          ],
+          "task_git_sources": [
+            {
+              "task_key": "validate",
+              "task_run_id": 125216206966992,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            },
+            {
+              "task_key": "bronze",
+              "task_run_id": 610675651773538,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            },
+            {
+              "task_key": "silver",
+              "task_run_id": 355465292110801,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            },
+            {
+              "task_key": "gold",
+              "task_run_id": 912631726679901,
+              "git_source": {
+                "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+                "git_provider": "gitHub",
+                "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+                "git_snapshot": {
+                  "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+                }
+              }
+            }
+          ],
+          "verified_used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+        }
+      ]
+    },
+    "model_reference_data_unchanged": {
+      "passed": true,
+      "evidence": {
+        "reference_versions": {
+          "model_split": 0,
+          "baseline_lookup": 0,
+          "model_selection": 0,
+          "model_candidate_metrics": 0,
+          "model_artifacts": 0,
+          "model_evaluation": 0
+        },
+        "predictions_history": [
+          {
+            "version": 2,
+            "timestamp": "2026-11-11T19:31:13.000Z",
+            "userId": "77319948357812",
+            "userName": "71aa88ee-37ab-48d4-aca6-4d3353f0608b",
+            "operation": "OPTIMIZE",
+            "operationParameters": "{\"predicate\":\"[]\",\"auto\":\"false\",\"clusterBy\":\"[]\",\"zOrderBy\":\"[]\",\"batchId\":\"0\"}",
+            "job": "{\"jobName\":\"Predictive Optimization Job-c5127bb6-c89a-4cac-9a9f-f7f6910481af\",\"jobOwnerId\":\"77319948357812\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"354969791839617\",\"jobRunId\":\"884828752586847\",\"runId\":\"944354355308640\",\"triggerType\":\"manual\"}",
+            "notebook": null,
+            "queryHistoryStatementId": "4da77d83-7ab9-43df-be4e-c4c559e9bf95",
+            "clusterId": "1111-193046-uvhxvxwx-v2n",
+            "readVersion": 1,
+            "isolationLevel": "SnapshotIsolation",
+            "isBlindAppend": false,
+            "operationMetrics": "{\"numRemovedFiles\":\"16\",\"numRemovedBytes\":\"1590932\",\"p25FileSize\":\"1400078\",\"numDeletionVectorsRemoved\":\"0\",\"minFileSize\":\"1400078\",\"numAddedFiles\":\"1\",\"maxFileSize\":\"1400078\",\"p75FileSize\":\"1400078\",\"p50FileSize\":\"1400078\",\"numAddedBytes\":\"1400078\"}",
+            "userMetadata": null,
+            "engineInfo": "Databricks-Runtime/19.13.x-aarch64-photon-scala2.13"
+          },
+          {
+            "version": 1,
+            "timestamp": "2026-11-11T17:16:30.000Z",
+            "userId": "76775023896411",
+            "userName": "mykolaichuk.pn@ucu.edu.ua",
+            "operation": "WRITE",
+            "operationParameters": "{\"partitionBy\":\"[]\",\"clusterBy\":\"[]\",\"statsOnLoad\":\"true\",\"mode\":\"Append\",\"clusteringOnWriteStatus\":null}",
+            "job": "{\"jobName\":\"airbnb-model-08-score-329d3f1-run1\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"107728460413309\",\"jobRunId\":\"772231092119601\",\"runId\":\"796954295181797\",\"triggerType\":\"manual\"}",
+            "notebook": "{\"notebookId\":\"277368132150635\"}",
+            "queryHistoryStatementId": "bf9c3bb8-88d0-4d70-ac07-100c0b0f5ce1",
+            "clusterId": "1111-171532-n0h9prd5-v2n",
+            "readVersion": 0,
+            "isolationLevel": "WriteSerializable",
+            "isBlindAppend": true,
+            "operationMetrics": "{\"numFiles\":\"8\",\"numOutputRows\":\"13571\",\"numOutputBytes\":\"573015\"}",
+            "userMetadata": null,
+            "engineInfo": "Databricks-Runtime/19.13.x-aarch64-photon-scala2.13"
+          }
+        ],
+        "predictions_v1_v2_full_row_differences": 0
+      }
+    }
+  },
+  "job": {
+    "job_id": 816607442908043,
+    "created_missing_job": true,
+    "settings": {
+      "description": "One city/snapshot per run: bronze \u2192 silver \u2192 gold \u2192 validation. Run Milan and Florence sequentially before the Week 1 freeze.",
+      "email_notifications": {},
+      "format": "MULTI_TASK",
+      "git_source": {
+        "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+        "git_provider": "gitHub",
+        "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git"
+      },
+      "max_concurrent_runs": 1,
+      "name": "airbnb-cities-etl",
+      "parameters": [
+        {
+          "default": "workspace",
+          "name": "catalog"
+        },
+        {
+          "default": "milan",
+          "name": "city"
+        },
+        {
+          "default": "2026-09-19",
+          "name": "snapshot_date"
+        },
+        {
+          "default": "",
+          "name": "source_path"
+        },
+        {
+          "default": "",
+          "name": "source_url"
+        },
+        {
+          "default": "",
+          "name": "sources_config_path"
+        }
+      ],
+      "queue": {
+        "enabled": true
+      },
+      "tags": {
+        "owner": "yaropolk",
+        "project": "bigdata_project_cities"
+      },
+      "tasks": [
+        {
+          "disabled": false,
+          "email_notifications": {},
+          "notebook_task": {
+            "notebook_path": "notebooks/01_ingest_bronze.py",
+            "source": "GIT"
+          },
+          "run_if": "ALL_SUCCESS",
+          "task_key": "bronze",
+          "timeout_seconds": 0
+        },
+        {
+          "depends_on": [
+            {
+              "task_key": "bronze"
+            }
+          ],
+          "disabled": false,
+          "email_notifications": {},
+          "notebook_task": {
+            "notebook_path": "notebooks/02_prepare_silver.py",
+            "source": "GIT"
+          },
+          "run_if": "ALL_SUCCESS",
+          "task_key": "silver",
+          "timeout_seconds": 0
+        },
+        {
+          "depends_on": [
+            {
+              "task_key": "silver"
+            }
+          ],
+          "disabled": false,
+          "email_notifications": {},
+          "notebook_task": {
+            "notebook_path": "notebooks/03_build_gold.py",
+            "source": "GIT"
+          },
+          "run_if": "ALL_SUCCESS",
+          "task_key": "gold",
+          "timeout_seconds": 0
+        },
+        {
+          "depends_on": [
+            {
+              "task_key": "gold"
+            }
+          ],
+          "disabled": false,
+          "email_notifications": {},
+          "notebook_task": {
+            "base_parameters": {
+              "job_id": "{{job.id}}",
+              "job_run_id": "{{job.run_id}}"
+            },
+            "notebook_path": "notebooks/04_validate_pipeline.py",
+            "source": "GIT"
+          },
+          "run_if": "ALL_SUCCESS",
+          "task_key": "validate",
+          "timeout_seconds": 0
+        }
+      ],
+      "timeout_seconds": 3600,
+      "webhook_notifications": {}
+    },
+    "run_as_user_name": "kalmuk.pn@ucu.edu.ua",
+    "runs_started": 2
+  },
+  "status": "PASS",
+  "scope": "Milan/Florence 2026-09-19 only",
+  "table_versions": {
+    "airbnb_bronze.listings": {
+      "version": 4,
+      "timestamp": "2026-11-11T19:39:58.000Z"
+    },
+    "airbnb_silver.listings": {
+      "version": 4,
+      "timestamp": "2026-11-11T19:40:44.000Z"
+    },
+    "airbnb_gold.city_metrics": {
+      "version": 4,
+      "timestamp": "2026-11-11T19:41:00.000Z"
+    },
+    "airbnb_gold.room_type_metrics": {
+      "version": 4,
+      "timestamp": "2026-11-11T19:41:03.000Z"
+    },
+    "airbnb_gold.neighbourhood_metrics": {
+      "version": 4,
+      "timestamp": "2026-11-11T19:41:05.000Z"
+    },
+    "airbnb_gold.model_features": {
+      "version": 4,
+      "timestamp": "2026-11-11T19:41:07.000Z"
+    },
+    "airbnb_gold.model_split": {
+      "version": 0,
+      "timestamp": "2026-11-11T16:31:35.000Z"
+    },
+    "airbnb_gold.baseline_lookup": {
+      "version": 0,
+      "timestamp": "2026-11-11T16:31:44.000Z"
+    },
+    "airbnb_gold.model_selection": {
+      "version": 0,
+      "timestamp": "2026-11-11T16:50:49.000Z"
+    },
+    "airbnb_gold.model_candidate_metrics": {
+      "version": 0,
+      "timestamp": "2026-11-11T16:50:52.000Z"
+    },
+    "airbnb_gold.model_artifacts": {
+      "version": 0,
+      "timestamp": "2026-11-11T16:52:51.000Z"
+    },
+    "airbnb_gold.model_evaluation": {
+      "version": 0,
+      "timestamp": "2026-11-11T16:52:42.000Z"
+    },
+    "airbnb_gold.predictions": {
+      "version": 2,
+      "timestamp": "2026-11-11T19:31:13.000Z"
+    }
+  },
+  "reference_runs": [
+    {
+      "run_id": 399786082243961,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/55362627585488/run/399786082243961",
+      "git_source": null
+    },
+    {
+      "run_id": 334832161613071,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/771472732713812/run/334832161613071",
+      "git_source": null
+    },
+    {
+      "run_id": 768192587578562,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/930131963779370/run/768192587578562",
+      "git_source": null
+    }
+  ],
+  "acceptance_runs": [
+    {
+      "city": "milan",
+      "run_id": 27941700122958,
+      "parameters": {
+        "catalog": "workspace",
+        "city": "milan",
+        "snapshot_date": "2026-09-19",
+        "source_path": "",
+        "source_url": "",
+        "sources_config_path": ""
+      },
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/27941700122958",
+      "git_source": null,
+      "tasks": [
+        {
+          "task_key": "validate",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        },
+        {
+          "task_key": "bronze",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        },
+        {
+          "task_key": "silver",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        },
+        {
+          "task_key": "gold",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        }
+      ],
+      "task_git_sources": [
+        {
+          "task_key": "validate",
+          "task_run_id": 843533251590558,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        },
+        {
+          "task_key": "bronze",
+          "task_run_id": 316644577915335,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        },
+        {
+          "task_key": "silver",
+          "task_run_id": 209099107303425,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        },
+        {
+          "task_key": "gold",
+          "task_run_id": 912196092046359,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        }
+      ],
+      "verified_used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+    },
+    {
+      "city": "florence",
+      "run_id": 367666271706452,
+      "parameters": {
+        "catalog": "workspace",
+        "city": "florence",
+        "snapshot_date": "2026-09-19",
+        "source_path": "",
+        "source_url": "",
+        "sources_config_path": ""
+      },
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/367666271706452",
+      "git_source": null,
+      "tasks": [
+        {
+          "task_key": "validate",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        },
+        {
+          "task_key": "bronze",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        },
+        {
+          "task_key": "silver",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        },
+        {
+          "task_key": "gold",
+          "state": {
+            "life_cycle_state": "TERMINATED",
+            "result_state": "SUCCESS",
+            "state_message": "",
+            "user_cancelled_or_timedout": false
+          }
+        }
+      ],
+      "task_git_sources": [
+        {
+          "task_key": "validate",
+          "task_run_id": 125216206966992,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        },
+        {
+          "task_key": "bronze",
+          "task_run_id": 610675651773538,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        },
+        {
+          "task_key": "silver",
+          "task_run_id": 355465292110801,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        },
+        {
+          "task_key": "gold",
+          "task_run_id": 912631726679901,
+          "git_source": {
+            "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+            "git_provider": "gitHub",
+            "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+            "git_snapshot": {
+              "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+            }
+          }
+        }
+      ],
+      "verified_used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+    }
+  ],
+  "completed_at_utc": "2026-11-11T19:46:01.707741+00:00",
+  "test_suite": {
+    "passed": 100,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 25.74,
+    "tested_source_commit": "2ceb9c35e0a356bfc74b3e0f45260d596de3dbc1",
+    "python": "3.12",
+    "java": "21",
+    "pyspark": "4.0.1",
+    "scikit_learn": "1.7.2"
+  },
+  "configuration_only_city_support": {
+    "verified": "existing unit tests execute ETL/scorer parameter cells with synthetic runtime manifests and synthetic silver/gold rows",
+    "real_unseen_city_accessed": false
+  },
+  "immutable_job_pin_matches_main_executable_files": true,
+  "code_sha256": {
+    "airbnb/__init__.py": "70d64a366da9bf717f9e39979a9703e9e7073d69f421cc343867aeb96e585289",
+    "airbnb/gold.py": "d804f08643d315d294483ef205f649d79b177798e0f6cb6bd9d133215e85f859",
+    "airbnb/inputs.py": "310de6923aa363b463103aed12f474d22ad305b56ac0b1cca2be8324c4390096",
+    "airbnb/model.py": "eb05a0b00bd4d3fafc0cba162745527056c0263f482cad5652f9662798c53308",
+    "airbnb/price_model.py": "de443c876c86f3e78f060609c66407052169a7b7511ff2c18cff65cd8466c085",
+    "airbnb/scoring.py": "0fd26ba77fd9d76767aefdd49a8b769f967c08770412e47df6155108ec251f90",
+    "airbnb/silver.py": "0987a904f7590312ee017a30b6479b0f96229953b674e8319ef476a87ca9432f",
+    "airbnb/validation.py": "eaa65eebc0f4a000ac0f631ffbfbf89bbee1b6901eb09827837f866baf5412f9",
+    "notebooks/00_setup.py": "22aa6d828f4651f143f3f88d479547a585e73c109a918f651cf7aa9f429c9bb9",
+    "notebooks/01_ingest_bronze.py": "a0a8bfb6ed0d2891390e1b51d50ba056e015e9d7da0ca2eaad1c7a6a184c595b",
+    "notebooks/02_prepare_silver.py": "b2e1a59af47083d4629578b4abbcf7a5b77bb53e563fd2f3db51d649b363113d",
+    "notebooks/03_build_gold.py": "ff4b985da0d095c8f9e344a96cdf7f3a0ec591147a72da1427d08aad9e1701d7",
+    "notebooks/04_validate_pipeline.py": "8f630fdc067534f157a3ceaac42aec9bc957d40333d4481da7be1cc728df9c40",
+    "notebooks/05_create_etl_job.py": "a6cc2814930703b22784ddc1e1fbdb2f24d76519122f27fcb3f83443d37d1ba4",
+    "notebooks/06_baseline_eval.py": "b789580a484a517c0998f2a21b2a5cc3444192d0fa392a3e331fbc75b8a13422",
+    "notebooks/07_train_model.py": "5fefb51b2cb911d29c37772b6a5ffba5ef42ef2b5a12ff86698dc7cd78b25804",
+    "notebooks/08_score_predictions.py": "debe34f14bb1653ee7e4f7cf1a00f96b06bf9724188449422c52e91e23fe19b6",
+    "notebooks/09_check_week1_readiness.py": "b68bb570cb15af60eb51df95ef70620f95848f26f2167d7aeed4c245af593e56",
+    "notebooks/eda_milan_florence.py": "1be1b20c73f4e1a4bf4f2ffb4316b1e55b0ef39b4fa4ae242de49de692f6e5bf",
+    "notebooks/testing.ipynb": "77bd5c5b27b339bdc47f033d60eb93902c3c9ff52a8742e968fae4c228835195",
+    "config/sources.json": "6f0cae577b606f6b20ce43a2c2abd055edf3b6cc62d771ce2899abefff74bbdb"
+  },
+  "permission_changes": [
+    {
+      "statement": "GRANT USE SCHEMA ON SCHEMA workspace.airbnb_bronze TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-db02-115d-b45b-d59f7d58b92f",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT USE SCHEMA ON SCHEMA workspace.airbnb_silver TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-db98-1f93-bc8d-7778bd519543",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT SELECT ON TABLE workspace.airbnb_bronze.listings TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-dc15-1c6a-8e67-1dfa904f5d5e",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT SELECT ON TABLE workspace.airbnb_bronze.ingestion_manifest TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-dc91-18a5-ba8e-5c932b1d5850",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT SELECT ON TABLE workspace.airbnb_silver.listings TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-dcf5-16ca-856d-65b139cc7814",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT READ VOLUME ON VOLUME workspace.airbnb_bronze.raw_files TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-dd56-16ed-a0ae-d74db59bcf02",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT READ VOLUME ON VOLUME workspace.airbnb_gold.model_artifacts TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de05-ddc4-1de7-add4-47952b472eb7",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT CREATE TABLE ON SCHEMA workspace.airbnb_bronze TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-41f4-107a-b1af-441d315fa9b4",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT CREATE TABLE ON SCHEMA workspace.airbnb_silver TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-427c-1533-8612-d290202e6d92",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT CREATE TABLE ON SCHEMA workspace.airbnb_gold TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-42cd-1544-bdaa-d7daf0002a6e",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_bronze.listings TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-4336-146a-9c3a-fefe04b98462",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_bronze.ingestion_manifest TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-4391-10c5-9be3-29c9f27a2c9d",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_silver.listings TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-43f2-1196-ac61-671380ea5e22",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_gold.city_metrics TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-4450-1027-aeb5-eeeb8d0ddf31",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_gold.room_type_metrics TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-44ac-1da4-9656-6d19b70e1639",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_gold.neighbourhood_metrics TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-44ff-1017-bd12-52b6356d2012",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_gold.model_features TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-4557-1635-b79a-10cd7b3aad3d",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    },
+    {
+      "statement": "GRANT MODIFY ON TABLE workspace.airbnb_gold.pipeline_validations TO `kalmuk.pn@ucu.edu.ua`",
+      "statement_id": "01f1de07-45b7-10b5-9c20-b473aa3ad675",
+      "status": {
+        "state": "SUCCEEDED"
+      }
+    }
+  ],
+  "tag_name": "M1-freeze",
+  "tag_commit_reference": "M1-freeze^{commit}"
+}

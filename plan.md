@@ -101,6 +101,10 @@ Defaults: use relative working days because no deadline was supplied; keep all t
 
 ## Yaropolk's current engineering status
 
+Latest milestone: all 100 local tests and 24 live A/B integration checks passed.
+The [M1 freeze record](docs/week1_freeze.md) supersedes historical pending-status
+notes below. Tag publication is the final release step; Venice remains untouched.
+
 - Feature 4 Job: three reported successful runs (Milan, Florence, Milan repeat). Post-repeat silver rows/distinct IDs: 25,338/25,338 and 13,571/13,571. Evidence: [run log](docs/pipeline_run_log.md).
 - Feature 5: configuration-driven inputs implemented; Milan/Florence success recorded. User reports completing all runs, but repeat/external-manifest IDs and resolved Git SHA remain TODOs in the log.
 - Feature 6: engineering/EDA and Nazar's model candidate integrated on a review branch; 100 local tests pass after repository corrections. Frozen scorer input resolution now matches ETL. Read-only workspace reconciliation and integrated scorer acceptance remain pending; follow [integration readiness](docs/integration_readiness.md).

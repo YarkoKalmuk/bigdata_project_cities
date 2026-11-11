@@ -34,6 +34,10 @@ to an unseen city (Venice).
 
 ### Work plan and setup
 
+Current release evidence: [M1 Week 1 freeze](docs/week1_freeze.md), including live
+workspace checks, immutable Job identity, model hashes and held-out A/B results.
+The feature-status notes below describe the earlier integration stages.
+
 - [Three-person work plan](plan.md)
 - [Databricks setup and bronze ingestion](docs/databricks_setup.md)
 - [Lakehouse architecture](docs/architecture.md)

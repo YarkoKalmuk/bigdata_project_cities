@@ -1,5 +1,8 @@
 # Yaropolk's engineering handoff
 
+Current milestone: [M1 Week 1 freeze](week1_freeze.md). Local and live A/B checks
+have passed; the implementation/candidate notes below are historical context.
+
 Current next step: [feature 6 integration readiness](integration_readiness.md). Feature 5 has two recorded successful A/B runs; its repeat/external-manifest details still need recording. This handoff's input contract remains valid, and scorer 08 now accepts the same manifest path.
 
 ## Current status

@@ -1,5 +1,9 @@
 # Model freeze candidate: price-v1
 
+The model candidate's identity and metrics have now been checked live against
+the integrated main source. [The M1 record](week1_freeze.md) is authoritative for
+the full-system release; candidate-era access/merge notes below are historical.
+
 The model identity below is preserved. Later code integration and workspace reconciliation are tracked in [integration readiness](integration_readiness.md); this document is not evidence that the full-system freeze has occurred. Access findings below are historical and were superseded by the later [workspace check](week1_integration_check.md#permissions-yaropolk-kalmukpn-maksym-matseliukhpn).
 
 Status: **freeze candidate, not the Week 1 freeze.** No Git freeze tag exists. The final freeze

@@ -1,5 +1,9 @@
 # Integrated A/B system: review before the Week 1 freeze
 
+Historical integration procedure. PR #3 has been merged into main, and live A/B
+verification has now passed. See [the M1 freeze record](week1_freeze.md) for the
+current release state, actual Job identity and executed verification evidence.
+
 Status: **integration candidate, not frozen**. No freeze tag, workspace change, model retraining or unseen-city run was performed by this integration.
 
 The latest requirement audit and proposed PR merge order are in
