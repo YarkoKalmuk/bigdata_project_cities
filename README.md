@@ -31,3 +31,13 @@ and Genie Agent.
 
 Evaluate how well the system transfers
 to an unseen city (Venice).
+
+### Work plan and setup
+
+- [Three-person work plan](plan.md)
+- [Databricks setup and bronze ingestion](docs/databricks_setup.md)
+- [Lakehouse architecture](docs/architecture.md)
+
+Yaropolk's first feature branch prepares setup and parameterised bronze ingestion
+for Milan and Florence. Workspace execution is pending; no ingestion results are
+claimed yet. Snapshot dates above must be verified against the downloaded files.
