@@ -1,0 +1,30 @@
+# macOS and IDE files
+.DS_Store
+.idea/
+*.iml
+
+# Python caches, environments and notebook checkpoints
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Local credentials and environment configuration
+.env
+.env.*
+!.env.example
+.databrickscfg
+
+# Local datasets and generated model/run artifacts
+data/
+artifacts/
+mlruns/
+tmp/
+*.csv.gz
+*.parquet
+
+# Keep notebooks, assignment PDFs, documentation and presentations trackable.
