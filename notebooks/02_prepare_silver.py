@@ -9,6 +9,7 @@
 # MAGIC outlier treatment, imputation and feature selection are not applied here.
 
 # COMMAND ----------
+
 import json
 import re
 import sys
@@ -39,6 +40,7 @@ if date.fromisoformat(snapshot_date).isoformat() != snapshot_date or snapshot_da
 predicate = f"_city = '{city}' AND _snapshot_date = '{snapshot_date}'"
 
 # COMMAND ----------
+
 bronze = spark.table(f"{catalog}.airbnb_bronze.listings").where(predicate)
 source_count = bronze.count()
 if not source_count:
@@ -55,6 +57,7 @@ if silver.groupBy("city", "snapshot_date", "listing_id").count().where("count > 
     raise ValueError("Duplicate silver keys after ID casting; existing silver will not be replaced.")
 
 # COMMAND ----------
+
 target = f"{catalog}.airbnb_silver.listings"
 silver.write.format("delta").mode("overwrite").option("replaceWhere", predicate).saveAsTable(target)
 stored = spark.table(target).where(predicate)
