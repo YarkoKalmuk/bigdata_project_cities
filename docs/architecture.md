@@ -12,7 +12,7 @@ flowchart LR
     G --> H
 ```
 
-Implemented: setup, parameterised bronze ingestion, EDA-informed silver preparation, and gold city/neighbourhood/room-type metrics plus an explicit model-input table. Initial silver execution was reported successful; updated silver and gold need workspace validation. Model predictions belong to Nazar; Job orchestration remains a subsequent feature.
+Implemented: setup, parameterised bronze ingestion, EDA-informed silver preparation, gold metrics/model inputs, and a serverless Job definition chaining ingestion, silver, gold and validation. Workspace Job creation/execution and recorded acceptance evidence remain pending. Model predictions belong to Nazar. See [Job instructions](pipeline_job.md) for the remaining transfer-ready input interface and Week 1 freeze requirements.
 
 Bronze preserves original compressed files and source strings. Metadata identifies city, snapshot and source; repeat loads replace only one city/snapshot. The manifest records successful load counts. Silver will enforce the agreed listing key `(city, snapshot_date, listing_id)`, typed EUR nightly price and explicit exclusion reasons. Gold will provide shared definitions for dashboard/Genie metrics, leakage-reviewed features and versioned model outputs.
 

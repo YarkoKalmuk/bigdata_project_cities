@@ -6,6 +6,7 @@ from pyspark.sql import SparkSession
 
 from airbnb.silver import prepare_listings
 from airbnb.gold import build_gold
+from airbnb.validation import validate_layers
 
 
 class SilverTests(unittest.TestCase):
@@ -125,6 +126,16 @@ class SilverTests(unittest.TestCase):
             self.assertFalse(column.startswith('raw_'))
             self.assertNotIn('price_quote', column)
             self.assertNotIn(column, ('estimated_revenue_l365d', 'estimated_occupancy_l365d', 'city_price_p99', 'price_class', 'host_id'))
+        manifest = self.spark.createDataFrame([(203,)], 'row_count long')
+        counts = validate_layers(raw, silver, manifest, tables)
+        self.assertEqual(counts['bronze_rows'], 203)
+        self.assertEqual(counts['analytical_rows'], 200)
+        bad_tables = dict(tables)
+        bad_tables['model_features'] = features.withColumn('price_eur', F.col('price_eur') + 1)
+        with self.assertRaisesRegex(ValueError, 'Model features differ'):
+            validate_layers(raw, silver, manifest, bad_tables)
+        with self.assertRaisesRegex(ValueError, 'manifest'):
+            validate_layers(raw, silver, self.spark.createDataFrame([(202,)], 'row_count long'), tables)
 
 
 if __name__ == "__main__":
