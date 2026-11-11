@@ -109,6 +109,18 @@ differences are in [the first-run report](docs/week2/venice_first_run_2026-09-16
 Stopped before pipeline fixes, model changes, retraining or scoring. Nazar's
 first frozen-model Venice evaluation remains pending; no Venice MAE is claimed.
 
+## Week 2 — first Venice model run (Nazar)
+
+*Supersedes the "pending" note above.* The frozen `price-v1` scored all 8,844 Venice
+listings on the first attempt (job run **65362888524059**, `scoring_run_id`
+`venice-2026-09-16-price-v1-score-v1-first-run`, `predictions` v3). On the 8,144 priced
+listings: baseline MAE **142.46**, model MAE **106.07** EUR (A/B held-out: 95.47 / 75.88).
+The model is 39.8 % worse than on A/B but still 25.5 % better than the baseline. Pipeline
+fixes: none. Model changes: none (FIX-02 not required). Evidence:
+[first-run model report](docs/week2/venice_model_first_run_2026-09-16/REPORT.md),
+[transfer report, model section](docs/week2/transfer_report.md),
+[read-only re-check](docs/week2/venice_model_final_audit_2026-11-11/audit.json).
+
 ## Yaropolk's current engineering status
 
 **M1 complete:** all 100 local tests and 24 live A/B integration checks passed.

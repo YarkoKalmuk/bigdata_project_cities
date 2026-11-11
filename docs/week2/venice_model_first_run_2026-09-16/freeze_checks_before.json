@@ -1,0 +1,551 @@
+{
+  "model_artifacts": [
+    {
+      "model_version": "price-v1",
+      "artifact_path": "/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/model.joblib",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c",
+      "selected_candidate": "hgb_leaves_31_iter_400",
+      "selected_family": "hgb_log",
+      "selected_params_json": "{\"l2_regularization\":1.0,\"learning_rate\":0.05,\"max_iter\":400,\"max_leaf_nodes\":31,\"min_samples_leaf\":40}",
+      "spec_sha256": "acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "code_revision": "d1c2bd6",
+      "training_snapshots": "milan=2026-09-19;florence=2026-09-19",
+      "split_salt": "airbnb-v1",
+      "train_rows": "26939",
+      "sklearn_version": "1.7.2",
+      "fit_seconds": "13.63319346999998",
+      "mlflow_run_id": "a08250c6bcb5415c9591c6427e3d6bf7"
+    }
+  ],
+  "artifact_file": [
+    {
+      "bytes": "1484150",
+      "sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    }
+  ],
+  "selection_file": [
+    {
+      "bytes": "41385",
+      "sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db"
+    }
+  ],
+  "model_selection": [
+    {
+      "computed_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "spec_sha256": "acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99",
+      "selected": "hgb_leaves_31_iter_400"
+    }
+  ],
+  "split_fingerprint": [
+    {
+      "n": "38909",
+      "fingerprint": "d4625414b6181cecf5de7548b376d77377b500b5e758f0a49236a356ae00a880"
+    }
+  ],
+  "split_counts": [
+    {
+      "city": "florence",
+      "s": "excluded",
+      "n": "1423"
+    },
+    {
+      "city": "florence",
+      "s": "test",
+      "n": "2464"
+    },
+    {
+      "city": "florence",
+      "s": "train",
+      "n": "9684"
+    },
+    {
+      "city": "milan",
+      "s": "excluded",
+      "n": "3684"
+    },
+    {
+      "city": "milan",
+      "s": "test",
+      "n": "4399"
+    },
+    {
+      "city": "milan",
+      "s": "train",
+      "n": "17255"
+    }
+  ],
+  "split_cities": [
+    {
+      "city": "milan",
+      "snapshot_date": "2026-09-19",
+      "n": "25338"
+    },
+    {
+      "city": "florence",
+      "snapshot_date": "2026-09-19",
+      "n": "13571"
+    }
+  ],
+  "baseline_fingerprint": [
+    {
+      "n": "44",
+      "fingerprint": "0ca4b685a4b85babccc0810105eb35c074b34808f28d1a54d4012149b987b65c"
+    }
+  ],
+  "baseline_meta": [
+    {
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "training_snapshots": "milan=2026-09-19;florence=2026-09-19",
+      "baseline_level": "overall",
+      "n": "1"
+    },
+    {
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "training_snapshots": "milan=2026-09-19;florence=2026-09-19",
+      "baseline_level": "room_type",
+      "n": "4"
+    },
+    {
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "training_snapshots": "milan=2026-09-19;florence=2026-09-19",
+      "baseline_level": "room_type_x_accommodates",
+      "n": "39"
+    }
+  ],
+  "baseline_upper_levels": [
+    {
+      "baseline_level": "overall",
+      "room_type": null,
+      "median_price_eur": "175.0",
+      "n_train": "26939"
+    },
+    {
+      "baseline_level": "room_type",
+      "room_type": "Entire home/apt",
+      "median_price_eur": "182.75",
+      "n_train": "23219"
+    },
+    {
+      "baseline_level": "room_type",
+      "room_type": "Hotel room",
+      "median_price_eur": "187.0",
+      "n_train": "46"
+    },
+    {
+      "baseline_level": "room_type",
+      "room_type": "Private room",
+      "median_price_eur": "120.0",
+      "n_train": "3629"
+    },
+    {
+      "baseline_level": "room_type",
+      "room_type": "Shared room",
+      "median_price_eur": "58.0",
+      "n_train": "45"
+    }
+  ],
+  "model_evaluation": [
+    {
+      "model_version": "price-v1",
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "evaluation_population": "test_actual_le_train_threshold",
+      "city_group": "florence",
+      "n": "2448",
+      "baseline_mae_eur": "82.53962418300654",
+      "model_mae_eur": "62.930263546209865",
+      "improvement_eur": "19.609360636796673",
+      "improvement_pct": "23.757511414540577",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    },
+    {
+      "model_version": "price-v1",
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "evaluation_population": "test_actual_le_train_threshold",
+      "city_group": "milan",
+      "n": "4363",
+      "baseline_mae_eur": "75.83216250286499",
+      "model_mae_eur": "57.78386955861253",
+      "improvement_eur": "18.04829294425246",
+      "improvement_pct": "23.800314205164046",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    },
+    {
+      "model_version": "price-v1",
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "evaluation_population": "test_actual_le_train_threshold",
+      "city_group": "milan+florence",
+      "n": "6811",
+      "baseline_mae_eur": "78.2429489061812",
+      "model_mae_eur": "59.633579216759394",
+      "improvement_eur": "18.609369689421804",
+      "improvement_pct": "23.784085274873455",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    },
+    {
+      "model_version": "price-v1",
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "evaluation_population": "test_all_valid_positive_price",
+      "city_group": "florence",
+      "n": "2464",
+      "baseline_mae_eur": "97.41181412337663",
+      "model_mae_eur": "76.17608368869547",
+      "improvement_eur": "21.23573043468116",
+      "improvement_pct": "21.799953758981545",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    },
+    {
+      "model_version": "price-v1",
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "evaluation_population": "test_all_valid_positive_price",
+      "city_group": "milan",
+      "n": "4399",
+      "baseline_mae_eur": "94.37535348942943",
+      "model_mae_eur": "75.72109460621044",
+      "improvement_eur": "18.654258883218986",
+      "improvement_pct": "19.766028092608277",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    },
+    {
+      "model_version": "price-v1",
+      "baseline_version": "airbnb-v1",
+      "split_salt": "airbnb-v1",
+      "evaluation_population": "test_all_valid_positive_price",
+      "city_group": "milan+florence",
+      "n": "6863",
+      "baseline_mae_eur": "95.46552382340084",
+      "model_mae_eur": "75.88444781898083",
+      "improvement_eur": "19.581076004420012",
+      "improvement_pct": "20.511149177416687",
+      "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+      "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c"
+    }
+  ],
+  "official_test_mae_from_predictions": [
+    {
+      "g": "florence",
+      "n": "2464",
+      "model_mae": "76.17608368869574",
+      "baseline_mae": "97.41181412337652"
+    },
+    {
+      "g": "milan+florence",
+      "n": "6863",
+      "model_mae": "75.8844478189808",
+      "baseline_mae": "95.4655238234008"
+    },
+    {
+      "g": "milan",
+      "n": "4399",
+      "model_mae": "75.7210946062105",
+      "baseline_mae": "94.37535348942961"
+    }
+  ],
+  "venice_features": [
+    {
+      "n": "8844",
+      "ids": "8844",
+      "priced": "8144",
+      "price_null": "700",
+      "price_nonpos": "0",
+      "median_price": "231.34"
+    }
+  ],
+  "features_cities": [
+    {
+      "city": "florence",
+      "snapshot_date": "2026-09-19",
+      "n": "13571"
+    },
+    {
+      "city": "milan",
+      "snapshot_date": "2026-09-19",
+      "n": "25338"
+    },
+    {
+      "city": "venice",
+      "snapshot_date": "2026-09-16",
+      "n": "8844"
+    }
+  ],
+  "predictions_scope": [
+    {
+      "city": "florence",
+      "snapshot_date": "2026-09-19",
+      "model_version": "price-v1",
+      "scoring_version": "score-v1",
+      "scoring_run_id": "772231092119601",
+      "evaluation_split": "excluded",
+      "n": "1423"
+    },
+    {
+      "city": "florence",
+      "snapshot_date": "2026-09-19",
+      "model_version": "price-v1",
+      "scoring_version": "score-v1",
+      "scoring_run_id": "772231092119601",
+      "evaluation_split": "test",
+      "n": "2464"
+    },
+    {
+      "city": "florence",
+      "snapshot_date": "2026-09-19",
+      "model_version": "price-v1",
+      "scoring_version": "score-v1",
+      "scoring_run_id": "772231092119601",
+      "evaluation_split": "train",
+      "n": "9684"
+    },
+    {
+      "city": "milan",
+      "snapshot_date": "2026-09-19",
+      "model_version": "price-v1",
+      "scoring_version": "score-v1",
+      "scoring_run_id": "772231092119601",
+      "evaluation_split": "excluded",
+      "n": "3684"
+    },
+    {
+      "city": "milan",
+      "snapshot_date": "2026-09-19",
+      "model_version": "price-v1",
+      "scoring_version": "score-v1",
+      "scoring_run_id": "772231092119601",
+      "evaluation_split": "test",
+      "n": "4399"
+    },
+    {
+      "city": "milan",
+      "snapshot_date": "2026-09-19",
+      "model_version": "price-v1",
+      "scoring_version": "score-v1",
+      "scoring_run_id": "772231092119601",
+      "evaluation_split": "train",
+      "n": "17255"
+    }
+  ],
+  "venice_validation": [
+    {
+      "job_id": "816607442908043",
+      "job_run_id": "782550938914199",
+      "city": "venice",
+      "snapshot_date": "2026-09-16",
+      "bronze_rows": "8844",
+      "silver_rows": "8844",
+      "feature_rows": "8844",
+      "analytical_rows": "8101",
+      "validated_at": "2026-11-11T20:08:50.176Z",
+      "sources_config_path": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json",
+      "sources_config_sha256": "84d3e54441a104cb6640b20e8bef56fdbdc97f26ee246608bd60f42f647fee02"
+    }
+  ],
+  "history": {
+    "model_features": [
+      {
+        "version": "5",
+        "timestamp": "2026-11-11T20:08:31.000Z",
+        "operation": "WRITE",
+        "userName": "kalmuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-cities-etl\",\"jobOwnerId\":\"72233802659968\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"816607442908043\",\"jobRunId\":\"782550938914199\",\"runId\":\"134411079440636\",\"triggerType\":\"manual\"}"
+      },
+      {
+        "version": "4",
+        "timestamp": "2026-11-11T19:41:07.000Z",
+        "operation": "WRITE",
+        "userName": "kalmuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-cities-etl\",\"jobOwnerId\":\"72233802659968\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"816607442908043\",\"jobRunId\":\"367666271706452\",\"runId\":\"912631726679901\",\"triggerType\":\"manual\"}"
+      },
+      {
+        "version": "3",
+        "timestamp": "2026-11-11T19:39:17.000Z",
+        "operation": "WRITE",
+        "userName": "kalmuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-cities-etl\",\"jobOwnerId\":\"72233802659968\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"816607442908043\",\"jobRunId\":\"27941700122958\",\"runId\":\"912196092046359\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "model_split": [
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T16:31:35.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-ab-baseline-run2\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"696447997244217\",\"jobRunId\":\"363160174813621\",\"runId\":\"132745414141249\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "baseline_lookup": [
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T16:31:44.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-ab-baseline-run2\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"696447997244217\",\"jobRunId\":\"363160174813621\",\"runId\":\"132745414141249\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "model_artifacts": [
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T16:52:51.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-model-07-final-d1c2bd6\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"887900602580990\",\"jobRunId\":\"906579585632281\",\"runId\":\"1014284074152913\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "model_selection": [
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T16:50:49.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-model-07-select-3f79eb9\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"517618862481284\",\"jobRunId\":\"507329454375587\",\"runId\":\"417986478430148\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "model_candidate_metrics": [
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T16:50:52.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-model-07-select-3f79eb9\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"517618862481284\",\"jobRunId\":\"507329454375587\",\"runId\":\"417986478430148\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "model_evaluation": [
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T16:52:42.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-model-07-final-d1c2bd6\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"887900602580990\",\"jobRunId\":\"906579585632281\",\"runId\":\"1014284074152913\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "predictions": [
+      {
+        "version": "2",
+        "timestamp": "2026-11-11T19:31:13.000Z",
+        "operation": "OPTIMIZE",
+        "userName": "71aa88ee-37ab-48d4-aca6-4d3353f0608b",
+        "job": "{\"jobName\":\"Predictive Optimization Job-c5127bb6-c89a-4cac-9a9f-f7f6910481af\",\"jobOwnerId\":\"77319948357812\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"354969791839617\",\"jobRunId\":\"884828752586847\",\"runId\":\"944354355308640\",\"triggerType\":\"manual\"}"
+      },
+      {
+        "version": "1",
+        "timestamp": "2026-11-11T17:16:30.000Z",
+        "operation": "WRITE",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-model-08-score-329d3f1-run1\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"107728460413309\",\"jobRunId\":\"772231092119601\",\"runId\":\"796954295181797\",\"triggerType\":\"manual\"}"
+      },
+      {
+        "version": "0",
+        "timestamp": "2026-11-11T17:16:26.000Z",
+        "operation": "CREATE TABLE AS SELECT",
+        "userName": "mykolaichuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-model-08-score-329d3f1-run1\",\"jobOwnerId\":\"76775023896411\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"107728460413309\",\"jobRunId\":\"772231092119601\",\"runId\":\"796954295181797\",\"triggerType\":\"manual\"}"
+      }
+    ],
+    "pipeline_validations": [
+      {
+        "version": "5",
+        "timestamp": "2026-11-11T20:08:52.000Z",
+        "operation": "WRITE",
+        "userName": "kalmuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-cities-etl\",\"jobOwnerId\":\"72233802659968\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"816607442908043\",\"jobRunId\":\"782550938914199\",\"runId\":\"1105744524605448\",\"triggerType\":\"manual\"}"
+      },
+      {
+        "version": "4",
+        "timestamp": "2026-11-11T19:41:26.000Z",
+        "operation": "WRITE",
+        "userName": "kalmuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-cities-etl\",\"jobOwnerId\":\"72233802659968\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"816607442908043\",\"jobRunId\":\"367666271706452\",\"runId\":\"125216206966992\",\"triggerType\":\"manual\"}"
+      },
+      {
+        "version": "3",
+        "timestamp": "2026-11-11T19:39:37.000Z",
+        "operation": "WRITE",
+        "userName": "kalmuk.pn@ucu.edu.ua",
+        "job": "{\"jobName\":\"airbnb-cities-etl\",\"jobOwnerId\":\"72233802659968\",\"workspaceId\":\"7474659920821008\",\"jobId\":\"816607442908043\",\"jobRunId\":\"27941700122958\",\"runId\":\"843533251590558\",\"triggerType\":\"manual\"}"
+      }
+    ]
+  },
+  "venice_etl_run": {
+    "782550938914199": {
+      "job_id": 816607442908043,
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "params": [
+        {
+          "default": "workspace",
+          "name": "catalog",
+          "value": "workspace"
+        },
+        {
+          "default": "milan",
+          "name": "city",
+          "value": "venice"
+        },
+        {
+          "default": "2026-09-19",
+          "name": "snapshot_date",
+          "value": "2026-09-16"
+        },
+        {
+          "default": "",
+          "name": "source_path",
+          "value": ""
+        },
+        {
+          "default": "",
+          "name": "source_url",
+          "value": ""
+        },
+        {
+          "default": "",
+          "name": "sources_config_path",
+          "value": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json"
+        }
+      ],
+      "tasks": [
+        {
+          "task_key": "validate",
+          "run_id": 1105744524605448,
+          "result": "SUCCESS"
+        },
+        {
+          "task_key": "bronze",
+          "run_id": 307763021962734,
+          "result": "SUCCESS"
+        },
+        {
+          "task_key": "silver",
+          "run_id": 856540313555055,
+          "result": "SUCCESS"
+        },
+        {
+          "task_key": "gold",
+          "run_id": 134411079440636,
+          "result": "SUCCESS"
+        }
+      ],
+      "start_time": 1794427583502,
+      "end_time": 1794427734466
+    },
+    "7825509389114199": {
+      "error": "Run 7825509389114199 does not exist."
+    }
+  }
+}

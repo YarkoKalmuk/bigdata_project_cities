@@ -1,0 +1,392 @@
+{
+  "expected": {
+    "rows": 8844,
+    "evaluable": 8144,
+    "unpriced": 700
+  },
+  "identity": {
+    "n": 8844,
+    "keys": 8844,
+    "scoring_versions": "[\"score-v1\"]",
+    "schema_versions": "[\"predictions-v1\"]",
+    "artifacts": "[\"c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c\"]",
+    "mlflow": "[\"a08250c6bcb5415c9591c6427e3d6bf7\"]",
+    "baselines": "[\"airbnb-v1\"]",
+    "salts": "[\"airbnb-v1\"]",
+    "splits": "[\"unseen\"]",
+    "feature_versions": "[\"5\"]",
+    "scored_at": "2026-11-11T20:45:38.000Z"
+  },
+  "all_venice_prediction_rows": [
+    {
+      "model_version": "price-v1",
+      "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run",
+      "n": 8844
+    }
+  ],
+  "keys_vs_model_features": {
+    "extra_in_predictions": 0,
+    "missing_from_predictions": 0,
+    "actual_mismatch": 0
+  },
+  "row_checks": {
+    "model_null": 0,
+    "model_nonpos": 0,
+    "baseline_null": 0,
+    "evaluable_with_errors": 8144,
+    "unpriced_null_errors": 700,
+    "unpriced_with_errors": 0,
+    "residual_formula_bad": 0,
+    "abs_formula_bad": 0,
+    "baseline_formula_bad": 0,
+    "scoring_excluded": 0
+  },
+  "baseline_lookup_reproduction": {
+    "n": 8844,
+    "value_mismatch": 0,
+    "level_mismatch": 0
+  },
+  "notebook_reconciliation": {
+    "feature_rows": 8844,
+    "prediction_rows": 8844,
+    "duplicate_keys": 0,
+    "missing_from_predictions": 0,
+    "extra_in_predictions": 0,
+    "baseline_null": 0
+  },
+  "notebook_pre_write_checks": {
+    "reconciliation": {
+      "feature_rows": 8844,
+      "prediction_rows": 8844,
+      "duplicate_keys": 0,
+      "missing_from_predictions": 0,
+      "extra_in_predictions": 0,
+      "baseline_null": 0
+    }
+  },
+  "by_prediction_status": [
+    {
+      "prediction_status": "scored_no_actual",
+      "evaluation_exclusion_reason": "no_valid_actual_price",
+      "scoring_exclusion_reason": null,
+      "n": 700
+    },
+    {
+      "prediction_status": "scored_with_actual",
+      "evaluation_exclusion_reason": null,
+      "scoring_exclusion_reason": null,
+      "n": 8144
+    }
+  ],
+  "by_fallback_level": [
+    {
+      "baseline_fallback_level": "room_type",
+      "n": 5,
+      "priced": 5
+    },
+    {
+      "baseline_fallback_level": "room_type_x_accommodates",
+      "n": 8839,
+      "priced": 8139
+    }
+  ],
+  "fallback_rows_detail": [
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Hotel room",
+      "accommodates": 6,
+      "n": 1,
+      "priced": 1
+    },
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Hotel room",
+      "accommodates": 7,
+      "n": 1,
+      "priced": 1
+    },
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Hotel room",
+      "accommodates": 9,
+      "n": 1,
+      "priced": 1
+    },
+    {
+      "baseline_fallback_level": "room_type",
+      "room_type": "Shared room",
+      "accommodates": 7,
+      "n": 2,
+      "priced": 2
+    }
+  ],
+  "by_room_type": [
+    {
+      "room_type": "Entire home/apt",
+      "n": 6826,
+      "priced": 6336,
+      "unpriced": 490
+    },
+    {
+      "room_type": "Private room",
+      "n": 1970,
+      "priced": 1762,
+      "unpriced": 208
+    },
+    {
+      "room_type": "Hotel room",
+      "n": 36,
+      "priced": 35,
+      "unpriced": 1
+    },
+    {
+      "room_type": "Shared room",
+      "n": 12,
+      "priced": 11,
+      "unpriced": 1
+    }
+  ],
+  "by_property_type_status": [
+    {
+      "model_view": "OTHER_never_in_AB_train",
+      "vs_ab_snapshots": "unseen_in_AB_snapshots",
+      "n": 18,
+      "priced": 18
+    },
+    {
+      "model_view": "OTHER_rare_in_AB_train",
+      "vs_ab_snapshots": "seen_in_AB_snapshots",
+      "n": 311,
+      "priced": 275
+    },
+    {
+      "model_view": "kept_level",
+      "vs_ab_snapshots": "seen_in_AB_snapshots",
+      "n": 8515,
+      "priced": 7851
+    }
+  ],
+  "unseen_property_types": [
+    {
+      "property_type": "Private room in tower",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 4,
+      "priced": 4
+    },
+    {
+      "property_type": "Private room in boat",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 3,
+      "priced": 3
+    },
+    {
+      "property_type": "Houseboat",
+      "room_type": "Entire home/apt",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 3,
+      "priced": 3
+    },
+    {
+      "property_type": "Private room in pension",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 3,
+      "priced": 3
+    },
+    {
+      "property_type": "Private room in castle",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 2,
+      "priced": 2
+    },
+    {
+      "property_type": "Room in heritage hotel",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 1,
+      "priced": 1
+    },
+    {
+      "property_type": "Dammuso",
+      "room_type": "Entire home/apt",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 1,
+      "priced": 1
+    },
+    {
+      "property_type": "Private room in houseboat",
+      "room_type": "Private room",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 1,
+      "priced": 1
+    }
+  ],
+  "other_property_types_top": [
+    {
+      "property_type": "Private room in guesthouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 84
+    },
+    {
+      "property_type": "Entire townhouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 38
+    },
+    {
+      "property_type": "Entire villa",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 24
+    },
+    {
+      "property_type": "Private room in guest suite",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 23
+    },
+    {
+      "property_type": "Entire guest suite",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 23
+    },
+    {
+      "property_type": "Private room in serviced apartment",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 16
+    },
+    {
+      "property_type": "Private room in villa",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 12
+    },
+    {
+      "property_type": "Private room",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 10
+    },
+    {
+      "property_type": "Private room in casa particular",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 7
+    },
+    {
+      "property_type": "Private room in farm stay",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 7
+    },
+    {
+      "property_type": "Entire place",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 7
+    },
+    {
+      "property_type": "Private room in townhouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 7
+    },
+    {
+      "property_type": "Entire guesthouse",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 5
+    },
+    {
+      "property_type": "Shared room in hostel",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 5
+    },
+    {
+      "property_type": "Tiny home",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 5
+    },
+    {
+      "property_type": "Room in aparthotel",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 4
+    },
+    {
+      "property_type": "Room in bed and breakfast",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 4
+    },
+    {
+      "property_type": "Shared room in rental unit",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 4
+    },
+    {
+      "property_type": "Boat",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 4
+    },
+    {
+      "property_type": "Room in serviced apartment",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 4
+    },
+    {
+      "property_type": "Private room in tower",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 4
+    },
+    {
+      "property_type": "Private room in boat",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 3
+    },
+    {
+      "property_type": "Shared room in home",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 3
+    },
+    {
+      "property_type": "Casa particular",
+      "model_view": "OTHER_rare_in_AB_train",
+      "n": 3
+    },
+    {
+      "property_type": "Private room in pension",
+      "model_view": "OTHER_never_in_AB_train",
+      "n": 3
+    }
+  ],
+  "priced_vs_unpriced": [
+    {
+      "k": "unpriced",
+      "n": 700,
+      "mean_model_pred": 199.17997593130164,
+      "mean_baseline_pred": 180.57128571428566
+    },
+    {
+      "k": "priced",
+      "n": 8144,
+      "mean_model_pred": 224.1779366761374,
+      "mean_baseline_pred": 191.11429948428304
+    }
+  ],
+  "above_ab_training_caps": {
+    "n": 8844,
+    "above_cap_accommodates": 64,
+    "above_cap_bedrooms": 74,
+    "above_cap_beds": 116,
+    "above_cap_bathrooms_n": 117,
+    "above_cap_minimum_nights": 6,
+    "above_cap_dist_center_km": 2105,
+    "dist_null": 0,
+    "dist_max": 18.901956272823814
+  },
+  "ab_above_distance_cap": [
+    {
+      "city": "milan",
+      "n": 25338,
+      "above_dist_cap": 378
+    },
+    {
+      "city": "florence",
+      "n": 13571,
+      "above_dist_cap": 12
+    }
+  ],
+  "passed": true
+}

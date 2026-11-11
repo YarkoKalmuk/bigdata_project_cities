@@ -1,0 +1,143 @@
+{
+  "scope": "First unchanged frozen price-v1 scoring of Venice 2026-09-16; evaluation_split='unseen'; population = every Venice listing with a valid positive actual price (no target-based filtering).",
+  "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run",
+  "job_run_id": 65362888524059,
+  "task_run_id": 793825231802478,
+  "population": {
+    "n": 8144,
+    "rows_total": 8844,
+    "rows_unpriced_excluded": 700
+  },
+  "venice": {
+    "model_mae_eur": 106.06768526451864,
+    "baseline_mae_eur": 142.45822016208285,
+    "model_improvement_vs_baseline_eur": 36.39053489756421,
+    "model_improvement_vs_baseline_pct": 25.544706971742745,
+    "model_median_ae_eur": 46.769108829828276,
+    "baseline_median_ae_eur": 72.5,
+    "model_rmse_eur": 297.5499520028042,
+    "baseline_rmse_eur": 336.3816731509281,
+    "model_mean_signed_residual_eur": -77.09013552425543,
+    "baseline_mean_signed_residual_eur": -110.15377271611075,
+    "mean_actual_eur": 301.26807220039296,
+    "median_actual_eur": 231.34,
+    "mean_model_prediction_eur": 224.1779366761374,
+    "model_mae_over_mean_actual": 0.35207078031808875,
+    "model_underpredictions": 5425,
+    "model_overpredictions": 2719,
+    "model_exact": 0,
+    "model_underprediction_rate": 0.6661345776031434,
+    "model_overprediction_rate": 0.33386542239685657,
+    "baseline_underpredictions": 5640,
+    "baseline_overpredictions": 2500,
+    "baseline_exact": 4,
+    "model_beats_baseline_row_share": 0.73797
+  },
+  "ab_frozen_test": {
+    "n": 6863,
+    "model_mae_eur": 75.8844478189808,
+    "baseline_mae_eur": 95.4655238234008,
+    "model_improvement_vs_baseline_eur": 19.581076004419998,
+    "model_improvement_vs_baseline_pct": 20.51114917741668,
+    "model_median_ae_eur": 33.98980343008003,
+    "model_mean_signed_residual_eur": -27.23178319404152,
+    "mean_actual_eur": 231.33063529068912,
+    "model_mae_over_mean_actual": 0.3280345801308362,
+    "model_underprediction_rate": 0.43975,
+    "by_city": {
+      "milan": {
+        "n": 4399,
+        "model_mae_eur": 75.7210946062105,
+        "baseline_mae_eur": 94.37535348942961
+      },
+      "florence": {
+        "n": 2464,
+        "model_mae_eur": 76.17608368869574,
+        "baseline_mae_eur": 97.41181412337652
+      }
+    },
+    "source": "recomputed from stored price-v1 test rows; equals airbnb_gold.model_evaluation and scoring.FROZEN_MODELS"
+  },
+  "venice_vs_ab": {
+    "model_mae_diff_eur": 30.18323744553784,
+    "model_mae_diff_pct": 39.7752613520213,
+    "baseline_mae_diff_eur": 46.99269633868205,
+    "baseline_mae_diff_pct": 49.22478236814855
+  },
+  "error_concentration": {
+    "top1pct_share": 0.19723050837571907,
+    "top5pct_share": 0.40750495523761554,
+    "mae_without_top1pct_abs_errors": 86.00328811564735
+  },
+  "supplementary_secondary": {
+    "label": "SECONDARY ONLY - actual <= frozen A/B training P99; not a headline number",
+    "threshold_eur": 1156.619999999999,
+    "threshold_source": "P99 of 26,939 pooled Milan+Florence training prices (split airbnb-v1); recomputed, equals 1,156.62 in docs/model_baseline_run.md",
+    "venice": {
+      "n": 7999,
+      "rows_above_threshold": 145,
+      "model_mae_eur": 80.9546209053351,
+      "baseline_mae_eur": 114.10128766095808
+    },
+    "ab_test_reproduced": {
+      "florence": {
+        "n": 2448,
+        "model_mae_eur": 62.93026354620996,
+        "baseline_mae_eur": 82.53962418300652
+      },
+      "milan+florence": {
+        "n": 6811,
+        "model_mae_eur": 59.633579216759465,
+        "baseline_mae_eur": 78.24294890618123
+      },
+      "milan": {
+        "n": 4363,
+        "model_mae_eur": 57.7838695586126,
+        "baseline_mae_eur": 75.8321625028651
+      }
+    }
+  },
+  "frozen_choices_used_for_breakdowns": {
+    "price_band_edges_eur": [
+      0.0,
+      128.0,
+      174.6,
+      249.0,
+      513.0
+    ],
+    "price_band_source": "selection_record.json failure_modes.by_actual_price_band (A/B fit-row quartiles + p95)",
+    "distance_bands_km": [
+      0,
+      1,
+      2,
+      4,
+      8,
+      "inf"
+    ],
+    "distance_band_source": "price_model.DISTANCE_BANDS_KM",
+    "numeric_caps_from_artifact": {
+      "accommodates": 10.0,
+      "bedrooms": 4.0,
+      "beds": 6.0,
+      "bathrooms_n": 3.0,
+      "minimum_nights": 31.0,
+      "dist_center_km": 7.068462416182617,
+      "log_host_listings_count": 6.302618975744905
+    },
+    "property_type_kept_levels_from_artifact": [
+      "Entire condo",
+      "Entire home",
+      "Entire loft",
+      "Entire rental unit",
+      "Entire serviced apartment",
+      "Entire vacation home",
+      "Private room in bed and breakfast",
+      "Private room in condo",
+      "Private room in home",
+      "Private room in rental unit",
+      "Private room in vacation home",
+      "Room in boutique hotel",
+      "Room in hotel"
+    ]
+  }
+}
