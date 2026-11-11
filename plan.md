@@ -6,7 +6,7 @@ Build the Northern Italy Airbnb analytics project on Databricks Free Edition, us
 
 Sources: [README.md](README.md) and [assignment instructions](group_assignment_2.pdf).
 
-This document is a plan only. Start implementation after the team has switched to working branches.
+Implementation is under way on working branches. The responsibilities and milestone gates below remain the agreed plan.
 
 - Use detailed `listings.csv.gz` snapshots. Verify Milan and Florence's recorded dates, and record Venice's snapshot in Week 2.
 - Do not download or explore Venice before Week 1 is complete.
@@ -98,3 +98,11 @@ For Venice:
 - **Submission:** Only the team admin submits the repository link.
 
 Defaults: use relative working days because no deadline was supplied; keep all three city choices from the README; use no optional reviews/calendar datasets unless the required work is complete.
+
+## Yaropolk's current engineering status
+
+- Feature 4 Job: three reported successful runs (Milan, Florence, Milan repeat). Post-repeat silver rows/distinct IDs: 25,338/25,338 and 13,571/13,571. Evidence: [run log](docs/pipeline_run_log.md).
+- Feature 5: configuration-driven inputs implemented; Milan/Florence success recorded. User reports completing all runs, but repeat/external-manifest IDs and resolved Git SHA remain TODOs in the log.
+- Feature 6: engineering/EDA and Nazar's model candidate integrated on a review branch; 100 local tests pass after repository corrections. Frozen scorer input resolution now matches ETL. Read-only workspace reconciliation and integrated scorer acceptance remain pending; follow [integration readiness](docs/integration_readiness.md).
+- Shared-data access, integration into main and the joint code/model freeze must be confirmed with the team. Venice remains unseen. Week 2 work is not marked complete.
+- Repository review: existing city-input and integration work is retained; the Job definition is commit-pinned and shared-workspace reference runs are recorded. See [requirement audit and proposed merge order](docs/week1_repository_review.md). No merge, freeze, live Job change or unseen-city access is approved by this status update.

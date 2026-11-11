@@ -1,0 +1,16 @@
+{
+  "milan": {
+    "display_name": "Milan",
+    "snapshot_date": "2026-09-19",
+    "source_url": "https://data.insideairbnb.com/italy/lombardy/milan/2026-09-19/data/listings.csv.gz",
+    "centre_latitude": 45.4642,
+    "centre_longitude": 9.1900
+  },
+  "florence": {
+    "display_name": "Florence",
+    "snapshot_date": "2026-09-19",
+    "source_url": "https://data.insideairbnb.com/italy/toscana/florence/2026-09-19/data/listings.csv.gz",
+    "centre_latitude": 43.7731,
+    "centre_longitude": 11.2560
+  }
+}
