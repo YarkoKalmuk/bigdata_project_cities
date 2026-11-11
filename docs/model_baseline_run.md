@@ -14,7 +14,7 @@ Venice was not downloaded, configured, queried or run.
 | Raw file SHA-256 | Milan `23f51e357f0a779522ca4bdb5fb6fc1f7f98aa93c2711200085c813721368bd3` (14,955,780 B); Florence `a3392ba7e26760536ee6c399f15c550625276cecd618483ae07af16a93c3f0a1` (7,989,275 B) |
 | Snapshot dates | Milan 2026-09-19, Florence 2026-09-19 (match `config/sources.json` and `README.md`) |
 | Pipeline code | `yaropolk/feature4-pipeline` @ `504278b` (feature3 `d67faa9` + validation task), Git source pinned to that commit |
-| Baseline code | `nazar/model-baseline` @ `13b50d8`, `notebooks/06_baseline_eval.py`, run from an exact `git archive` of that commit imported to the workspace |
+| Baseline code | `nazar/model-baseline` @ `f3d080b`, `notebooks/06_baseline_eval.py`, run from an exact `git archive` of that commit imported to the workspace |
 
 ## Pipeline runs (one-time multi-task runs, same task graph as `jobs/airbnb_etl.job.json`)
 
@@ -66,9 +66,9 @@ include `extreme_high` (Milan 7, Florence 3), `stale_high` (15 / 4), `high_tail`
 
 | Run | Commit | Run ID | Result |
 |---|---|---|---|
-| First attempt | `dc97efb` | 418805058420712 | FAILED before any write: serverless Spark Connect rejects `mode("errorifexists")`. Fixed to `mode("error")` in `13b50d8` |
-| Baseline | `13b50d8` | 363160174813621 | SUCCESS; `model_split` and `baseline_lookup` created |
-| Rerun | `13b50d8` | 245469386416437 | SUCCESS; both tables `unchanged`, identical metrics |
+| First attempt | `3b06f1f` | 418805058420712 | FAILED before any write: serverless Spark Connect rejects `mode("errorifexists")`. Fixed to `mode("error")` in `f3d080b` |
+| Baseline | `f3d080b` | 363160174813621 | SUCCESS; `model_split` and `baseline_lookup` created |
+| Rerun | `f3d080b` | 245469386416437 | SUCCESS; both tables `unchanged`, identical metrics |
 
 ### Persisted tables
 
@@ -129,13 +129,27 @@ Linux container (Python 3.12.15, OpenJDK 21, PySpark 4.0.1),
 
 | Tree | Bronze parameters | Silver | Model | Job definition | Result |
 |---|---|---|---|---|---|
-| `nazar/model-baseline` @ `dc97efb` | 3 | 5 | 35 | – | 43 run, 43 passed, 0 failed, 0 skipped |
+| `nazar/model-baseline` @ `3b06f1f` | 3 | 5 | 35 | – | 43 run, 43 passed, 0 failed, 0 skipped |
 | `yaropolk/feature4-pipeline` @ `504278b` | 3 | 5 (incl. `validate_layers`) | – | 2 | 10 run, 10 passed, 0 failed, 0 skipped |
 
-`13b50d8` changes only a notebook write mode, which no unit test covers; the notebook change was
+`f3d080b` changes only a notebook write mode, which no unit test covers; the notebook change was
 verified by the Databricks runs above. On native Windows the 4 Spark-worker Silver tests crash
 (`Python worker exited unexpectedly`) even for a one-row DataFrame; this is a local environment
 issue, not a code failure. The two branches' suites were not run on one combined tree.
+
+## Commit identifiers
+
+The branch history was rewritten on 2026-11-11 to remove commit-message trailers; file
+contents are byte-identical (same Git trees). The runs above executed the pre-rewrite commits:
+
+| Current SHA | Pre-rewrite SHA (as run in Databricks) | Tree |
+|---|---|---|
+| `ea2b3ae` | `a02b758` | unchanged |
+| `3b06f1f` | `dc97efb` | unchanged |
+| `f3d080b` | `13b50d8` | unchanged |
+| `bddffe0` | `ca089bd` | unchanged |
+
+Workspace folder names (`airbnb_baseline_dc97efb`, `airbnb_baseline_13b50d8`) keep the pre-rewrite SHAs.
 
 ## Warnings and open items
 
