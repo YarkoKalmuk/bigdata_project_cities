@@ -1,11 +1,14 @@
 # Week 2 transfer report: Milan + Florence → Venice (REPORT-01)
 
-Status: **model section final** (owner: Mykolaichuk Nazar, 2026-11-11). The pipeline section
-belongs to Kalmuk Yaropolk; until he writes it, it only links his first-run evidence.
+Status: **joint pipeline/model report complete for review**. Pipeline: Kalmuk Yaropolk
+(2026-11-12); model: Mykolaichuk Nazar (2026-11-11). The report and supporting handoffs are now integrated into main with user approval.
+The original evidence review itself performed no merges or runtime changes.
 
 Every number comes from the preserved first-run evidence and was re-checked read-only on
-2026-11-11 ([audit](venice_model_final_audit_2026-11-11/audit.json)). Nothing was retrained,
-rescored or re-run for this report.
+2026-11-11 by Nazar ([audit](venice_model_final_audit_2026-11-11/audit.json)). The
+2026-11-12 documentation review verified 59 committed evidence hashes and cross-checked
+counts/metrics offline. It did not perform a new live workspace audit. Nothing was
+retrained, rescored or re-run for this report.
 
 ## Identifiers
 
@@ -29,10 +32,72 @@ unchanged.
 
 ## Pipeline section (owner: Yaropolk)
 
-*To be written by Yaropolk.* Facts already recorded in [his first-run report](venice_first_run_2026-09-16/REPORT.md):
-one submission with no retries or repairs; all four tasks succeeded; 8,844 Venice rows reached
-Bronze, Silver and `model_features`; A/B fingerprints were unchanged. The pipeline fix list is
-empty (see the change classification below).
+### First unchanged execution
+
+M1 was published before Venice was accessed. The latest listed Venice snapshot was
+2026-09-16; its original detailed gzip and a separate runtime manifest were uploaded
+without overwriting files. The manifest supplied city/date/source and a predeclared
+Piazza San Marco centre through `sources_config_path`; the A/B repository configuration,
+Job source, pipeline modules and tag were not edited.
+
+The first and only ETL submission was **782550938914199**. Bronze, Silver, Gold and
+validation all succeeded, using actual task Git snapshot
+`f408ac01ffdd025fab6df220c8f89b24d3d4fda6`, whose executable files match M1.
+No task retry, repair, copied city notebook or data-cleaning intervention was used.
+
+| First-run output | Result |
+|---|---|
+| Bronze / Silver / gold model features | 8,844 / 8,844 / 8,844 rows; unique listing keys |
+| Valid positive targets | 8,144; 700 missing prices retained, not deleted |
+| Analytical population | 8,101 (separate from the model MAE population) |
+| Gold metrics | 1 city, 4 room-type and 60 neighbourhood rows |
+| Protected state | 19 A/B/model object fingerprints unchanged |
+| Pipeline failures / fixes | **None / none required (FIX-01)** |
+
+The 19 protections cover A/B slices of ETL/reference/prediction tables, pooled
+model records, original A/B raw files, the artifact and selection file. Before/after
+fingerprints used original columns and complete row hashes inside Databricks.
+The later model audit separately verified its 15 protected table fingerprints;
+these are different protection sets, not contradictory counts.
+
+### Data-quality and transfer observations
+
+- **Schema:** 90 columns, identical to the A/B reference header; no missing or added
+  source columns and no contract failure.
+- **Prices:** all 8,144 present strings parsed; `$` is formatting while values are EUR.
+  Missing prices are 7.9% in Venice versus 14.5% Milan / 10.5% Florence. The frozen
+  rules retain all missing-target rows and expose exclusion reasons.
+- **Existing source gaps:** numeric bathrooms and host-verification fields are
+  missing/placeholders in Venice too; bathroom text and textual-null handling worked.
+  Beds are missing for 114 rows, minimum nights for 186, bathroom-derived fields for
+  six and review scores for 681. No new imputation was fitted in ETL.
+- **Price classes:** 14 extreme-high and 29 stale-high listings were flagged by the
+  frozen rules, with 39 high-tail listings. These classes remain descriptive:
+  all 8,144 valid targets, including the tail, enter headline Venice MAE.
+- **Shift:** the ETL's approximate parsed-price median is EUR 231, versus EUR 163.67
+  / 198 in A/B; centre distance reaches 18.90 km versus 9.98 / 8.11 km. Eighteen
+  listings have property types absent from full A/B snapshots; room types are unchanged.
+  The model report below checks the fitted-vocabulary behaviour independently.
+- **Dates:** Venice's snapshot precedes A/B by three days. No Venice review-after-
+  snapshot flags appeared; the pre-existing 568 / 282 A/B flags were left unchanged.
+
+These are observed differences, not invented runtime failures or reasons to repair
+working ETL. The approximate ETL median and the model report's exact median use
+different aggregation/population definitions; they should not be mixed silently.
+
+### Evidence and change boundary
+
+The [first-run report](venice_first_run_2026-09-16/REPORT.md), terminal task outputs,
+progress log, validation record, input hashes and before/after fingerprints were
+preserved before model evaluation. The ETL evidence directory and its hash index
+remain unchanged. Preparation/reporting helper errors are recorded separately in
+its `preparation_events.jsonl`; they did not alter frozen code and are not pipeline
+transfer failures.
+
+**FIX-01: none / not required.** No input correction, pipeline patch or repaired
+run followed the first ETL attempt. The original [ETL change ledger](venice_first_run_2026-09-16/change_ledger.json)
+still has an empty pipeline-fix list. Nazar's separate [model change ledger](venice_model_first_run_2026-09-16/change_ledger.json)
+has no model change or scoring rerun. No post-fix number is applicable.
 
 ## Model section
 
@@ -97,6 +162,10 @@ Breakdowns and CSVs: [first-run model report §4](venice_model_first_run_2026-09
 Neighbourhood figures: [reference SQL results](venice_model_final_audit_2026-11-11/reference_sql_results.json) (query `q3`).
 
 ### Limitations
+
+The error decomposition is observational. Reweighting actual-price bands is a
+diagnostic summary, not a predictive evaluation or proof of causation. No causal
+claim is needed to establish the measured transfer gap.
 
 - The model has no feature that captures the Venice centre premium. `dist_center_km` measured
   from Piazza San Marco mixes canals, islands and the mainland, which A/B never covered.

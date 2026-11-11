@@ -1,5 +1,12 @@
 # First milestone: Milan and Florence in bronze
 
+> Historical setup/integration instructions below. Current delivery status is in
+> [README](../README.md), [reproducibility](reproducibility.md) and the
+> [Week 2 engineering handoff](week2/handoff_dashboard_genie_engineering.md).
+> M1 and the first Venice ETL/model runs are complete. Do not rerun setup,
+> registration, ETL or training to reproduce report numbers. Contracts below remain
+> useful; earlier pending-status statements do not describe the current release.
+
 Status: Yaropolk reports running setup, ingestion and initial silver in Databricks. Maksym's EDA provides both snapshot URLs and observed counts in `docs/eda_handoff.md`. This review did not download city data.
 
 ## 1. Get this branch into Databricks

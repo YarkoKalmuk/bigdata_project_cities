@@ -1,75 +1,87 @@
-# Airbnb Price Analytics — Northern Italy
+# Airbnb Northern Italy: frozen cross-city price transfer
 
-## Group Assignment 2
+Databricks lakehouse project by **Kalmuk Yaropolk**, **Mykolaichuk Nazar** and
+**Matseliukh Maksym**. Detailed Inside Airbnb listings from Milan and Florence
+support EDA, a training-only median baseline and a price model. Venice tests the
+unchanged pipeline and frozen model on an unseen city. Prices are **EUR**, despite
+the source's `$` formatting.
 
-### Colaborators:
-#### Kalmuk Yaropolk
-#### Mykolaichuk Nazar
-#### Matseliukh Maksym
+## Verified results and current status
 
-Region: Northern Italy
-Currency: EUR
+| City / role | Snapshot | Listings | Evaluation rows | Baseline MAE EUR | Model MAE EUR |
+|---|---|---:|---:|---:|---:|
+| Milan / A, training + held-out | 2026-09-19 | 25,338 | 4,399 held-out | 94.38 | 75.72 |
+| Florence / B, training + held-out | 2026-09-19 | 13,571 | 2,464 held-out | 97.41 | 76.18 |
+| A/B combined held-out | 2026-09-19 | 38,909 | 6,863 | 95.47 | 75.88 |
+| Venice / C, unseen | 2026-09-16 | 8,844 | 8,144 priced | 142.46 | 106.07 |
 
-### Cities
-- City A: Milan (Training)
-- City B: Florence (Training)
-- City C: Venice (Unseen test)
+Venice ETL and scoring both succeeded on their first attempt. All 8,844 rows were
+preserved and predicted; 700 missing-target rows have no evaluation error. Model
+MAE improves on the Venice baseline by **25.5%**, while exceeding A/B model MAE by
+39.8%. **FIX-01: none required. FIX-02: none required.** No pipeline correction,
+retraining or model adaptation was needed. This is a transfer result, not evidence
+that the model generalises equally well across cities.
 
-### Dataset
-Source: Inside Airbnb
-File: Detailed listings.csv.gz
+The [joint transfer report](docs/week2/transfer_report.md) links sealed ETL/model
+evidence and Nazar's read-only audit. This documentation review checked 59 evidence
+hashes and 100 local tests; it did not rerun Venice or perform a new live audit.
+PR #4 and the documentation from PR #5 are integrated into `main` with user approval.
+Maksym's A/B dashboard and Genie deployment are reported in his working branch;
+Venice acceptance, final presentation and submission remain pending.
 
-Snapshot dates:
-- Milan: 19 September 2026
-- Florence: 19 September 2026
-- Venice: 16 September 2026 (first frozen ETL run completed; model scoring pending)
+## Architecture and frozen lineage
 
-### Project objective
-Build a Databricks lakehouse, ETL pipeline,
-Airbnb price prediction model, dashboard,
-and Genie Agent.
+![Lakehouse architecture](docs/architecture.png)
 
-Evaluate how well the system transfers
-to an unseen city (Venice).
+See [architecture and grains](docs/architecture.md) and the
+[slide-ready SVG](docs/architecture.svg).
+The immutable ETL Job runs Bronze → Silver → Gold → validation for one configured
+city/snapshot. An external runtime manifest supplied Venice inputs without changing
+the frozen code. Model scoring is separate from ETL and loads the preserved model.
 
-### Work plan and setup
+| Reference | Value |
+|---|---|
+| Freeze | `M1-freeze` → `7f76cbe6936e76fa3a7685ac90b40c1ce1c253df` |
+| ETL Job / immutable executable source | `816607442908043` / `f408ac01ffdd025fab6df220c8f89b24d3d4fda6` |
+| Frozen model / scorer / baseline | `price-v1` / `score-v1` / `airbnb-v1` |
+| First Venice ETL / scoring Job runs | `782550938914199` / `65362888524059` |
+| Venice scoring run ID | `venice-2026-09-16-price-v1-score-v1-first-run` |
 
-Current release evidence: [M1 Week 1 freeze](docs/week1_freeze.md), including live
-workspace checks, immutable Job identity, model hashes and held-out A/B results.
-**Week 1 is frozen:** `M1-freeze` → `7f76cbe6936e76fa3a7685ac90b40c1ce1c253df`;
-model `price-v1`, combined held-out MAE **EUR 75.88** versus baseline **EUR 95.47**.
-Week 2 has begun: [Venice's unchanged first ETL run](docs/week2/venice_first_run_2026-09-16/REPORT.md)
-succeeded. Initial evidence is preserved; no fixes or model scoring have been applied.
-The feature-status notes below describe the earlier integration stages.
+Executable files at the Job source match M1. The tag and original evidence remain
+unchanged. Artifact SHA-256 and historical Delta versions are recorded in
+[Week 1 freeze](docs/week1_freeze.md) and
+[model first-run evidence](docs/week2/venice_model_first_run_2026-09-16/REPORT.md).
 
-- [Three-person work plan](plan.md)
-- [Databricks setup and bronze ingestion](docs/databricks_setup.md)
-- [Lakehouse architecture](docs/architecture.md)
-- [Silver listings contract and verification](docs/silver_contract.md)
-- [Completed A/B EDA and cleaning handoff](docs/eda_handoff.md)
-- [Gold metrics and model handoff](docs/gold_contract.md)
-- [Parameterised Job setup and execution](docs/pipeline_job.md)
-- [Pipeline run evidence](docs/pipeline_run_log.md)
-- [Generic city inputs and engineering handoff](docs/engineering_handoff.md)
-- [Integrated system and remaining freeze checks](docs/integration_readiness.md)
-- [Model selection and held-out evaluation](docs/model_selection.md)
-- [Prediction schema and run evidence](docs/model_predictions_run.md)
+## Repository and reproducibility
 
-Yaropolk reports successful execution of the initial silver notebook. Maksym's
-completed EDA records 25,338 Milan listings and 13,571 Florence listings for
-2026-09-19, including 21,654 and 12,148 nonmissing prices respectively. These are
-EDA observations, not results from the new gold pipeline.
+- `airbnb/`: reusable ingestion, preparation, metrics and model modules.
+- `notebooks/`: Databricks setup, EDA, ETL, validation, model training and scoring entry points.
+- `config/`, `runtime/`, `jobs/`: A/B source configuration, separate Venice runtime input and immutable Job definition.
+- `tests/`: synthetic local suite; no production model retraining or real-city runs.
+- `docs/`: contracts, architecture, run logs, freeze/evidence and handoffs.
 
-The feature 4 Job completed Milan, Florence and a repeated Milan run. Reported
-post-repeat silver counts are 25,338 / 13,571 with no duplicate listing keys.
-Both source URLs and city centres are recorded in `config/sources.json`.
+Start with [reproducibility instructions](docs/reproducibility.md) to verify saved
+results without re-executing the experiment. For historical setup and contracts,
+see [Databricks setup](docs/databricks_setup.md), [Silver](docs/silver_contract.md),
+[Gold](docs/gold_contract.md), [model selection](docs/model_selection.md) and
+[pipeline run log](docs/pipeline_run_log.md). Original detailed datasets/artifacts
+live in Databricks volumes, not Git. Do not overwrite them to reproduce a report.
 
-`yaropolk/feature5-city-inputs` removes hardcoded city restrictions and accepts
-an optional runtime JSON manifest. Its A/B workspace acceptance is pending.
-Venice stays unseen; the joint pipeline/model freeze is not complete.
+## Contributions and final handoff
 
-`yaropolk/feature6-integration` combines the engineering/EDA line with Nazar's
-price-v1 model candidate. Its 100 local tests pass. Scorer 08 now accepts runtime
-input manifests alongside ETL; read-only notebook 09 helps reconcile model data,
-workspace identity and reference versions before the joint freeze. Integration
-workspace acceptance and merge into main are still pending.
+| Owner | Delivered | Remaining ownership |
+|---|---|---|
+| Yaropolk | Configuration-driven ETL, architecture, immutable Job, freeze verification, preserved Venice first run, engineering transfer report and integration documentation | Approved repository integration; support final BI reconciliation and own engineering slides |
+| Nazar | Leakage review, persisted split/baseline, frozen model/artifact, A/B evaluation, first Venice scoring and transfer diagnostics | Approved PR #4 integration; support BI reference answers and own model slides |
+| Maksym | A/B EDA and cleaning handoff; dashboard/Genie assets and A/B deployment reported on `maksym/dashboard-genie` | Venice dashboard/Genie acceptance, reviewed BI merge, presentation assembly and demo |
+
+[Task board](plan.md) records completed, review-pending and outstanding work.
+[Integration review](docs/week2/integration_review.md) records the original review and subsequent main integration. PR #2 is redundant
+and PR #1 should be superseded rather than merged; their closure still requires approval.
+
+Maksym: use the [engineering handoff](docs/week2/handoff_dashboard_genie_engineering.md),
+Nazar's [model/SQL handoff](docs/week2/handoff_dashboard_genie_model.md) and
+[model slides outline](docs/week2/handoff_model_slides.md). Final deliverables still
+need a presentation PDF/link, Venice BI screenshots/reference-answer checks,
+access verification and team-admin submission. Assignment requirements are in
+[the brief](group_assignment_2.pdf).
