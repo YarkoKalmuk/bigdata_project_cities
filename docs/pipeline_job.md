@@ -1,5 +1,12 @@
 # Run the parameterised ETL Job
 
+> Historical setup/integration instructions below. Current delivery status is in
+> [README](../README.md), [reproducibility](reproducibility.md) and the
+> [Week 2 engineering handoff](week2/handoff_dashboard_genie_engineering.md).
+> M1 and the first Venice ETL/model runs are complete. Do not rerun setup,
+> registration, ETL or training to reproduce report numbers. Contracts below remain
+> useful; earlier pending-status statements do not describe the current release.
+
 Current review branch: `yaropolk/feature6-integration` (PR #3). The Job settings file pins `git_commit: f408ac01ffdd025fab6df220c8f89b24d3d4fda6`, an existing integration revision containing the runtime city interface and model entry points. No moving branch is used. The pin is a repository fix, not a freeze or live Job update. See [the run log](pipeline_run_log.md) for shared submit runs and separate reported persistent-Job history.
 
 ## Update the existing Job for feature 5

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#f4f7fb"/>
+<text x="50" y="70" font-family="Arial,sans-serif" font-size="38" fill="#24334a" font-weight="bold">Airbnb: one frozen pipeline, three configured cities</text>
+<text x="50" y="114" font-family="Arial,sans-serif" font-size="24" fill="#24334a">Milan + Florence: training / held-out   |   Venice: first unchanged ETL and model evaluation</text>
+<text x="440" y="168" font-family="Arial,sans-serif" font-size="23" fill="#2066a4">Immutable Job 01 → 02 → 03 → 04; executable source matches M1-freeze</text>
+<rect x="50" y="190" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="68" y="230" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Detailed source inputs</text>
+<text x="68" y="266" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Original listings.csv.gz</text>
+<text x="68" y="293" font-family="Arial,sans-serif" font-size="21" fill="#24334a">City / date / centre manifest</text>
+<rect x="440" y="190" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="458" y="230" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Bronze · 01</text>
+<text x="458" y="266" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Source strings + metadata</text>
+<text x="458" y="293" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Raw hashes / load manifest</text>
+<rect x="830" y="190" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="848" y="230" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Silver · 02</text>
+<text x="848" y="266" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Typed EUR + quality flags</text>
+<text x="848" y="293" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Listing key: city/date/id</text>
+<rect x="1220" y="190" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="1238" y="230" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Gold · 03</text>
+<text x="1238" y="266" font-family="Arial,sans-serif" font-size="21" fill="#24334a">City / room / area metrics</text>
+<text x="1238" y="293" font-family="Arial,sans-serif" font-size="21" fill="#24334a">All-row model features</text>
+<polyline points="370,255 440,255" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="440,255 429.4690092573155,260.75310646325045 429.4690092573155,249.24689353674955" fill="#52667f"/>
+<polyline points="760,255 830,255" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="830,255 819.4690092573155,260.75310646325045 819.4690092573155,249.24689353674955" fill="#52667f"/>
+<polyline points="1150,255 1220,255" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="1220,255 1209.4690092573155,260.75310646325045 1209.4690092573155,249.24689353674955" fill="#52667f"/>
+<rect x="440" y="420" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="458" y="460" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Validation · 04</text>
+<text x="458" y="496" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Counts, keys and contracts</text>
+<text x="458" y="523" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Protected A/B fingerprints</text>
+<text x="440" y="585" font-family="Arial,sans-serif" font-size="20" fill="#24334a">Shared ETL audit; no fixes required</text>
+<rect x="830" y="420" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="848" y="460" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Frozen scoring · 08</text>
+<text x="848" y="496" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Load price-v1; no retraining</text>
+<text x="848" y="523" font-family="Arial,sans-serif" font-size="21" fill="#24334a">All 8,844 Venice rows</text>
+<rect x="1220" y="420" width="320" height="130" rx="14" fill="white" stroke="#2066a4" stroke-width="2"/>
+<text x="1238" y="460" font-family="Arial,sans-serif" font-size="26" fill="#2066a4" font-weight="bold">Predictions / evaluation</text>
+<text x="1238" y="496" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Version + run + split labels</text>
+<text x="1238" y="523" font-family="Arial,sans-serif" font-size="21" fill="#24334a">8,144 priced; 700 unpriced</text>
+<polyline points="1220,295 1190,295 1190,380 990,380 990,420" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="990,420 984.2468935367496,409.4690092573155 995.7531064632504,409.4690092573155" fill="#52667f"/>
+<text x="1015" y="369" font-family="Arial,sans-serif" font-size="19" fill="#52667f">features</text>
+<polyline points="1150,485 1220,485" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="1220,485 1209.4690092573155,490.75310646325045 1209.4690092573155,479.24689353674955" fill="#52667f"/>
+<rect x="50" y="650" width="320" height="130" rx="14" fill="white" stroke="#6b5b95" stroke-width="2"/>
+<text x="68" y="690" font-family="Arial,sans-serif" font-size="26" fill="#6b5b95" font-weight="bold">Historical A/B only</text>
+<text x="68" y="726" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Persisted split + baseline</text>
+<text x="68" y="753" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Train / select / evaluate</text>
+<rect x="440" y="650" width="320" height="130" rx="14" fill="white" stroke="#6b5b95" stroke-width="2"/>
+<text x="458" y="690" font-family="Arial,sans-serif" font-size="26" fill="#6b5b95" font-weight="bold">Frozen references</text>
+<text x="458" y="726" font-family="Arial,sans-serif" font-size="21" fill="#24334a">price-v1 artifact + hashes</text>
+<text x="458" y="753" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Baseline + evaluation</text>
+<polyline points="370,715 440,715" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="440,715 429.4690092573155,720.7531064632504 429.4690092573155,709.2468935367496" fill="#52667f"/>
+<polyline points="760,715 790,715 790,535 830,535" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="830,535 819.4690092573155,540.7531064632504 819.4690092573155,529.2468935367496" fill="#52667f"/>
+<text x="800" y="599" font-family="Arial,sans-serif" font-size="19" fill="#52667f">load</text>
+<rect x="1220" y="650" width="320" height="130" rx="14" fill="white" stroke="#207b71" stroke-width="2"/>
+<text x="1238" y="690" font-family="Arial,sans-serif" font-size="26" fill="#207b71" font-weight="bold">Dashboard / Genie</text>
+<text x="1238" y="726" font-family="Arial,sans-serif" font-size="21" fill="#24334a">BI views; A/B deployed*</text>
+<text x="1238" y="753" font-family="Arial,sans-serif" font-size="21" fill="#24334a">Venice acceptance pending</text>
+<polyline points="1380,550 1380,650" fill="none" stroke="#52667f" stroke-width="3"/>
+<polygon points="1380,650 1374.2468935367497,639.4690092573155 1385.7531064632503,639.4690092573155" fill="#52667f"/>
+<text x="1395" y="604" font-family="Arial,sans-serif" font-size="19" fill="#52667f">predictions</text>
+<polyline points="1540,255 1570,255 1570,715 1540,715" fill="none" stroke="#207b71" stroke-width="3"/>
+<polygon points="1540,715 1550.5309907426845,709.2468935367496 1550.5309907426845,720.7531064632504" fill="#207b71"/>
+<text x="1100" y="811" font-family="Arial,sans-serif" font-size="21" fill="#207b71">Gold metrics + predictions</text>
+<text x="50" y="843" font-family="Arial,sans-serif" font-size="23" fill="#24334a">Venice: 8,844 rows in Bronze / Silver / features; first ETL successful; FIX-01 and FIX-02 not required.</text>
+<text x="50" y="879" font-family="Arial,sans-serif" font-size="19" fill="#24334a">* A/B BI deployment reported on Maksym’s branch. This review made no workspace changes or experiment reruns.</text>
+</svg>

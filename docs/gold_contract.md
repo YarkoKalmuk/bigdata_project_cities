@@ -1,5 +1,12 @@
 # Gold handoff for Maksym and Nazar
 
+> Historical setup/integration instructions below. Current delivery status is in
+> [README](../README.md), [reproducibility](reproducibility.md) and the
+> [Week 2 engineering handoff](week2/handoff_dashboard_genie_engineering.md).
+> M1 and the first Venice ETL/model runs are complete. Do not rerun setup,
+> registration, ETL or training to reproduce report numbers. Contracts below remain
+> useful; earlier pending-status statements do not describe the current release.
+
 Current integration branch: `yaropolk/feature6-integration`. Earlier ETL and model runs are recorded separately in the run logs; integrated workspace acceptance is pending. Freeze the A/B pipeline and model before Week 2 and Venice.
 
 ## Run
