@@ -61,7 +61,7 @@ an optional runtime JSON manifest. Its A/B workspace acceptance is pending.
 Venice stays unseen; the joint pipeline/model freeze is not complete.
 
 `yaropolk/feature6-integration` combines the engineering/EDA line with Nazar's
-price-v1 model candidate. Its 99 local tests pass. Scorer 08 now accepts runtime
+price-v1 model candidate. Its 100 local tests pass. Scorer 08 now accepts runtime
 input manifests alongside ETL; read-only notebook 09 helps reconcile model data,
 workspace identity and reference versions before the joint freeze. Integration
 workspace acceptance and merge into main are still pending.

@@ -6,6 +6,12 @@ import unittest
 
 
 class JobDefinitionTests(unittest.TestCase):
+    def test_job_pins_an_immutable_commit(self):
+        source = json.loads(Path('jobs/airbnb_etl.job.json').read_text())['git_source']
+        self.assertRegex(source['git_commit'], r'^[0-9a-f]{40}$')
+        self.assertNotIn('git_branch', source)
+        self.assertNotIn('git_tag', source)
+
     def test_graph_uses_real_notebooks_and_fail_closed_dependencies(self):
         job = json.loads(Path('jobs/airbnb_etl.job.json').read_text())
         self.assertEqual(job['max_concurrent_runs'], 1)

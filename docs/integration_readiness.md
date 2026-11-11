@@ -2,6 +2,10 @@
 
 Status: **integration candidate, not frozen**. No freeze tag, workspace change, model retraining or unseen-city run was performed by this integration.
 
+The latest requirement audit and proposed PR merge order are in
+[Week 1 repository review](week1_repository_review.md). Merge, freeze and live
+Job deployment remain separate actions requiring explicit approval.
+
 ## Integrated source
 
 - Engineering: `yaropolk/feature5-city-inputs` at `7ddaa74`, including Maksym's EDA.
@@ -10,11 +14,11 @@ Status: **integration candidate, not frozen**. No freeze tag, workspace change, 
 - `airbnb/model.py`, `price_model.py`, `scoring.py` are unchanged from Nazar's branch. Silver/gold transformations and repository source metadata are unchanged from feature 5.
 - The only scoring behaviour change is input resolution in notebook 08: it now accepts the same `sources_config_path` as ETL and records its canonical JSON hash. Model identity, features, artifact, split, baseline, predictions schema and metrics are unchanged.
 
-The ETL Job definition points to the integration branch while under review. It still has four tasks; scorer 08 is run separately. The live Job is not updated just by changing this file.
+The repository ETL Job definition pins immutable executable integration commit `f408ac01ffdd025fab6df220c8f89b24d3d4fda6` through `git_commit`; no moving branch or tag is used. This deliberate pin avoids a self-referential commit hash: the current follow-up changes affect only Job settings, tests and documentation, not the task code at the pinned revision. It is not a final freeze. The graph still has four tasks; scorer 08 is separate. No live Job configuration was changed.
 
 ## Local validation
 
-Combined suite: **99 tests passed, zero failures, zero skips**. Synthetic inputs only; no city files or Databricks artifact was downloaded.
+Combined suite after repository corrections: **100 tests passed, zero failures, zero skips**. Includes the immutable Job-source regression check. Synthetic inputs only; no city files or Databricks artifact was downloaded.
 
 Python 3.12, Java 21, PySpark 4.0.1, scikit-learn 1.7.2, numpy 2.3.4, pandas 2.3.3, joblib 1.5.2; local SciPy 1.16.3. Dependencies are in `requirements-test.txt`. A broken inherited SciPy binary was replaced only inside the temporary test environment before the passing run.
 
@@ -34,7 +38,7 @@ Live verification was attempted locally using the existing `yaropolk` Databricks
 
 Yaropolk's feature 5 log has successful Milan run `1103284242992113` and Florence run `942670770239305`, but the resolved Git SHA, repeatability and external-manifest run fields remain TODOs. His report says all checks were run; exact run evidence still needs recording, not reclassification as a failure.
 
-Nazar's historical [integration check](week1_integration_check.md) describes a different workspace/run history: Job `721102111883860` was not visible there, although model tables/artifacts and submit-run pipeline evidence were present. Do not assume that a `workspace` catalog in two workspaces identifies the same tables. Establish the workspace host and actual table/artifact locations before combining execution evidence.
+Nazar's historical [integration check](week1_integration_check.md) did not find persistent Job `721102111883860` in the shared workspace. The shared ETL reference runs are submit runs `399786082243961`, `334832161613071` and `768192587578562`, now recorded separately in [the pipeline log](pipeline_run_log.md). The shared host is documented in [the baseline evidence](model_baseline_run.md). The persistent-Job IDs remain separate reported history; their location is not inferred from that discrepancy.
 
 ## Next workspace action: read-only readiness check
 

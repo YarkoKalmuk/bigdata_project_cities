@@ -1,10 +1,10 @@
 # Run the parameterised ETL Job
 
-Current branch: `yaropolk/feature5-city-inputs`. Feature 4 Job creation/execution succeeded according to the run log. Feature 5 still needs workspace validation. No live Job setting changes merely by pulling this branch.
+Current review branch: `yaropolk/feature6-integration` (PR #3). The Job settings file pins `git_commit: f408ac01ffdd025fab6df220c8f89b24d3d4fda6`, an existing integration revision containing the runtime city interface and model entry points. No moving branch is used. The pin is a repository fix, not a freeze or live Job update. See [the run log](pipeline_run_log.md) for shared submit runs and separate reported persistent-Job history.
 
 ## Update the existing Job for feature 5
 
-Do not rerun registration or create a duplicate Job. Open `airbnb-cities-etl` (ID `721102111883860`) and change its **remote Git branch** to `yaropolk/feature5-city-inputs`. Add the Job parameter `sources_config_path` with an empty default. Leave the four tasks, existing catalog/date/source parameters and concurrency setting unchanged. Select/pull the same branch in your workspace Git folder for interactive notebook work; this is separate from the Job's Git setting.
+Do not rerun registration or create a duplicate Job. Before any deployment, confirm the correct shared workspace and Job identity: the shared reference runs were one-time submissions, and persistent Job `721102111883860` was not found in Nazar's workspace check. After explicit approval, apply the repository's immutable Git **commit** source and the `sources_config_path` parameter to the intended Job. Do not substitute a feature branch. Selecting/pulling a workspace Git folder is separate from configuring the Job's source.
 
 Run Milan, Florence and a Milan repeat with blank `sources_config_path` to verify the repository defaults. Record new run IDs/SHAs separately from feature 4's evidence. Notebook 04 adds the input manifest's canonical JSON SHA-256 to successful validation records through additive schema evolution.
 
@@ -50,6 +50,6 @@ After the acceptance runs, give Maksym the metric table locations and give Nazar
 
 Feature 5 resolves configured cities generically: a new city's metadata can be supplied using a JSON manifest under `/Volumes/<catalog>/airbnb_bronze/raw_files/config/`. This avoids editing frozen code or moving the Job's pinned revision. See the [input contract](engineering_handoff.md). The runtime-manifest route is locally tested with synthetic input; it still needs an A/B workspace check before freezing. Wait for Nazar's baseline, held-out results and scoring entry point too.
 
-Once the full A/B system is ready, record an immutable Git revision and model artifacts and configure the Job to that Git **commit**, rather than a moving feature branch. Preserve that exact definition for the first Venice run. Do not freeze now or run Venice yet.
+Once the full A/B system is ready and the team explicitly approves the freeze, record the final integrated Git revision and model artifacts, then approve deployment of that exact commit to the intended Job. The current repository pin is an integration-code pin, not that approval. Preserve the approved definition for the first unseen-city run. Do not freeze or access the test city yet.
 
 References: [Job parameters](https://docs.databricks.com/aws/en/jobs/job-parameters), [remote Git Jobs](https://docs.databricks.com/aws/en/jobs/git), [serverless Jobs](https://docs.databricks.com/aws/en/jobs/run-serverless-jobs).

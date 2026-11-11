@@ -46,7 +46,7 @@ This interface performs no download or discovery. For the first unseen-city run,
 
 ## Finish workspace acceptance now, using A/B only
 
-1. Pull `yaropolk/feature5-city-inputs`. Update the **existing Job's** Git branch and add `sources_config_path` with an empty default as described in [Job setup](pipeline_job.md).
+1. Use the integrated review branch, `yaropolk/feature6-integration`. The repository Job definition uses an immutable commit. Confirm the intended workspace/Job and obtain explicit approval before any live configuration change; do not switch the Job to a moving feature branch. See [Job setup](pipeline_job.md).
 2. Run Milan, Florence and Milan again with repository defaults. Record run IDs, resolved commit, counts and success; verify the known row totals and unique keys remain unchanged.
 3. Copy the unchanged A/B `config/sources.json` to a uniquely named JSON file in the volume's `config` directory. Run Milan once with `sources_config_path` pointing to that file. This tests the frozen-code/runtime-input route without accessing a new city. Check the validation output includes its path/hash.
 4. Verify Nazar can query `workspace.airbnb_gold.model_features` (or his agreed catalog). If separate workspaces are required, he can reproduce the same A/B pipeline there; do not share credentials. Confirm both teammates have actual table access before announcing the handoff.
