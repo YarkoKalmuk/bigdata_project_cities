@@ -116,6 +116,7 @@ Added 2026-11-11 from a repository audit. Stable rules are in [CLAUDE.md](CLAUDE
 | `planned` | Described in this plan; no implementation |
 | `blocked` | Cannot proceed until the listed dependency or decision is resolved |
 | `missing` | Required by the assignment but not yet planned or assigned |
+| `not required` | Considered and deliberately not done, with the reason and evidence recorded |
 
 ### Status snapshot (2026-11-11)
 
@@ -188,11 +189,11 @@ City C check: no Venice URL, config entry, file or query was found on any branch
 | FREEZE-01 | **Milestone M1: A/B freeze** | All; Yaropolk records it | planned | PIPE-04..06, MODEL-07 | Everything in the "Week 1 freeze" definition in CLAUDE.md is recorded below | Tag name, artifact ID, metrics table |
 | CITYC-01 | Record the Venice snapshot date and URL; upload the raw file (only after M1) | Yaropolk | planned | FREEZE-01 | README and config updated; no other change | Commit SHA |
 | CITYC-02 | **Milestone M2: first unchanged pipeline run on Venice** | Yaropolk | planned | CITYC-01 | Ran or failed at the frozen tag; logs preserved | Run IDs, errors and counts committed under `docs/` |
-| CITYC-03 | First unchanged model scoring on Venice: baseline MAE and frozen-model MAE | Nazar | planned | CITYC-02 | Written under the frozen `model_version`; never overwritten | Metrics table; prediction row count |
+| CITYC-03 | First unchanged model scoring on Venice: baseline MAE and frozen-model MAE | Nazar | verified (2026-11-11: job run 65362888524059; 8,844 rows, 8,144 priced; baseline MAE 142.46, model MAE 106.07 EUR; [report](https://github.com/YarkoKalmuk/bigdata_project_cities/blob/nazar/week2-venice-model-first-run/docs/week2/venice_model_first_run_2026-09-16/REPORT.md), commits `b89dba9`, `7ec51d6`; PR #4) | CITYC-02 | Written under the frozen `model_version`; never overwritten | Metrics table; prediction row count |
 | CITYC-04 | Distribution shifts visible after the first run | Maksym | planned | CITYC-02 | Shifts described with numbers | Notes or notebook export |
 | FIX-01 | Pipeline fixes, logged as "pipeline fix" | Yaropolk | planned | CITYC-02 | Each change has a reason and before/after effect | Change log in the transfer report |
-| FIX-02 | Model changes, logged as "model change" | Nazar | planned | CITYC-03, D10 | If Venice labels are used, a Venice test set is reserved first; adapted results are reported separately | Change log; new `model_version` |
-| REPORT-01 | **Milestone M3: transfer report** | Nazar (model), Yaropolk (pipeline) | planned | FIX-01, FIX-02 | Venice baseline, A/B model MAE and Venice first-run/post-change model MAE side by side; gap explained | Report file in the repository |
+| FIX-02 | Model changes, logged as "model change" | Nazar | not required (the frozen model scored every listing, kept all contracts and beats the baseline by 25.5 %; no Venice labels used; `price-v1` is the only version; [change classification](https://github.com/YarkoKalmuk/bigdata_project_cities/blob/nazar/week2-venice-model-first-run/docs/week2/transfer_report.md#change-classification)) | CITYC-03, D10 | If Venice labels are used, a Venice test set is reserved first; adapted results are reported separately | Change log; new `model_version` |
+| REPORT-01 | **Milestone M3: transfer report** | Nazar (model), Yaropolk (pipeline) | partial (model section final, [transfer report](https://github.com/YarkoKalmuk/bigdata_project_cities/blob/nazar/week2-venice-model-first-run/docs/week2/transfer_report.md), commit `582aa95`, PR #4; pipeline section pending, Yaropolk) | FIX-01, FIX-02 | Venice baseline, A/B model MAE and Venice first-run/post-change model MAE side by side; gap explained | Report file in the repository |
 
 ### Presentation and repository (deliverables 3.8, 3.9)
 
