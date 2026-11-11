@@ -37,7 +37,12 @@ to an unseen city (Venice).
 - [Three-person work plan](plan.md)
 - [Databricks setup and bronze ingestion](docs/databricks_setup.md)
 - [Lakehouse architecture](docs/architecture.md)
+- [Silver listings contract and verification](docs/silver_contract.md)
 
-Yaropolk's first feature branch prepares setup and parameterised bronze ingestion
-for Milan and Florence. Workspace execution is pending; no ingestion results are
-claimed yet. Snapshot dates above must be verified against the downloaded files.
+Setup and bronze ingestion have been run in Databricks according to Yaropolk's
+report. The repository does not yet contain run counts confirming both cities.
+Milan's source URL is recorded in `config/sources.json`; Florence's URL and load
+still need confirmation. No snapshot dates were changed by this code review.
+
+The next feature adds conservative silver typing and quality flags. Its workspace
+execution and EDA-driven cleaning decisions remain pending. Venice stays unseen.
