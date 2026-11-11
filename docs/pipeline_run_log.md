@@ -44,3 +44,22 @@ The feature 4 Job executed successfully for both training cities and a repeated
 Milan run. The reported post-repeat counts and unique keys support repeatability.
 Feature 5 introduces runtime input manifests and still requires new A/B acceptance
 runs; do not attribute the feature 4 run IDs above to the new implementation.
+
+
+## Feature 5 — Databricks verification
+
+Job ID: 721102111883860
+Date: 2026-11-11
+
+| City | Run ID | Duration | Status |
+|---|---|---|---|
+| Milan | 1103284242992113 | 2m 30s | Succeeded |
+| Florence | 942670770239305 | 1m 46s | Succeeded |
+
+Both executions completed successfully.
+
+Git revision: TODO — confirm Feature 5 branch
+sources_config_path: TODO — confirm Job parameter
+Repeatability test: TODO
+External manifest test: TODO
+
