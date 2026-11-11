@@ -12,7 +12,7 @@ flowchart LR
     G --> H
 ```
 
-Implemented: setup of the three namespaces and original-file volume, one parameterised training-city bronze ingestion notebook, and conservative silver typing with raw-value preservation and quality flags. Silver workspace validation is pending. Gold and job orchestration are subsequent features.
+Implemented: setup, parameterised bronze ingestion, EDA-informed silver preparation, and gold city/neighbourhood/room-type metrics plus an explicit model-input table. Initial silver execution was reported successful; updated silver and gold need workspace validation. Model predictions belong to Nazar; Job orchestration remains a subsequent feature.
 
 Bronze preserves original compressed files and source strings. Metadata identifies city, snapshot and source; repeat loads replace only one city/snapshot. The manifest records successful load counts. Silver will enforce the agreed listing key `(city, snapshot_date, listing_id)`, typed EUR nightly price and explicit exclusion reasons. Gold will provide shared definitions for dashboard/Genie metrics, leakage-reviewed features and versioned model outputs.
 

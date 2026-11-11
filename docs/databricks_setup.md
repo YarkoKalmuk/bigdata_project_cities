@@ -1,6 +1,6 @@
 # First milestone: Milan and Florence in bronze
 
-Status: Yaropolk reports running setup and ingestion in Databricks. Milan's source URL is recorded in config; counts and Florence's completed load have not been provided in the repository. This review did not access the datasets.
+Status: Yaropolk reports running setup, ingestion and initial silver in Databricks. Maksym's EDA provides both snapshot URLs and observed counts in `docs/eda_handoff.md`. This review did not download city data.
 
 ## 1. Get this branch into Databricks
 
@@ -24,7 +24,7 @@ If permission is denied, select a writable catalog or ask the workspace owner to
 
 Use [Inside Airbnb's download page](https://insideairbnb.com/get-the-data/) and locate **Milan** and **Florence** only. Choose the detailed `listings.csv.gz`, not the summary `listings.csv`. Record the exact dated download link for each file. Data attribution: Inside Airbnb, CC BY 4.0.
 
-The README currently records 19 September 2026 for both cities. Verify dates against the source files. The assignment requests the latest snapshot: if the available latest date differs, update both `config/sources.json` and README before loading. Record each city's actual link in config. Milan's link is now recorded from the notebook used in Databricks; Florence's is pending. A blank source URL widget falls back to config. A blank source path derives the expected upload path from catalog/city/date. Existing widget values persist: clear Milan's old values before running Florence.
+Both dates and URLs are recorded from the completed A/B EDA in config. A blank source URL widget falls back to config; a blank source path derives the expected upload path. Existing widget values persist: clear Milan's old values before running Florence. Preserve the recorded snapshots rather than replacing them mid-experiment.
 
 Do not open, download or profile Venice. Its first run belongs after the Week 1 pipeline and model freeze.
 
@@ -49,7 +49,7 @@ Open `notebooks/01_ingest_bronze`, set widgets and run all cells:
 | `source_path` | Exact volume path above |
 | `source_url` | Exact dated Inside Airbnb detailed-file URL |
 
-The notebook preserves all source columns as strings, adds `_city`, `_snapshot_date`, `_source_path`, `_source_url` and `_ingested_at`, and writes `<catalog>.airbnb_bronze.listings`. It checks required columns, nonempty data, unique/nonmissing IDs and stored row counts. Source schema changes fail visibly; investigate them rather than enabling automatic schema merging without review.
+The notebook preserves all source columns as strings, adds `_city`, `_snapshot_date`, `_source_path`, `_source_url` and `_ingested_at`, and writes `<catalog>.airbnb_bronze.listings`. It checks required columns, nonempty data, unique/nonmissing IDs and stored row counts. Optional missing/extra string columns are tolerated through additive schema evolution; missing required fields fail visibly.
 
 Rerunning replaces only the selected city/date. Run cities sequentially for this milestone. If the audit step fails after writing listings, the notebook run is not complete: rerun after resolving the error to reconcile the manifest. Do not manually append the file again.
 

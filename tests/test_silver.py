@@ -5,6 +5,7 @@ import unittest
 from pyspark.sql import SparkSession
 
 from airbnb.silver import prepare_listings
+from airbnb.gold import build_gold
 
 
 class SilverTests(unittest.TestCase):
@@ -66,6 +67,64 @@ class SilverTests(unittest.TestCase):
         self.assertIn("invalid_bedrooms", row.quality_flags)
         self.assertIn("invalid_latitude", row.quality_flags)
         self.assertEqual(row.city, "florence")
+
+    def test_eda_nulls_bathrooms_dates_and_location(self):
+        raw = self.spark.createDataFrame(
+            [("1", "$100.00", "Private room", "2", " None ", "Shared half-bath", "1000", "2026-09-09", "1", "45.4642", "9.1900", "milan", "2026-09-19")],
+            "id string, price string, room_type string, accommodates string, host_verifications string, bathrooms_text string, minimum_nights string, last_review string, number_of_reviews string, latitude string, longitude string, _city string, _snapshot_date string",
+        )
+        row = prepare_listings(raw, {"milan": (45.4642, 9.1900)}).first()
+        self.assertIsNone(row.host_verifications)
+        self.assertEqual(row.raw_host_verifications, " None ")
+        self.assertEqual(row.bathrooms_n, 0.5)
+        self.assertTrue(row.bath_shared)
+        self.assertEqual(row.minimum_nights, 365)
+        self.assertEqual(row.raw_minimum_nights, "1000")
+        self.assertTrue(row.long_stay)
+        self.assertTrue(row.has_reviews)
+        self.assertEqual(row.days_since_last_review, 10)
+        self.assertAlmostEqual(row.dist_center_km, 0.0)
+
+    def test_eda_classification_gold_populations_and_feature_safety(self):
+        rows = [(str(i), "100", "2", "1", "0", "5", "2", "1", "Centro") for i in range(1, 201)]
+        rows += [
+            ("201", "200", "2", "0", "365", "5", "2", "1", "Centro"),
+            ("202", "5000", "1", "0", "365", "5", "2", "1", "Small"),
+            ("203", "None", "1", "0", "0", "5", "2", "0", "Small"),
+        ]
+        raw = self.spark.createDataFrame(rows, "id string, price string, accommodates string, number_of_reviews_ltm string, availability_365 string, review_scores_rating string, calculated_host_listings_count string, number_of_reviews string, neighbourhood_cleansed string")
+        from pyspark.sql import functions as F
+        raw = (raw.withColumn("_city", F.lit("milan"))
+               .withColumn("_snapshot_date", F.lit("2026-09-19").cast("date"))
+               .withColumn("room_type", F.lit("Private room"))
+               .withColumn("host_id", F.lit("10"))
+               .withColumn("price_quote_raw", F.lit('{"price": 100}'))
+               .withColumn("estimated_revenue_l365d", F.lit("10000")))
+        silver = prepare_listings(raw)
+        classified = {r.listing_id: r for r in silver.select("listing_id", "price_class", "eligible_for_training", "eligible_for_analysis").collect()}
+        self.assertEqual(classified[201].price_class, "stale_high")
+        self.assertTrue(classified[201].eligible_for_training)  # no test-label filtering
+        self.assertFalse(classified[201].eligible_for_analysis)
+        self.assertEqual(classified[202].price_class, "extreme_high")
+        self.assertEqual(classified[203].price_class, "missing_price")
+        tables = build_gold(silver)
+        metrics = tables['city_metrics'].first()
+        self.assertEqual(metrics.listings, 203)
+        self.assertEqual(metrics.priced_listings, 200)
+        self.assertEqual(metrics.median_price_eur, 100.0)
+        self.assertEqual(metrics.hosts, 1)
+        self.assertAlmostEqual(metrics.share_multi_listing_hosts, 1.0)
+        self.assertAlmostEqual(metrics.share_blocked, 201 / 203)
+        neighbourhoods = {r.neighbourhood_cleansed: r for r in tables['neighbourhood_metrics'].collect()}
+        self.assertEqual(neighbourhoods['Centro'].median_price_eur, 100.0)
+        self.assertIsNone(neighbourhoods['Small'].median_price_eur)
+        self.assertAlmostEqual(tables['room_type_metrics'].first().room_type_mix, 1.0)
+        features = tables['model_features']
+        self.assertEqual(features.count(), 203)
+        for column in features.columns:
+            self.assertFalse(column.startswith('raw_'))
+            self.assertNotIn('price_quote', column)
+            self.assertNotIn(column, ('estimated_revenue_l365d', 'estimated_occupancy_l365d', 'city_price_p99', 'price_class', 'host_id'))
 
 
 if __name__ == "__main__":

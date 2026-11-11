@@ -38,11 +38,14 @@ to an unseen city (Venice).
 - [Databricks setup and bronze ingestion](docs/databricks_setup.md)
 - [Lakehouse architecture](docs/architecture.md)
 - [Silver listings contract and verification](docs/silver_contract.md)
+- [Completed A/B EDA and cleaning handoff](docs/eda_handoff.md)
+- [Gold metrics and model handoff](docs/gold_contract.md)
 
-Setup and bronze ingestion have been run in Databricks according to Yaropolk's
-report. The repository does not yet contain run counts confirming both cities.
-Milan's source URL is recorded in `config/sources.json`; Florence's URL and load
-still need confirmation. No snapshot dates were changed by this code review.
+Yaropolk reports successful execution of the initial silver notebook. Maksym's
+completed EDA records 25,338 Milan listings and 13,571 Florence listings for
+2026-09-19, including 21,654 and 12,148 nonmissing prices respectively. These are
+EDA observations, not results from the new gold pipeline.
 
-The next feature adds conservative silver typing and quality flags. Its workspace
-execution and EDA-driven cleaning decisions remain pending. Venice stays unseen.
+The EDA-informed silver rules and gold metrics are implemented on
+`yaropolk/feature3-eda-gold`; their Databricks execution is pending. Both source
+URLs and city centres are recorded in `config/sources.json`. Venice stays unseen.

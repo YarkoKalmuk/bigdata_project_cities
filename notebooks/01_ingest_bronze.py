@@ -114,11 +114,12 @@ bronze = (
 table = f"{catalog}.airbnb_bronze.listings"
 predicate = f"_city = '{city}' AND _snapshot_date = '{snapshot_date}'"
 # replaceWhere replaces only this snapshot, retaining the other city and dates.
-# Deliberately reject schema drift rather than silently dropping new source columns.
+# Preserve optional added string columns; missing optional columns become null.
 (
     bronze.write.format("delta")
     .mode("overwrite")
     .option("replaceWhere", predicate)
+    .option("mergeSchema", "true")
     .saveAsTable(table)
 )
 stored = spark.table(table).where(predicate)
