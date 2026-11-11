@@ -36,6 +36,9 @@ to an unseen city (Venice).
 
 Current release evidence: [M1 Week 1 freeze](docs/week1_freeze.md), including live
 workspace checks, immutable Job identity, model hashes and held-out A/B results.
+**Week 1 is frozen:** `M1-freeze` → `7f76cbe6936e76fa3a7685ac90b40c1ce1c253df`;
+model `price-v1`, combined held-out MAE **EUR 75.88** versus baseline **EUR 95.47**.
+Ready for Week 2; the unseen-city evaluation has not started.
 The feature-status notes below describe the earlier integration stages.
 
 - [Three-person work plan](plan.md)

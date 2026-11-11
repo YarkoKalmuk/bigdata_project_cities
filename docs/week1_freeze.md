@@ -1,8 +1,14 @@
 # M1 Week 1 freeze
 
-**Verification: PASS.** All 100 local tests passed (zero skips), and all 24 live
-workspace verification checks passed on 2026-11-11 UTC. The annotated release tag
-is `M1-freeze`; its resolved commit will be recorded after successful publication.
+**Status: FROZEN — ready for Week 2.** All 100 local tests passed (zero skips),
+and all 24 live integration checks passed on 2026-11-11 UTC. Annotated tag
+[`M1-freeze`](https://github.com/YarkoKalmuk/bigdata_project_cities/tree/M1-freeze)
+was created, pushed and checked against the remote peeled commit.
+
+**Freeze commit: `7f76cbe6936e76fa3a7685ac90b40c1ce1c253df`.**
+Annotated tag object: `ab035707b6ac6470f45fccb79ee9ebb3f5e037dc`.
+This main-only documentation follow-up records the resolved tag identity; it does
+not move the tag or change any frozen executable file.
 
 ## Code and execution identity
 
@@ -108,7 +114,7 @@ both ETL and scorer 08; it needs configuration and a raw file, not a code edit.
 The original feature 5 external-manifest run IDs remain historical TODOs; they
 are not claimed as observed by this verification or substituted with older runs.
 
-Once `M1-freeze` is published, retain that code and `price-v1`. For the first
+Retain the published `M1-freeze` code and `price-v1`. For the first
 unseen-city run, supply its immutable runtime JSON manifest and original raw file,
 then pass the same manifest to the unchanged ETL Job and scorer. Override the
 city/snapshot parameters; do not change the code or model. Record the first ETL

@@ -101,9 +101,13 @@ Defaults: use relative working days because no deadline was supplied; keep all t
 
 ## Yaropolk's current engineering status
 
-Latest milestone: all 100 local tests and 24 live A/B integration checks passed.
-The [M1 freeze record](docs/week1_freeze.md) supersedes historical pending-status
-notes below. Tag publication is the final release step; Venice remains untouched.
+**M1 complete:** all 100 local tests and 24 live A/B integration checks passed.
+Annotated tag `M1-freeze` is published at
+`7f76cbe6936e76fa3a7685ac90b40c1ce1c253df`. Model: `price-v1`; combined held-out
+MAE EUR 75.88, baseline EUR 95.47. Shared Job `816607442908043` uses approved
+immutable code `f408ac01ffdd025fab6df220c8f89b24d3d4fda6`, whose executable files
+match the freeze. The [M1 record](docs/week1_freeze.md) supersedes historical
+pending-status notes below. Ready for Week 2; Venice remains untouched.
 
 - Feature 4 Job: three reported successful runs (Milan, Florence, Milan repeat). Post-repeat silver rows/distinct IDs: 25,338/25,338 and 13,571/13,571. Evidence: [run log](docs/pipeline_run_log.md).
 - Feature 5: configuration-driven inputs implemented; Milan/Florence success recorded. User reports completing all runs, but repeat/external-manifest IDs and resolved Git SHA remain TODOs in the log.
