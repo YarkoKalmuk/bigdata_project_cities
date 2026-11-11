@@ -1,0 +1,9 @@
+{
+  "venice": {
+    "display_name": "Venice",
+    "snapshot_date": "2026-09-16",
+    "source_url": "https://data.insideairbnb.com/italy/veneto/venice/2026-09-16/data/listings.csv.gz",
+    "centre_latitude": 45.43388888888889,
+    "centre_longitude": 12.338055555555556
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "first_run_id": 782550938914199,
+  "scope": "First unmodified ETL attempt; no fixes, reruns, model scoring or training",
+  "files": {
+    "REPORT.md": "6c61c865ff9ba1f002e53da9388ccc577374665bbcb4164e3d119160801bc3a0",
+    "change_ledger.json": "3eb29dd2e86b0ab796f65e1ef42c02eb2a1439629660a083d93b4d91bdca772c",
+    "first_run.json": "3ae349c6fba5099da9bf00cba1360e89b9dd0ca6af55e64ceb4c5ea18f9d2619",
+    "first_run_summary.json": "da12592e67e925f2d39f18fb2af18dcc90aa886e36894744054c3988c2315b64",
+    "frozen_state_unchanged.json": "bd28015de1f02a0c52ae618bcae47580e4407a2e7a0aeecf555c473a527242e4",
+    "intake.json": "9d4c1e0724d5fd14db76a3ef2237cab6e02906651ac2d06b759cd193dc926348",
+    "job_before.json": "accb8bcc93487e3836ba874b5bd65208cd8d22187fee172890aab80326c0d7b8",
+    "preparation_events.jsonl": "ad3f27a9cb898acfaa79347d857e2ad7ce84b5bfb0261cc6a823d31b2bf42166",
+    "previous_venice_runs.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "progress.jsonl": "9b60d630accc99fb5a5ad33806313ecaa8d0754308704f26567085640d965c8b",
+    "protected_after.json": "425436812bf2b4344ab0c3234b18700b7f6782a4c304e8b8fa33e370a65975b6",
+    "protected_before.json": "425436812bf2b4344ab0c3234b18700b7f6782a4c304e8b8fa33e370a65975b6",
+    "protected_comparison.json": "e42d4f0f0054772e8157d9264d4c51e32393dd6e32c9770c300fe0a11c35a5ab",
+    "run_request.json": "f74e449d73b0b47544e5ef012bb688e14ef9b76b64c80a3b8722f4c5084b4161",
+    "run_submission.json": "288b9cfc1d97f1c8d988830a90bbdd0e99379e8f415be86186caa8b5ff0421d5",
+    "source_header_after_first_attempt.json": "b1982dd7bdcb3d3849057016c734137639566f374b1c4399a238cc82b541eb90",
+    "sql_statements.jsonl": "b80853688e0d1971601009da7dff947cc4ad19270aac99d7b647620b56452636",
+    "task_bronze_output.json": "5b7a4f271fcf20a87f57f20a5c6a862493c4fd7cc8838725b1871484b7d167fd",
+    "task_git_verification.json": "2a8f1c2a59b1cfab9366b8ef9e3146b57fb2a9bb9af63015b84a78a814fc42b9",
+    "task_gold_output.json": "f7cc3efdf875c2c846d21a15c7e673d7faadd31146cf8dd3ff237563f4c38167",
+    "task_silver_output.json": "24270b811f2cc97b6ae37cf6535e3408e0410ff48047a5df26478add713e6042",
+    "task_validate_output.json": "434bbcf024141b6472e355a08ff40902d443582549f7959cb8e216ff8cb96492",
+    "upload_verified.json": "191601d6d6095114746e974045307ba0b01cd6295dd3388ebc1c6101aadf312e",
+    "validation_record.json": "9b3924e63807a732323d55211dedaa79066dd9ff3fc008d8efaa936d5d4898c6",
+    "venice_before.json": "23ba4d68d631ffcb31d5385f11217239237edf699445a1f68405a5c09588f978"
+  }
+}

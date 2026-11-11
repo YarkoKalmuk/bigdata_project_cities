@@ -1,0 +1,15 @@
+{
+  "tag_commit": "7f76cbe6936e76fa3a7685ac90b40c1ce1c253df",
+  "annotated_tag_object": "ab035707b6ac6470f45fccb79ee9ebb3f5e037dc",
+  "frozen_executable_files_unchanged": true,
+  "job_settings_unchanged": true,
+  "job_id": 816607442908043,
+  "job_git_source": {
+    "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+    "git_provider": "gitHub",
+    "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git"
+  },
+  "pipeline_attempts_submitted": 1,
+  "repairs_or_retries": 0,
+  "model_actions": 0
+}

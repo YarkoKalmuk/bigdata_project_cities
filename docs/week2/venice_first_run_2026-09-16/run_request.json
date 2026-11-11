@@ -1,0 +1,15 @@
+{
+  "submitted_at_utc": "2026-11-11T20:06:23.227631+00:00",
+  "payload": {
+    "job_id": 816607442908043,
+    "job_parameters": {
+      "catalog": "workspace",
+      "city": "venice",
+      "snapshot_date": "2026-09-16",
+      "source_path": "",
+      "source_url": "",
+      "sources_config_path": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json"
+    },
+    "idempotency_token": "venice-first-6f985a8866d342c18ffa050af78d5843"
+  }
+}

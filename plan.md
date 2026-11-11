@@ -99,6 +99,16 @@ For Venice:
 
 Defaults: use relative working days because no deadline was supplied; keep all three city choices from the README; use no optional reviews/calendar datasets unless the required work is complete.
 
+## Week 2 — first Venice data-engineering run
+
+The unchanged frozen ETL completed its first Venice attempt on snapshot
+2026-09-16: run **782550938914199**, all four tasks successful, **8,844** rows
+preserved through Bronze, Silver and gold model features. All 19 protected A/B
+and model fingerprints are unchanged. Runtime inputs and first-run logs/quality
+differences are in [the first-run report](docs/week2/venice_first_run_2026-09-16/REPORT.md).
+Stopped before pipeline fixes, model changes, retraining or scoring. Nazar's
+first frozen-model Venice evaluation remains pending; no Venice MAE is claimed.
+
 ## Yaropolk's current engineering status
 
 **M1 complete:** all 100 local tests and 24 live A/B integration checks passed.

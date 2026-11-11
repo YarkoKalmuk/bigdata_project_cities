@@ -1,0 +1,332 @@
+{
+  "first_run_id": 782550938914199,
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/782550938914199",
+  "pipeline_or_model_fixes_applied": false,
+  "model_scoring_executed": false,
+  "protected_objects_unchanged": 19,
+  "layers": {
+    "airbnb_bronze.listings": 8844,
+    "airbnb_silver.listings": 8844,
+    "airbnb_gold.model_features": 8844,
+    "airbnb_gold.city_metrics": 1,
+    "airbnb_gold.room_type_metrics": 4,
+    "airbnb_gold.neighbourhood_metrics": 60
+  },
+  "available_profile": {
+    "raw_columns": [
+      {
+        "city": "milan",
+        "listings": 25338,
+        "missing_raw_price": 3684,
+        "dollar_formatted_price": 21654,
+        "missing_host_verifications": 25338,
+        "missing_numeric_bathrooms": 25338
+      },
+      {
+        "city": "florence",
+        "listings": 13571,
+        "missing_raw_price": 1423,
+        "dollar_formatted_price": 12148,
+        "missing_host_verifications": 13571,
+        "missing_numeric_bathrooms": 13571
+      },
+      {
+        "city": "venice",
+        "listings": 8844,
+        "missing_raw_price": 700,
+        "dollar_formatted_price": 8144,
+        "missing_host_verifications": 8844,
+        "missing_numeric_bathrooms": 8844
+      }
+    ],
+    "typed_summary": [
+      {
+        "city": "florence",
+        "listings": 13571,
+        "unique_keys": 13571,
+        "valid_target_rows": 12148,
+        "analytical_rows": 12086,
+        "median_price_eur": 198.0,
+        "p99_price_eur": 1188.0,
+        "max_price_eur": 17430.0,
+        "raw_nonnull_price_unparsed": 0,
+        "long_stay_listings": 870,
+        "reviewed_listings": 12295,
+        "max_distance_km": 8.106823213732373,
+        "median_distance_km": 0.9047087085124275,
+        "fully_blocked_listings": 1299,
+        "neighbourhoods": 5,
+        "reviews_after_snapshot": 282
+      },
+      {
+        "city": "milan",
+        "listings": 25338,
+        "unique_keys": 25338,
+        "valid_target_rows": 21654,
+        "analytical_rows": 21522,
+        "median_price_eur": 163.67,
+        "p99_price_eur": 1105.1,
+        "max_price_eur": 88100.0,
+        "raw_nonnull_price_unparsed": 0,
+        "long_stay_listings": 3588,
+        "reviewed_listings": 21674,
+        "max_distance_km": 9.976679531525333,
+        "median_distance_km": 2.77569241855904,
+        "fully_blocked_listings": 2844,
+        "neighbourhoods": 87,
+        "reviews_after_snapshot": 568
+      },
+      {
+        "city": "venice",
+        "listings": 8844,
+        "unique_keys": 8844,
+        "valid_target_rows": 8144,
+        "analytical_rows": 8101,
+        "median_price_eur": 231.0,
+        "p99_price_eur": 1583.23,
+        "max_price_eur": 12047.0,
+        "raw_nonnull_price_unparsed": 0,
+        "long_stay_listings": 367,
+        "reviewed_listings": 8163,
+        "max_distance_km": 18.901956272823814,
+        "median_distance_km": 1.22562314723983,
+        "fully_blocked_listings": 639,
+        "neighbourhoods": 60,
+        "reviews_after_snapshot": 0
+      }
+    ],
+    "price_classes": [
+      {
+        "city": "milan",
+        "price_class": "normal",
+        "listings": 21428
+      },
+      {
+        "city": "milan",
+        "price_class": "extreme_high",
+        "listings": 51
+      },
+      {
+        "city": "milan",
+        "price_class": "missing_price",
+        "listings": 3684
+      },
+      {
+        "city": "milan",
+        "price_class": "low_tail",
+        "listings": 8
+      },
+      {
+        "city": "milan",
+        "price_class": "stale_high",
+        "listings": 81
+      },
+      {
+        "city": "milan",
+        "price_class": "high_tail",
+        "listings": 86
+      },
+      {
+        "city": "florence",
+        "price_class": "low_tail",
+        "listings": 5
+      },
+      {
+        "city": "florence",
+        "price_class": "normal",
+        "listings": 12020
+      },
+      {
+        "city": "florence",
+        "price_class": "high_tail",
+        "listings": 61
+      },
+      {
+        "city": "florence",
+        "price_class": "missing_price",
+        "listings": 1423
+      },
+      {
+        "city": "florence",
+        "price_class": "stale_high",
+        "listings": 35
+      },
+      {
+        "city": "florence",
+        "price_class": "extreme_high",
+        "listings": 27
+      },
+      {
+        "city": "venice",
+        "price_class": "stale_high",
+        "listings": 29
+      },
+      {
+        "city": "venice",
+        "price_class": "extreme_high",
+        "listings": 14
+      },
+      {
+        "city": "venice",
+        "price_class": "normal",
+        "listings": 8062
+      },
+      {
+        "city": "venice",
+        "price_class": "missing_price",
+        "listings": 700
+      },
+      {
+        "city": "venice",
+        "price_class": "high_tail",
+        "listings": 39
+      }
+    ],
+    "quality_flags": [
+      {
+        "city": "milan",
+        "flag": "review_after_snapshot",
+        "listings": 568
+      },
+      {
+        "city": "milan",
+        "flag": "missing_price",
+        "listings": 3684
+      },
+      {
+        "city": "florence",
+        "flag": "missing_price",
+        "listings": 1423
+      },
+      {
+        "city": "florence",
+        "flag": "review_after_snapshot",
+        "listings": 282
+      },
+      {
+        "city": "florence",
+        "flag": "invalid_bathrooms_text",
+        "listings": 1
+      },
+      {
+        "city": "venice",
+        "flag": "missing_price",
+        "listings": 700
+      }
+    ],
+    "predictor_null_counts": [
+      {
+        "city": "milan",
+        "listings": 25338,
+        "room_type": 0,
+        "property_type": 0,
+        "accommodates": 0,
+        "bedrooms": 9,
+        "beds": 554,
+        "bathrooms_n": 5,
+        "bath_shared": 5,
+        "minimum_nights": 152,
+        "long_stay": 152,
+        "dist_center_km": 0,
+        "has_reviews": 0,
+        "review_scores_rating": 3664,
+        "review_scores_accuracy": 3664,
+        "review_scores_cleanliness": 3664,
+        "review_scores_checkin": 3664,
+        "review_scores_communication": 3664,
+        "review_scores_location": 3664,
+        "review_scores_value": 3665,
+        "log_host_listings_count": 0,
+        "host_is_superhost": 0,
+        "instant_bookable": 25338
+      },
+      {
+        "city": "florence",
+        "listings": 13571,
+        "room_type": 0,
+        "property_type": 0,
+        "accommodates": 0,
+        "bedrooms": 4,
+        "beds": 210,
+        "bathrooms_n": 4,
+        "bath_shared": 3,
+        "minimum_nights": 374,
+        "long_stay": 374,
+        "dist_center_km": 0,
+        "has_reviews": 0,
+        "review_scores_rating": 1276,
+        "review_scores_accuracy": 1276,
+        "review_scores_cleanliness": 1276,
+        "review_scores_checkin": 1276,
+        "review_scores_communication": 1276,
+        "review_scores_location": 1276,
+        "review_scores_value": 1276,
+        "log_host_listings_count": 0,
+        "host_is_superhost": 0,
+        "instant_bookable": 13571
+      },
+      {
+        "city": "venice",
+        "listings": 8844,
+        "room_type": 0,
+        "property_type": 0,
+        "accommodates": 0,
+        "bedrooms": 1,
+        "beds": 114,
+        "bathrooms_n": 6,
+        "bath_shared": 6,
+        "minimum_nights": 186,
+        "long_stay": 186,
+        "dist_center_km": 0,
+        "has_reviews": 0,
+        "review_scores_rating": 681,
+        "review_scores_accuracy": 681,
+        "review_scores_cleanliness": 681,
+        "review_scores_checkin": 681,
+        "review_scores_communication": 681,
+        "review_scores_location": 681,
+        "review_scores_value": 681,
+        "log_host_listings_count": 0,
+        "host_is_superhost": 0,
+        "instant_bookable": 8844
+      }
+    ],
+    "new_categories_vs_ab": [
+      {
+        "venice_listings": 8844,
+        "unseen_room_type_rows": 0,
+        "unseen_property_type_rows": 18
+      }
+    ],
+    "new_category_definition": "Compared with complete A/B snapshots, not necessarily the fitted model vocabulary; no model is loaded or changed.",
+    "gold_city_metrics": [
+      {
+        "city": "venice",
+        "snapshot_date": "2026-09-16",
+        "listings": 8844,
+        "priced_listings": 8101,
+        "median_price_eur": 231.0,
+        "open_days_share_365": 0.5586674349299579,
+        "availability_observations": 8844,
+        "share_blocked": 0.07225237449118047,
+        "avg_review_score": 4.740594144309692,
+        "hosts": 3894,
+        "share_multi_listing_hosts": 0.7094075079149706
+      }
+    ]
+  },
+  "source_schema": {
+    "venice_columns": 90,
+    "ab_reference_columns": 90,
+    "extra_vs_ab": [],
+    "missing_vs_ab": [],
+    "header_read_after_first_pipeline_attempt": true
+  },
+  "venice_predictions": 0
+}

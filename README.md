@@ -22,7 +22,7 @@ File: Detailed listings.csv.gz
 Snapshot dates:
 - Milan: 19 September 2026
 - Florence: 19 September 2026
-- Venice: To be recorded in Week 2
+- Venice: 16 September 2026 (first frozen ETL run completed; model scoring pending)
 
 ### Project objective
 Build a Databricks lakehouse, ETL pipeline,
@@ -38,7 +38,8 @@ Current release evidence: [M1 Week 1 freeze](docs/week1_freeze.md), including li
 workspace checks, immutable Job identity, model hashes and held-out A/B results.
 **Week 1 is frozen:** `M1-freeze` → `7f76cbe6936e76fa3a7685ac90b40c1ce1c253df`;
 model `price-v1`, combined held-out MAE **EUR 75.88** versus baseline **EUR 95.47**.
-Ready for Week 2; the unseen-city evaluation has not started.
+Week 2 has begun: [Venice's unchanged first ETL run](docs/week2/venice_first_run_2026-09-16/REPORT.md)
+succeeded. Initial evidence is preserved; no fixes or model scoring have been applied.
 The feature-status notes below describe the earlier integration stages.
 
 - [Three-person work plan](plan.md)
