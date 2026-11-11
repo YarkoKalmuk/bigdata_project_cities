@@ -9,6 +9,7 @@
 # MAGIC docs/gold_contract.md. Predictions are produced by Nazar's model, not here.
 
 # COMMAND ----------
+
 import json
 import re
 import sys
@@ -36,6 +37,7 @@ if city not in sources or date.fromisoformat(snapshot_date).isoformat() != sourc
     raise ValueError("Select the configured Milan or Florence snapshot.")
 
 # COMMAND ----------
+
 predicate = f"city = '{city}' AND snapshot_date = '{snapshot_date}'"
 silver = spark.table(f"{catalog}.airbnb_silver.listings").where(predicate)
 if not {"price_class", "eligible_for_analysis", "dist_center_km"}.issubset(silver.columns):
