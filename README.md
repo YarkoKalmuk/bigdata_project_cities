@@ -59,6 +59,7 @@ unchanged. Artifact SHA-256 and historical Delta versions are recorded in
 - `config/`, `runtime/`, `jobs/`: A/B source configuration, separate Venice runtime input and immutable Job definition.
 - `tests/`: synthetic local suite; no production model retraining or real-city runs.
 - `docs/`: contracts, architecture, run logs, freeze/evidence and handoffs.
+- `docs/presentation_script.md`: 7-minute presentation script, speaker by speaker (slides: PDF to be added under `docs/`).
 - `sql/bi_views.sql`, `dashboard/`, `genie/`: BI semantic layer (`workspace.airbnb_bi`), AI/BI dashboard and Genie Agent built from code; see [dashboard and Genie](docs/dashboard_genie.md).
 
 Start with [reproducibility instructions](docs/reproducibility.md) to verify saved
