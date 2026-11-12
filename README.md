@@ -59,6 +59,7 @@ unchanged. Artifact SHA-256 and historical Delta versions are recorded in
 - `config/`, `runtime/`, `jobs/`: A/B source configuration, separate Venice runtime input and immutable Job definition.
 - `tests/`: synthetic local suite; no production model retraining or real-city runs.
 - `docs/`: contracts, architecture, run logs, freeze/evidence and handoffs.
+- `sql/bi_views.sql`, `dashboard/`, `genie/`: BI semantic layer (`workspace.airbnb_bi`), AI/BI dashboard and Genie Agent built from code; see [dashboard and Genie](docs/dashboard_genie.md).
 
 Start with [reproducibility instructions](docs/reproducibility.md) to verify saved
 results without re-executing the experiment. For historical setup and contracts,
@@ -73,7 +74,7 @@ live in Databricks volumes, not Git. Do not overwrite them to reproduce a report
 |---|---|---|
 | Yaropolk | Configuration-driven ETL, architecture, immutable Job, freeze verification, preserved Venice first run, engineering transfer report and integration documentation | Approved repository integration; support final BI reconciliation and own engineering slides |
 | Nazar | Leakage review, persisted split/baseline, frozen model/artifact, A/B evaluation, first Venice scoring and transfer diagnostics | Approved PR #4 integration; support BI reference answers and own model slides |
-| Maksym | A/B EDA and cleaning handoff; dashboard/Genie assets and A/B deployment reported on `maksym/dashboard-genie` | Venice dashboard/Genie acceptance, reviewed BI merge, presentation assembly and demo |
+| Maksym | A/B EDA and cleaning handoff; BI views, three-page dashboard and Genie Agent covering Milan, Florence and Venice, reconciled with Nazar's Q1–Q6 ([dashboard and Genie](docs/dashboard_genie.md)) | Reviewed BI merge, viewer access, presentation assembly and demo |
 
 [Task board](plan.md) records completed, review-pending and outstanding work.
 [Integration review](docs/week2/integration_review.md) records the original review and subsequent main integration. PR #2 is redundant

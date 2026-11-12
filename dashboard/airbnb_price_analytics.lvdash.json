@@ -1,0 +1,1933 @@
+{
+  "datasets": [
+    {
+      "name": "city_kpis",
+      "displayName": "City KPIs",
+      "queryLines": [
+        "SELECT city_letter, city_name, city_role, snapshot_date,\n       listings, priced_listings, hosts,\n       round(median_price_eur, 0)                AS median_price_eur,\n       round(100 * open_days_share_365, 1)       AS open_days_pct,\n       round(100 * share_blocked, 1)             AS blocked_pct,\n       round(avg_review_score, 2)                AS avg_review_score,\n       round(100 * share_multi_listing_hosts, 1) AS multi_host_listings_pct\nFROM workspace.airbnb_bi.city_metrics\nORDER BY city_letter"
+      ]
+    },
+    {
+      "name": "room_mix",
+      "displayName": "Room-type mix and price",
+      "queryLines": [
+        "SELECT city_letter, city_name, city_role, room_type, listings,\n       round(100 * room_type_mix, 1) AS share_pct,\n       round(median_price_eur, 0)    AS median_price_eur\nFROM workspace.airbnb_bi.room_type_metrics"
+      ]
+    },
+    {
+      "name": "room_mix_ab",
+      "displayName": "Room-type price, A vs B",
+      "queryLines": [
+        "SELECT city_name, room_type, round(median_price_eur, 0) AS median_price_eur\nFROM workspace.airbnb_bi.room_type_metrics WHERE city_role = 'training'"
+      ]
+    },
+    {
+      "name": "neighbourhood_prices",
+      "displayName": "Most expensive neighbourhoods",
+      "queryLines": [
+        "SELECT city_name, concat(neighbourhood, ' (', city_letter, ')') AS neighbourhood_label,\n       listings, priced_listings, round(median_price_eur, 0) AS median_price_eur\nFROM workspace.airbnb_bi.neighbourhood_metrics\nWHERE meets_price_sample_minimum\nQUALIFY row_number() OVER (PARTITION BY city ORDER BY median_price_eur DESC) <= 6"
+      ]
+    },
+    {
+      "name": "neighbourhood_counts",
+      "displayName": "Listings per neighbourhood",
+      "queryLines": [
+        "SELECT city_name, concat(neighbourhood, ' (', city_letter, ')') AS neighbourhood_label, listings,\n       round(100 * listings / sum(listings) OVER (PARTITION BY city), 1) AS share_of_city_pct\nFROM workspace.airbnb_bi.neighbourhood_metrics\nQUALIFY row_number() OVER (PARTITION BY city ORDER BY listings DESC) <= 6"
+      ]
+    },
+    {
+      "name": "price_bands",
+      "displayName": "Price distribution",
+      "queryLines": [
+        "SELECT city_name,\n       CASE WHEN price_eur < 50 THEN '01: <50'\n            WHEN price_eur < 100 THEN '02: 50-99'\n            WHEN price_eur < 150 THEN '03: 100-149'\n            WHEN price_eur < 200 THEN '04: 150-199'\n            WHEN price_eur < 300 THEN '05: 200-299'\n            WHEN price_eur < 500 THEN '06: 300-499'\n            WHEN price_eur < 1000 THEN '07: 500-999'\n            ELSE '08: 1000+' END AS price_band,\n       round(100 * count(*) / sum(count(*)) OVER (PARTITION BY city_name), 1) AS share_pct\nFROM workspace.airbnb_bi.listing_facts\nWHERE price_eur > 0\nGROUP BY ALL"
+      ]
+    },
+    {
+      "name": "ab_comparison",
+      "displayName": "Florence vs Milan",
+      "queryLines": [
+        "WITH m AS (SELECT * FROM workspace.airbnb_bi.city_metrics WHERE city = 'milan'),\n     f AS (SELECT * FROM workspace.airbnb_bi.city_metrics WHERE city = 'florence')\nSELECT metric,\n       format_number(milan, d) AS milan,\n       format_number(florence, d) AS florence,\n       format_number(florence - milan, d) AS difference,\n       concat(format_number(100 * (florence - milan) / milan, 1), ' %') AS difference_pct\nFROM (\n  SELECT 'Listings' AS metric, 1 AS o, 0 AS d, CAST(m.listings AS DOUBLE) AS milan, CAST(f.listings AS DOUBLE) AS florence FROM m, f\n  UNION ALL SELECT 'Hosts', 2, 0, m.hosts, f.hosts FROM m, f\n  UNION ALL SELECT 'Median price, EUR', 3, 1, round(m.median_price_eur, 1), round(f.median_price_eur, 1) FROM m, f\n  UNION ALL SELECT 'Days open for booking, %', 4, 1, round(100 * m.open_days_share_365, 1), round(100 * f.open_days_share_365, 1) FROM m, f\n  UNION ALL SELECT 'Blocked all year, %', 5, 1, round(100 * m.share_blocked, 1), round(100 * f.share_blocked, 1) FROM m, f\n  UNION ALL SELECT 'Average review score', 6, 2, round(m.avg_review_score, 2), round(f.avg_review_score, 2) FROM m, f\n  UNION ALL SELECT 'Listings from multi-listing hosts, %', 7, 1, round(100 * m.share_multi_listing_hosts, 1), round(100 * f.share_multi_listing_hosts, 1) FROM m, f\n)\nORDER BY o"
+      ]
+    },
+    {
+      "name": "price_by_guests",
+      "displayName": "Median price by guests",
+      "queryLines": [
+        "SELECT city_name, least(accommodates, 8) AS guests,\n       CASE WHEN accommodates >= 8 THEN '8+' ELSE CAST(accommodates AS STRING) END AS guests_label,\n       round(median(price_eur), 0) AS median_price_eur, count(*) AS listings\nFROM workspace.airbnb_bi.listing_facts\nWHERE price_eur > 0 AND room_type = 'Entire home/apt' AND city_role = 'training'\nGROUP BY ALL\nORDER BY guests"
+      ]
+    },
+    {
+      "name": "price_by_distance",
+      "displayName": "Median price by distance to centre",
+      "queryLines": [
+        "SELECT city_name, distance_band, round(median(price_eur), 0) AS median_price_eur, count(*) AS listings\nFROM workspace.airbnb_bi.listing_facts\nWHERE price_eur > 0 AND distance_band NOT IN ('unknown', '8+ km') AND city_role = 'training'\nGROUP BY ALL\nORDER BY distance_band"
+      ]
+    },
+    {
+      "name": "model_scorecard",
+      "displayName": "Model scorecard",
+      "queryLines": [
+        "SELECT city_letter, scope, city_role, evaluation_split, n,\n       round(model_mae_eur, 2)            AS model_mae_eur,\n       round(baseline_mae_eur, 2)         AS baseline_mae_eur,\n       round(100 * improvement_share, 1)  AS improvement_pct,\n       round(model_median_ae_eur, 1)      AS model_median_ae_eur,\n       round(mean_signed_residual_eur, 2) AS mean_signed_residual_eur\nFROM workspace.airbnb_bi.model_scorecard\nWHERE model_version = 'price-v1'\nORDER BY CASE city_letter WHEN 'A' THEN 1 WHEN 'B' THEN 2 WHEN 'A+B' THEN 3 ELSE 4 END"
+      ]
+    },
+    {
+      "name": "model_headline",
+      "displayName": "Headline numbers",
+      "queryLines": [
+        "SELECT round(max(CASE WHEN city_letter = 'A+B' THEN model_mae_eur END), 1)    AS ab_model_mae_eur,\n       round(max(CASE WHEN city_letter = 'C' THEN model_mae_eur END), 1)      AS c_model_mae_eur,\n       round(max(CASE WHEN city_letter = 'C' THEN baseline_mae_eur END), 1)   AS c_baseline_mae_eur,\n       round(100 * (max(CASE WHEN city_letter = 'C' THEN model_mae_eur END)\n                    / max(CASE WHEN city_letter = 'A+B' THEN model_mae_eur END) - 1), 1) AS c_vs_ab_pct\nFROM workspace.airbnb_bi.model_scorecard\nWHERE model_version = 'price-v1'"
+      ]
+    },
+    {
+      "name": "mae_long",
+      "displayName": "Model vs baseline MAE",
+      "queryLines": [
+        "SELECT scope, 'Model' AS predictor, round(model_mae_eur, 1) AS mae_eur FROM workspace.airbnb_bi.model_scorecard WHERE model_version = 'price-v1'\nUNION ALL\nSELECT scope, 'Baseline', round(baseline_mae_eur, 1) FROM workspace.airbnb_bi.model_scorecard WHERE model_version = 'price-v1'"
+      ]
+    },
+    {
+      "name": "pred_vs_actual",
+      "displayName": "Predicted vs actual (evaluation rows)",
+      "queryLines": [
+        "SELECT city_name, listing_id, room_type,\n       round(actual_price_eur, 0) AS actual_price_eur,\n       round(model_prediction_eur, 0) AS predicted_price_eur\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1' AND actual_price_eur <= 1000"
+      ]
+    },
+    {
+      "name": "error_by_room",
+      "displayName": "Error by room type",
+      "queryLines": [
+        "SELECT city_name, room_type, count(*) AS n,\n       round(avg(absolute_error_eur), 1) AS model_mae_eur,\n       round(avg(signed_residual_eur), 1) AS mean_signed_residual_eur\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1'\nGROUP BY ALL\nHAVING count(*) >= 20"
+      ]
+    },
+    {
+      "name": "error_by_price_band",
+      "displayName": "Residual by actual price band",
+      "queryLines": [
+        "SELECT price_band, city_name, count(*) AS n,\n       round(avg(signed_residual_eur), 0) AS mean_signed_residual_eur,\n       round(avg(absolute_error_eur), 0) AS model_mae_eur\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1'\nGROUP BY ALL"
+      ]
+    },
+    {
+      "name": "error_share_by_band",
+      "displayName": "Share of listings vs share of error",
+      "queryLines": [
+        "SELECT CASE WHEN city_role = 'training' THEN 'Milan + Florence (test)' ELSE concat(city_name, ' (unseen)') END AS population, price_band,\n       count(*) AS n,\n       round(100 * count(*) / sum(count(*)) OVER (PARTITION BY CASE WHEN city_role = 'training' THEN 'Milan + Florence (test)' ELSE concat(city_name, ' (unseen)') END), 1) AS share_of_listings_pct,\n       round(avg(absolute_error_eur), 0) AS model_mae_eur,\n       round(100 * sum(absolute_error_eur) / sum(sum(absolute_error_eur)) OVER (PARTITION BY CASE WHEN city_role = 'training' THEN 'Milan + Florence (test)' ELSE concat(city_name, ' (unseen)') END), 1) AS share_of_total_error_pct\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1'\nGROUP BY ALL\nORDER BY population, price_band"
+      ]
+    },
+    {
+      "name": "error_by_distance",
+      "displayName": "Error by distance to centre",
+      "queryLines": [
+        "SELECT city_name, distance_band, count(*) AS n,\n       round(avg(absolute_error_eur), 1) AS model_mae_eur,\n       round(avg(signed_residual_eur), 1) AS mean_signed_residual_eur\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1' AND distance_band <> 'unknown'\nGROUP BY ALL\nHAVING count(*) >= 20\nORDER BY distance_band"
+      ]
+    },
+    {
+      "name": "venice_neighbourhood_error",
+      "displayName": "City C: error by neighbourhood",
+      "queryLines": [
+        "SELECT neighbourhood, count(*) AS n,\n       round(avg(absolute_error_eur), 1) AS model_mae_eur,\n       round(avg(signed_residual_eur), 1) AS mean_signed_residual_eur,\n       round(100 * sum(absolute_error_eur) / (SELECT sum(absolute_error_eur) FROM workspace.airbnb_bi.prediction_details\n                                        WHERE is_evaluation_row AND model_version = 'price-v1' AND city_letter = 'C'), 1) AS share_of_error_pct\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1' AND city_letter = 'C'\nGROUP BY neighbourhood\nHAVING count(*) >= 20\nORDER BY share_of_error_pct DESC\nLIMIT 12"
+      ]
+    },
+    {
+      "name": "worst_listings",
+      "displayName": "Most mis-priced listings",
+      "queryLines": [
+        "SELECT city_name, listing_id, listing_url, room_type, neighbourhood, accommodates, distance_band,\n       round(actual_price_eur, 0) AS actual_eur,\n       round(model_prediction_eur, 0) AS predicted_eur,\n       round(baseline_prediction_eur, 0) AS baseline_eur,\n       round(signed_residual_eur, 0) AS residual_eur,\n       pricing_direction\nFROM workspace.airbnb_bi.prediction_details\nWHERE is_evaluation_row AND model_version = 'price-v1'\nQUALIFY row_number() OVER (PARTITION BY city ORDER BY abs(signed_residual_eur) DESC) <= 15\nORDER BY abs(signed_residual_eur) DESC"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "city_overview",
+      "displayName": "1 · City overview",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "city_overview_w1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Venice is the priciest market (median 231 €/night), Florence 197 €, Milan 163 €; Milan is by far the biggest (25.3k listings)\n\n",
+                "Inside Airbnb detailed listings, prices in EUR per night. Snapshots: Milan and Florence 2026-09-19 (City A, B: training), Venice 2026-09-16 (City C: new client, never seen by the model). Median price excludes missing and extreme placeholder prices."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "city_overview_w2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "city_kpis",
+                  "fields": [
+                    {
+                      "name": "city_letter",
+                      "expression": "`city_letter`"
+                    },
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "snapshot_date",
+                      "expression": "`snapshot_date`"
+                    },
+                    {
+                      "name": "listings",
+                      "expression": "`listings`"
+                    },
+                    {
+                      "name": "priced_listings",
+                      "expression": "`priced_listings`"
+                    },
+                    {
+                      "name": "hosts",
+                      "expression": "`hosts`"
+                    },
+                    {
+                      "name": "median_price_eur",
+                      "expression": "`median_price_eur`"
+                    },
+                    {
+                      "name": "open_days_pct",
+                      "expression": "`open_days_pct`"
+                    },
+                    {
+                      "name": "blocked_pct",
+                      "expression": "`blocked_pct`"
+                    },
+                    {
+                      "name": "avg_review_score",
+                      "expression": "`avg_review_score`"
+                    },
+                    {
+                      "name": "multi_host_listings_pct",
+                      "expression": "`multi_host_listings_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "city_letter",
+                    "displayName": "City"
+                  },
+                  {
+                    "fieldName": "city_name",
+                    "displayName": "Name"
+                  },
+                  {
+                    "fieldName": "snapshot_date",
+                    "displayName": "Snapshot"
+                  },
+                  {
+                    "fieldName": "listings",
+                    "displayName": "Listings"
+                  },
+                  {
+                    "fieldName": "priced_listings",
+                    "displayName": "Priced listings"
+                  },
+                  {
+                    "fieldName": "hosts",
+                    "displayName": "Hosts"
+                  },
+                  {
+                    "fieldName": "median_price_eur",
+                    "displayName": "Median price, EUR"
+                  },
+                  {
+                    "fieldName": "open_days_pct",
+                    "displayName": "Days open, %"
+                  },
+                  {
+                    "fieldName": "blocked_pct",
+                    "displayName": "Blocked all year, %"
+                  },
+                  {
+                    "fieldName": "avg_review_score",
+                    "displayName": "Avg review (0–5)"
+                  },
+                  {
+                    "fieldName": "multi_host_listings_pct",
+                    "displayName": "From multi-listing hosts, %"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Key metrics per city: Venice is small but expensive, with the most professional host base",
+                "showDescription": true,
+                "description": "Days open = share of the next 365 days open for booking; it is not occupancy. Multi-listing hosts = share of listings whose host has 2+ listings."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "city_overview_w3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "room_mix",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "room_type",
+                      "expression": "`room_type`"
+                    },
+                    {
+                      "name": "share_pct",
+                      "expression": "`share_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "room_type",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Room type"
+                },
+                "y": {
+                  "fieldName": "share_pct",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Share of listings, %"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Entire homes dominate everywhere; Venice has the most private rooms (22 %)"
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "city_overview_w4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "price_bands",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "price_band",
+                      "expression": "`price_band`"
+                    },
+                    {
+                      "name": "share_pct",
+                      "expression": "`share_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "price_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Price per night, EUR"
+                },
+                "y": {
+                  "fieldName": "share_pct",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Share of priced listings, %"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Milan peaks at 100–149 €, Florence and Venice at 200–299 €"
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 5,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "city_overview_w5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "neighbourhood_prices",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "neighbourhood_label",
+                      "expression": "`neighbourhood_label`"
+                    },
+                    {
+                      "name": "median_price_eur",
+                      "expression": "`median_price_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "median_price_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Median price, EUR"
+                },
+                "y": {
+                  "fieldName": "neighbourhood_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "Neighbourhood"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "San Marco (Venice) and Duomo (Milan) are the most expensive areas",
+                "showDescription": true,
+                "description": "Top 6 neighbourhoods per city by median price; only areas with ≥ 20 priced listings."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 3,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "city_overview_w6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "neighbourhood_counts",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "neighbourhood_label",
+                      "expression": "`neighbourhood_label`"
+                    },
+                    {
+                      "name": "listings",
+                      "expression": "`listings`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "listings",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Listings"
+                },
+                "y": {
+                  "fieldName": "neighbourhood_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "Neighbourhood"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "74 % of Florence's listings are in one area; Milan is spread over 87, Venice over 60",
+                "showDescription": true,
+                "description": "Top 6 neighbourhoods per city by number of listings."
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 10,
+            "width": 3,
+            "height": 7
+          }
+        }
+      ]
+    },
+    {
+      "name": "cross_city",
+      "displayName": "2 · Milan vs Florence",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "cross_city_w1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Florence looks ~20 % pricier, but at the same distance from the centre Milan costs as much or more: Florence's premium is location\n\n",
+                "55 % of Florence's priced listings are within 1 km of the Duomo vs 9 % in Milan. Composition, not the city name, explains most of the gap, so distance to the centre is the feature that should transfer to a new city."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "cross_city_w2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ab_comparison",
+                  "fields": [
+                    {
+                      "name": "metric",
+                      "expression": "`metric`"
+                    },
+                    {
+                      "name": "milan",
+                      "expression": "`milan`"
+                    },
+                    {
+                      "name": "florence",
+                      "expression": "`florence`"
+                    },
+                    {
+                      "name": "difference",
+                      "expression": "`difference`"
+                    },
+                    {
+                      "name": "difference_pct",
+                      "expression": "`difference_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "metric",
+                    "displayName": "Metric"
+                  },
+                  {
+                    "fieldName": "milan",
+                    "displayName": "Milan (A)"
+                  },
+                  {
+                    "fieldName": "florence",
+                    "displayName": "Florence (B)"
+                  },
+                  {
+                    "fieldName": "difference",
+                    "displayName": "Florence − Milan"
+                  },
+                  {
+                    "fieldName": "difference_pct",
+                    "displayName": "Difference, %"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Side by side: Florence is pricier, more open for booking and has a more professional host base"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "cross_city_w3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "room_mix_ab",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "room_type",
+                      "expression": "`room_type`"
+                    },
+                    {
+                      "name": "median_price_eur",
+                      "expression": "`median_price_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "room_type",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Room type"
+                },
+                "y": {
+                  "fieldName": "median_price_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Median price, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Florence is pricier in every room type (entire home 208 € vs 169 €), because more of it is central"
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cross_city_w4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "price_by_guests",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "guests_label",
+                      "expression": "`guests_label`"
+                    },
+                    {
+                      "name": "median_price_eur",
+                      "expression": "`median_price_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "guests_label",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Guests (entire homes)"
+                },
+                "y": {
+                  "fieldName": "median_price_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Median price, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Price grows with guests in both cities; Florence is higher from 2 guests up",
+                "showDescription": true,
+                "description": "Entire homes only; 8 = 8 or more guests."
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 6,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cross_city_w5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "price_by_distance",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "distance_band",
+                      "expression": "`distance_band`"
+                    },
+                    {
+                      "name": "median_price_eur",
+                      "expression": "`median_price_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "distance_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Distance to the cathedral (Duomo)"
+                },
+                "y": {
+                  "fieldName": "median_price_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Median price, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Within 1 km of the Duomo Milan is the pricier city (299 € vs 229 €); its centre premium is 2.3× vs 1.6× in Florence",
+                "showDescription": true,
+                "description": "Bands 0–1 / 1–2 / 2–4 / 4–8 km, the same as in the model report; 8+ km omitted (111 Milan listings, 1 in Florence)."
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": "model",
+      "displayName": "3 · Price model and city C",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "model_w1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## On Venice the frozen model's error is 40 % higher than on Milan/Florence, because expensive central listings dominate the misses; it still beats the baseline by 25 %\n\n",
+                "price-v1 was frozen after Week 1 and run unchanged on Venice: no pipeline fix and no model change were needed. Milan/Florence: held-out test set (20 % per city). Venice: every priced listing (unseen). Baseline = training median price for the same room type and number of guests. Residual = predicted − actual; negative = the model under-prices."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "model_headline",
+                  "fields": [
+                    {
+                      "name": "ab_model_mae_eur",
+                      "expression": "`ab_model_mae_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "ab_model_mae_eur",
+                  "displayName": "MAE, EUR"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Model MAE, Milan + Florence test (EUR)"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "model_headline",
+                  "fields": [
+                    {
+                      "name": "c_model_mae_eur",
+                      "expression": "`c_model_mae_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "c_model_mae_eur",
+                  "displayName": "MAE, EUR"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Model MAE, Venice unseen (EUR)"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "model_headline",
+                  "fields": [
+                    {
+                      "name": "c_baseline_mae_eur",
+                      "expression": "`c_baseline_mae_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "c_baseline_mae_eur",
+                  "displayName": "MAE, EUR"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Baseline MAE, Venice (EUR)"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 1,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "model_headline",
+                  "fields": [
+                    {
+                      "name": "c_vs_ab_pct",
+                      "expression": "`c_vs_ab_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "c_vs_ab_pct",
+                  "displayName": "%"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Venice model MAE above A/B, %"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "model_scorecard",
+                  "fields": [
+                    {
+                      "name": "city_letter",
+                      "expression": "`city_letter`"
+                    },
+                    {
+                      "name": "scope",
+                      "expression": "`scope`"
+                    },
+                    {
+                      "name": "evaluation_split",
+                      "expression": "`evaluation_split`"
+                    },
+                    {
+                      "name": "n",
+                      "expression": "`n`"
+                    },
+                    {
+                      "name": "model_mae_eur",
+                      "expression": "`model_mae_eur`"
+                    },
+                    {
+                      "name": "baseline_mae_eur",
+                      "expression": "`baseline_mae_eur`"
+                    },
+                    {
+                      "name": "improvement_pct",
+                      "expression": "`improvement_pct`"
+                    },
+                    {
+                      "name": "model_median_ae_eur",
+                      "expression": "`model_median_ae_eur`"
+                    },
+                    {
+                      "name": "mean_signed_residual_eur",
+                      "expression": "`mean_signed_residual_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "city_letter",
+                    "displayName": "City"
+                  },
+                  {
+                    "fieldName": "scope",
+                    "displayName": "Scope"
+                  },
+                  {
+                    "fieldName": "evaluation_split",
+                    "displayName": "Rows"
+                  },
+                  {
+                    "fieldName": "n",
+                    "displayName": "Listings"
+                  },
+                  {
+                    "fieldName": "model_mae_eur",
+                    "displayName": "Model MAE, EUR"
+                  },
+                  {
+                    "fieldName": "baseline_mae_eur",
+                    "displayName": "Baseline MAE, EUR"
+                  },
+                  {
+                    "fieldName": "improvement_pct",
+                    "displayName": "Improvement, %"
+                  },
+                  {
+                    "fieldName": "model_median_ae_eur",
+                    "displayName": "Model median abs. error, EUR"
+                  },
+                  {
+                    "fieldName": "mean_signed_residual_eur",
+                    "displayName": "Mean residual, EUR"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "The three numbers side by side: baseline on C 142.46 €, model on A+B 75.88 €, model on C 106.07 €",
+                "showDescription": true,
+                "description": "No post-change number exists because no pipeline fix or model change was required."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mae_long",
+                  "fields": [
+                    {
+                      "name": "scope",
+                      "expression": "`scope`"
+                    },
+                    {
+                      "name": "predictor",
+                      "expression": "`predictor`"
+                    },
+                    {
+                      "name": "mae_eur",
+                      "expression": "`mae_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "scope",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Population"
+                },
+                "y": {
+                  "fieldName": "mae_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "MAE, EUR"
+                },
+                "color": {
+                  "fieldName": "predictor",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Predictor"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "The model beats the baseline in every city, by the most in Venice"
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 4,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w8",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "pred_vs_actual",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "actual_price_eur",
+                      "expression": "`actual_price_eur`"
+                    },
+                    {
+                      "name": "predicted_price_eur",
+                      "expression": "`predicted_price_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "actual_price_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Actual price, EUR"
+                },
+                "y": {
+                  "fieldName": "predicted_price_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Predicted price, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Predictions flatten towards the middle: cheap listings are over-priced, expensive ones under-priced",
+                "showDescription": true,
+                "description": "Evaluation rows with actual price ≤ 1,000 €. A perfect model lies on the diagonal."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 3,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "error_by_price_band",
+                  "fields": [
+                    {
+                      "name": "price_band",
+                      "expression": "`price_band`"
+                    },
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "mean_signed_residual_eur",
+                      "expression": "`mean_signed_residual_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "price_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Actual price band, EUR (A/B training quartiles and p95)"
+                },
+                "y": {
+                  "fieldName": "mean_signed_residual_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Mean residual, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Above 513 € the model under-prices by hundreds of euros in every city"
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 7,
+            "width": 3,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w10",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "error_share_by_band",
+                  "fields": [
+                    {
+                      "name": "population",
+                      "expression": "`population`"
+                    },
+                    {
+                      "name": "price_band",
+                      "expression": "`price_band`"
+                    },
+                    {
+                      "name": "n",
+                      "expression": "`n`"
+                    },
+                    {
+                      "name": "share_of_listings_pct",
+                      "expression": "`share_of_listings_pct`"
+                    },
+                    {
+                      "name": "model_mae_eur",
+                      "expression": "`model_mae_eur`"
+                    },
+                    {
+                      "name": "share_of_total_error_pct",
+                      "expression": "`share_of_total_error_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "population",
+                    "displayName": "Population"
+                  },
+                  {
+                    "fieldName": "price_band",
+                    "displayName": "Actual price band, EUR"
+                  },
+                  {
+                    "fieldName": "n",
+                    "displayName": "Listings"
+                  },
+                  {
+                    "fieldName": "share_of_listings_pct",
+                    "displayName": "Share of listings, %"
+                  },
+                  {
+                    "fieldName": "model_mae_eur",
+                    "displayName": "Model MAE, EUR"
+                  },
+                  {
+                    "fieldName": "share_of_total_error_pct",
+                    "displayName": "Share of total error, %"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "In Venice the 513+ € band is 9.9 % of listings but 50.6 % of the error; Venice also has more listings in the expensive bands",
+                "showDescription": true,
+                "description": "Band edges are the frozen A/B training quartiles and p95, so the populations are compared on the same scale."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w11",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "error_by_distance",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "distance_band",
+                      "expression": "`distance_band`"
+                    },
+                    {
+                      "name": "model_mae_eur",
+                      "expression": "`model_mae_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "distance_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Distance to centre"
+                },
+                "y": {
+                  "fieldName": "model_mae_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Model MAE, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Errors are highest in the historic centres (< 1 km); Venice's mainland (8+ km) is priced well",
+                "showDescription": true,
+                "description": "Groups with at least 20 evaluation listings."
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 14,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w12",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "venice_neighbourhood_error",
+                  "fields": [
+                    {
+                      "name": "neighbourhood",
+                      "expression": "`neighbourhood`"
+                    },
+                    {
+                      "name": "share_of_error_pct",
+                      "expression": "`share_of_error_pct`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "share_of_error_pct",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Share of Venice's total error, %"
+                },
+                "y": {
+                  "fieldName": "neighbourhood",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  },
+                  "displayName": "Venice neighbourhood"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Cannaregio, San Marco and Castello carry 56 % of Venice's error",
+                "showDescription": true,
+                "description": "Top 12 Venice neighbourhoods by share of total absolute error; at least 20 listings."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 19,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w13",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "error_by_room",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "room_type",
+                      "expression": "`room_type`"
+                    },
+                    {
+                      "name": "model_mae_eur",
+                      "expression": "`model_mae_eur`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "room_type",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Room type"
+                },
+                "y": {
+                  "fieldName": "model_mae_eur",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Model MAE, EUR"
+                },
+                "color": {
+                  "fieldName": "city_name",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Milan",
+                        "color": "#2A6FDB"
+                      },
+                      {
+                        "value": "Florence",
+                        "color": "#E07B39"
+                      },
+                      {
+                        "value": "Venice",
+                        "color": "#2E9E6A"
+                      }
+                    ]
+                  },
+                  "displayName": "City"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Entire homes carry the largest errors in every city; private rooms are priced best",
+                "showDescription": true,
+                "description": "Room types with at least 20 evaluation listings."
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 19,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "model_w14",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "worst_listings",
+                  "fields": [
+                    {
+                      "name": "city_name",
+                      "expression": "`city_name`"
+                    },
+                    {
+                      "name": "listing_id",
+                      "expression": "`listing_id`"
+                    },
+                    {
+                      "name": "room_type",
+                      "expression": "`room_type`"
+                    },
+                    {
+                      "name": "neighbourhood",
+                      "expression": "`neighbourhood`"
+                    },
+                    {
+                      "name": "accommodates",
+                      "expression": "`accommodates`"
+                    },
+                    {
+                      "name": "distance_band",
+                      "expression": "`distance_band`"
+                    },
+                    {
+                      "name": "actual_eur",
+                      "expression": "`actual_eur`"
+                    },
+                    {
+                      "name": "predicted_eur",
+                      "expression": "`predicted_eur`"
+                    },
+                    {
+                      "name": "baseline_eur",
+                      "expression": "`baseline_eur`"
+                    },
+                    {
+                      "name": "residual_eur",
+                      "expression": "`residual_eur`"
+                    },
+                    {
+                      "name": "pricing_direction",
+                      "expression": "`pricing_direction`"
+                    },
+                    {
+                      "name": "listing_url",
+                      "expression": "`listing_url`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "city_name",
+                    "displayName": "City"
+                  },
+                  {
+                    "fieldName": "listing_id",
+                    "displayName": "Listing"
+                  },
+                  {
+                    "fieldName": "room_type",
+                    "displayName": "Room type"
+                  },
+                  {
+                    "fieldName": "neighbourhood",
+                    "displayName": "Neighbourhood"
+                  },
+                  {
+                    "fieldName": "accommodates",
+                    "displayName": "Guests"
+                  },
+                  {
+                    "fieldName": "distance_band",
+                    "displayName": "Distance"
+                  },
+                  {
+                    "fieldName": "actual_eur",
+                    "displayName": "Actual, EUR"
+                  },
+                  {
+                    "fieldName": "predicted_eur",
+                    "displayName": "Model, EUR"
+                  },
+                  {
+                    "fieldName": "baseline_eur",
+                    "displayName": "Baseline, EUR"
+                  },
+                  {
+                    "fieldName": "residual_eur",
+                    "displayName": "Residual, EUR"
+                  },
+                  {
+                    "fieldName": "pricing_direction",
+                    "displayName": "Direction"
+                  },
+                  {
+                    "fieldName": "listing_url",
+                    "displayName": "Link"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "The largest misses are extreme asking prices the model under-prices; a residual is not proof a listing is mispriced",
+                "showDescription": true,
+                "description": "15 evaluation listings per city with the largest absolute residual."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 25,
+            "width": 6,
+            "height": 8
+          }
+        }
+      ]
+    }
+  ]
+}

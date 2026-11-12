@@ -1,0 +1,386 @@
+{
+  "version": 2,
+  "config": {
+    "sample_questions": [
+      {
+        "id": "7efe4113aff05d30a91ea8d85c5986b3",
+        "question": [
+          "Where does the model under-price listings the most?"
+        ]
+      },
+      {
+        "id": "909d6495d2ff5ca39177dd35ef5d4ec6",
+        "question": [
+          "How much better is the model than the baseline?"
+        ]
+      },
+      {
+        "id": "ca26f22dc21650d1a4327d46f90884ab",
+        "question": [
+          "How much worse is the model on Venice than on Milan and Florence?"
+        ]
+      },
+      {
+        "id": "db63767ef1e058518e2b0e87bd30de53",
+        "question": [
+          "What is the median price in City C?"
+        ]
+      },
+      {
+        "id": "de75c60358c05bd292129f2ad7c86045",
+        "question": [
+          "Which neighbourhoods in City B have the most listings?"
+        ]
+      },
+      {
+        "id": "e2e62e9ad7c25981933df65b298d6e17",
+        "question": [
+          "Which city has more listings from multi-listing hosts?"
+        ]
+      },
+      {
+        "id": "ef1199723b38549a9f5e7fa92a38413f",
+        "question": [
+          "What is the median price of entire homes in City A?"
+        ]
+      }
+    ]
+  },
+  "data_sources": {
+    "tables": [
+      {
+        "identifier": "workspace.airbnb_bi.city_metrics",
+        "column_configs": [
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "workspace.airbnb_bi.city_roles",
+        "column_configs": [
+          {
+            "column_name": "city",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_role",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "workspace.airbnb_bi.listing_facts",
+        "column_configs": [
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "distance_band",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "neighbourhood",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "property_type",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "room_type",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "workspace.airbnb_bi.model_scorecard",
+        "column_configs": [
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "evaluation_split",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "scope",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "workspace.airbnb_bi.neighbourhood_metrics",
+        "column_configs": [
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "neighbourhood",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "workspace.airbnb_bi.prediction_details",
+        "column_configs": [
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "distance_band",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "evaluation_split",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "neighbourhood",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "price_band",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "pricing_direction",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "room_type",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      },
+      {
+        "identifier": "workspace.airbnb_bi.room_type_metrics",
+        "column_configs": [
+          {
+            "column_name": "city_letter",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "city_name",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          },
+          {
+            "column_name": "room_type",
+            "enable_format_assistance": true,
+            "enable_entity_matching": true
+          }
+        ]
+      }
+    ]
+  },
+  "instructions": {
+    "text_instructions": [
+      {
+        "id": "3f9f4dd3eedc5a64849cf2b9e7c13422",
+        "content": [
+          "You answer questions about short-term rentals (Inside Airbnb, detailed listings) in Northern Italy for an analytics start-up.\n",
+          "\n",
+          "CITIES\n",
+          "- \"City A\" = Milan, \"City B\" = Florence: the two training cities. \"City C\" = Venice, the new client (unseen by the model).\n",
+          "- Filter cities with city_letter ('A', 'B', 'C') or city_name ('Milan', 'Florence', 'Venice'). city_roles maps them.\n",
+          "- Venice is loaded and scored (first unchanged run of the frozen pipeline and model). If a question asks about a city that has no rows, say it has not been loaded yet; never substitute another city.\n",
+          "- Every table has snapshot_date. Snapshots: Milan and Florence 2026-09-19, Venice 2026-09-16. Mention the snapshot date when comparing cities. If several snapshots exist, use the latest per city unless asked otherwise.\n",
+          "\n",
+          "PRICES\n",
+          "- price is the advertised price per night in EUR (all cities share the currency, no conversion).\n",
+          "- For median price per city, use city_metrics.median_price_eur. Per city and room type, use room_type_metrics.median_price_eur. Per neighbourhood, use neighbourhood_metrics.median_price_eur (NULL when fewer than 20 priced listings; say so instead of computing your own).\n",
+          "- Only for filters these tables cannot answer (e.g. number of guests, distance, property type) compute MEDIAN(price_eur) from listing_facts with price_eur IS NOT NULL (listings without a valid price have price_eur NULL). Use the median, never the average price: a few listings advertise placeholder prices of thousands of euros.\n",
+          "- Never average medians across groups and never sum distinct host counts across groups.\n",
+          "- \"Entire home\" / \"whole apartment\" means room_type = 'Entire home/apt'. \"Private room\", \"Hotel room\", \"Shared room\" are the other room types.\n",
+          "\n",
+          "AVAILABILITY AND HOSTS\n",
+          "- open_days_share_365 is the share of the next 365 days that are open for booking. It is NOT occupancy and NOT demand. share_blocked = share of listings with no open day in the next year.\n",
+          "- share_multi_listing_hosts is the share of LISTINGS whose host has 2 or more listings (not a share of hosts).\n",
+          "- \"How many listings\" uses the listings column of the metrics tables (all listings, including those without a price).\n",
+          "\n",
+          "MODEL\n",
+          "- The model is version price-v1; it predicts the nightly price. The baseline is the training median price for the same room type and number of guests (accommodates).\n",
+          "- Errors are only meaningful on evaluation rows: always filter prediction_details with is_evaluation_row = true AND model_version = 'price-v1' (evaluation_split 'test' for Milan/Florence = held-out 20 %, 'unseen' for Venice = every priced listing). Never report errors from 'train' rows: they are in-sample and make the model look better.\n",
+          "- The model and baseline were frozen after Week 1 and run unchanged on Venice; no pipeline fix or model change was needed, so there is no \"after changes\" result.\n",
+          "- signed_residual_eur = predicted - actual. Negative = the model UNDER-prices the listing, positive = OVER-prices. pricing_direction holds the same as text.\n",
+          "- MAE = AVG(absolute_error_eur). For headline MAE per city or for A+B together use model_scorecard (scope 'Milan', 'Florence', 'Milan + Florence', 'Venice'). Compare model and baseline on the same rows.\n",
+          "- \"Where does the model under-price the most\" = group evaluation rows by neighbourhood (with city) and rank by AVG(signed_residual_eur) ascending; only groups with at least 20 rows; show the count and the city. Room type, distance_band and price_band are other useful dimensions.\n",
+          "- price_band uses the frozen A/B training quartiles and p95 (<128, 128-174.6, 174.6-249, 249-513, 513+ EUR); distance_band is 0-1 / 1-2 / 2-4 / 4-8 / 8+ km from the city centre.\n",
+          "- A negative residual means the listing is priced above what the model expects. Do not say a listing is objectively over- or under-priced on the market.\n",
+          "- Always show the number of listings behind an average, and round money to whole euros."
+        ]
+      }
+    ],
+    "example_question_sqls": [
+      {
+        "id": "01056cf3eb0f59d49c292ce59cc72616",
+        "question": [
+          "What is the model's MAE compared with the baseline in each city?"
+        ],
+        "sql": [
+          "SELECT scope, evaluation_split, n AS listings, ROUND(model_mae_eur, 1) AS model_mae_eur,\n",
+          "       ROUND(baseline_mae_eur, 1) AS baseline_mae_eur, ROUND(100 * improvement_share, 1) AS improvement_pct\n",
+          "FROM workspace.airbnb_bi.model_scorecard\n",
+          "WHERE model_version = 'price-v1'\n",
+          "ORDER BY scope"
+        ]
+      },
+      {
+        "id": "0133ab7d50a454899af5177463331461",
+        "question": [
+          "Which Venice neighbourhoods account for most of the model error?"
+        ],
+        "sql": [
+          "SELECT neighbourhood, COUNT(*) AS listings, ROUND(AVG(absolute_error_eur), 0) AS mae_eur,\n",
+          "       ROUND(AVG(signed_residual_eur), 0) AS mean_residual_eur,\n",
+          "       ROUND(100 * SUM(absolute_error_eur) / (SELECT SUM(absolute_error_eur) FROM workspace.airbnb_bi.prediction_details\n",
+          "         WHERE is_evaluation_row AND model_version = 'price-v1' AND city_letter = 'C'), 1) AS share_of_error_pct\n",
+          "FROM workspace.airbnb_bi.prediction_details\n",
+          "WHERE is_evaluation_row AND model_version = 'price-v1' AND city_letter = 'C'\n",
+          "GROUP BY neighbourhood\n",
+          "HAVING COUNT(*) >= 20\n",
+          "ORDER BY share_of_error_pct DESC\n",
+          "LIMIT 10"
+        ]
+      },
+      {
+        "id": "0b8fb69f783054c6880f9b89dcca4d78",
+        "question": [
+          "What is the median price of entire homes in City A?"
+        ],
+        "sql": [
+          "SELECT city_letter, city_name, room_type, listings, ROUND(median_price_eur, 0) AS median_price_eur\n",
+          "FROM workspace.airbnb_bi.room_type_metrics\n",
+          "WHERE city_letter = 'A' AND room_type = 'Entire home/apt'"
+        ]
+      },
+      {
+        "id": "20548d1f8ee152a7a8c0edc84cfd7c1e",
+        "question": [
+          "Where does the model under-price listings the most?"
+        ],
+        "sql": [
+          "SELECT city_name, neighbourhood, COUNT(*) AS listings,\n",
+          "       ROUND(AVG(signed_residual_eur), 0) AS mean_residual_eur,\n",
+          "       ROUND(AVG(absolute_error_eur), 0) AS mae_eur,\n",
+          "       ROUND(100 * AVG(CASE WHEN signed_residual_eur < 0 THEN 1 ELSE 0 END), 1) AS under_priced_pct\n",
+          "FROM workspace.airbnb_bi.prediction_details\n",
+          "WHERE is_evaluation_row AND model_version = 'price-v1'\n",
+          "GROUP BY city_name, neighbourhood\n",
+          "HAVING COUNT(*) >= 20\n",
+          "ORDER BY mean_residual_eur ASC\n",
+          "LIMIT 10"
+        ]
+      },
+      {
+        "id": "5cfd75017b82587fb02d2fd1bf25bccc",
+        "question": [
+          "What is the median price of a 4-guest entire home in Florence?"
+        ],
+        "sql": [
+          "SELECT city_name, COUNT(*) AS listings, ROUND(MEDIAN(price_eur), 0) AS median_price_eur\n",
+          "FROM workspace.airbnb_bi.listing_facts\n",
+          "WHERE city_name = 'Florence' AND room_type = 'Entire home/apt' AND accommodates = 4\n",
+          "  AND price_eur IS NOT NULL\n",
+          "GROUP BY city_name"
+        ]
+      },
+      {
+        "id": "9dc23f9138db53f58263594921389512",
+        "question": [
+          "Compare median price and share of entire homes between Milan and Florence"
+        ],
+        "sql": [
+          "SELECT c.city_name, c.listings, ROUND(c.median_price_eur, 0) AS median_price_eur,\n",
+          "       ROUND(100 * r.room_type_mix, 1) AS entire_home_pct\n",
+          "FROM workspace.airbnb_bi.city_metrics c\n",
+          "JOIN workspace.airbnb_bi.room_type_metrics r\n",
+          "  ON r.city = c.city AND r.snapshot_date = c.snapshot_date AND r.room_type = 'Entire home/apt'\n",
+          "WHERE c.city_role = 'training'"
+        ]
+      },
+      {
+        "id": "a1758ac8738c5602ba773e9d5f6864b4",
+        "question": [
+          "What is the model MAE for Venice compared with Milan and Florence?"
+        ],
+        "sql": [
+          "SELECT scope, evaluation_split, n AS listings, ROUND(baseline_mae_eur, 2) AS baseline_mae_eur,\n",
+          "       ROUND(model_mae_eur, 2) AS model_mae_eur, ROUND(100 * improvement_share, 1) AS improvement_vs_baseline_pct\n",
+          "FROM workspace.airbnb_bi.model_scorecard\n",
+          "WHERE model_version = 'price-v1' AND scope IN ('Venice', 'Milan + Florence')"
+        ]
+      },
+      {
+        "id": "ad90fffc6e5d5e559101e77af4309967",
+        "question": [
+          "Which neighbourhoods in City B have the most listings?"
+        ],
+        "sql": [
+          "SELECT neighbourhood, listings, priced_listings, ROUND(median_price_eur, 0) AS median_price_eur\n",
+          "FROM workspace.airbnb_bi.neighbourhood_metrics\n",
+          "WHERE city_letter = 'B'\n",
+          "ORDER BY listings DESC\n",
+          "LIMIT 10"
+        ]
+      }
+    ]
+  }
+}
