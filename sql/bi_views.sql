@@ -15,12 +15,12 @@ COMMENT 'Dashboard/Genie views over airbnb_gold (read-only semantic layer)';
 
 -- City letters used in the assignment (A, B = training, C = new client).
 CREATE OR REPLACE VIEW workspace.airbnb_bi.city_roles
-COMMENT 'Maps pipeline city keys to assignment letters: A = Milan, B = Florence (training), C = Venice (unseen new client).'
+COMMENT 'Maps pipeline city keys to assignment letters: A = Milan, B = Florence (training, snapshot 2026-09-19), C = Venice (unseen new client, snapshot 2026-09-16).'
 AS SELECT * FROM VALUES
-  ('milan',    'A', 'Milan',    'training'),
-  ('florence', 'B', 'Florence', 'training'),
-  ('venice',   'C', 'Venice',   'new client (unseen)')
-AS t(city, city_letter, city_name, city_role);
+  ('milan',    'A', 'Milan',    'training',            DATE'2026-09-19'),
+  ('florence', 'B', 'Florence', 'training',            DATE'2026-09-19'),
+  ('venice',   'C', 'Venice',   'new client (unseen)', DATE'2026-09-16')
+AS t(city, city_letter, city_name, city_role, snapshot_date);
 ;;
 
 CREATE OR REPLACE VIEW workspace.airbnb_bi.city_metrics
@@ -28,7 +28,7 @@ COMMENT 'One row per city and snapshot. Prices in EUR. open_days_share_365 is th
 AS
 SELECT r.city_letter, r.city_name, r.city_role, m.*
 FROM workspace.airbnb_gold.city_metrics m
-LEFT JOIN workspace.airbnb_bi.city_roles r USING (city);
+LEFT JOIN workspace.airbnb_bi.city_roles r ON r.city = m.city;
 ;;
 
 CREATE OR REPLACE VIEW workspace.airbnb_bi.room_type_metrics
@@ -36,7 +36,7 @@ COMMENT 'One row per city, snapshot and room_type. room_type_mix = share of the 
 AS
 SELECT r.city_letter, r.city_name, r.city_role, m.*
 FROM workspace.airbnb_gold.room_type_metrics m
-LEFT JOIN workspace.airbnb_bi.city_roles r USING (city);
+LEFT JOIN workspace.airbnb_bi.city_roles r ON r.city = m.city;
 ;;
 
 CREATE OR REPLACE VIEW workspace.airbnb_bi.neighbourhood_metrics
@@ -49,39 +49,51 @@ SELECT r.city_letter, r.city_name, r.city_role,
        m.availability_observations, m.share_blocked, m.avg_review_score, m.hosts,
        m.share_multi_listing_hosts, m.meets_price_sample_minimum
 FROM workspace.airbnb_gold.neighbourhood_metrics m
-LEFT JOIN workspace.airbnb_bi.city_roles r USING (city);
+LEFT JOIN workspace.airbnb_bi.city_roles r ON r.city = m.city;
 ;;
 
--- One row per listing (gold model_features: cleaned attributes, no raw/leaking columns).
--- Note: neighbourhood, name and coordinates live in silver; this layer reads gold only.
+-- One row per listing: gold model_features (cleaned, leakage-reviewed attributes)
+-- plus the neighbourhood from silver. The silver key (city, snapshot_date,
+-- listing_id) is unique, so the join cannot fan out.
 CREATE OR REPLACE VIEW workspace.airbnb_bi.listing_facts
-COMMENT 'One row per listing and snapshot with cleaned attributes from gold model_features. price_eur is the advertised nightly price in EUR (null when missing/invalid). distance_band groups dist_center_km.'
+COMMENT 'One row per listing and snapshot with cleaned attributes. price_eur is the advertised nightly price in EUR (null when missing/invalid). distance_band uses the frozen report bands 0-1/1-2/2-4/4-8/8+ km from the city centre.'
 AS
 SELECT r.city_letter, r.city_name, r.city_role,
        f.city, f.snapshot_date, f.listing_id,
-       f.room_type, f.property_type, f.accommodates, f.bedrooms, f.beds, f.bathrooms_n,
+       f.room_type, f.property_type, s.neighbourhood_cleansed AS neighbourhood,
+       f.accommodates, f.bedrooms, f.beds, f.bathrooms_n,
        f.dist_center_km,
        CASE WHEN f.dist_center_km IS NULL THEN 'unknown'
             WHEN f.dist_center_km < 1 THEN '0-1 km'
             WHEN f.dist_center_km < 2 THEN '1-2 km'
             WHEN f.dist_center_km < 4 THEN '2-4 km'
-            WHEN f.dist_center_km < 7 THEN '4-7 km'
-            ELSE '7+ km' END AS distance_band,
+            WHEN f.dist_center_km < 8 THEN '4-8 km'
+            ELSE '8+ km' END AS distance_band,
        f.minimum_nights, f.long_stay, f.has_reviews, f.review_scores_rating,
        f.host_is_superhost, f.price_eur, f.eligible_for_training
 FROM workspace.airbnb_gold.model_features f
-LEFT JOIN workspace.airbnb_bi.city_roles r USING (city);
+LEFT JOIN workspace.airbnb_silver.listings s
+       ON s.city = f.city AND s.snapshot_date = f.snapshot_date AND s.listing_id = f.listing_id
+LEFT JOIN workspace.airbnb_bi.city_roles r ON r.city = f.city;
 ;;
 
 -- Predictions enriched with listing attributes, for error analysis.
 CREATE OR REPLACE VIEW workspace.airbnb_bi.prediction_details
-COMMENT 'Model and baseline predictions per listing. Honest error analysis uses is_evaluation_row = true (held-out test rows for A/B, all priced rows for an unseen city). signed_residual_eur < 0 means the model under-prices the listing.'
+COMMENT 'Model and baseline predictions per listing. Honest error analysis uses is_evaluation_row = true (held-out test rows for A/B, all priced rows for an unseen city). signed_residual_eur = prediction - actual; < 0 means the model under-prices the listing. One scoring run per city/snapshot/model_version (gold key), scoring_run_id identifies it.'
 AS
 SELECT f.city_letter, f.city_name, f.city_role,
        p.city, p.snapshot_date, p.listing_id, p.model_version,
        p.evaluation_split,
        p.evaluation_split IN ('test', 'unseen') AND p.absolute_error_eur IS NOT NULL AS is_evaluation_row,
-       f.room_type, f.property_type, f.accommodates, f.bedrooms, f.dist_center_km, f.distance_band, f.long_stay,
+       f.room_type, f.property_type, f.neighbourhood, f.accommodates, f.bedrooms,
+       f.dist_center_km, f.distance_band, f.long_stay,
+       -- Edges = frozen A/B training quartiles and p95 (Nazar's transfer report).
+       CASE WHEN p.actual_price_eur IS NULL THEN NULL
+            WHEN p.actual_price_eur < 128 THEN '1: <128'
+            WHEN p.actual_price_eur < 174.6 THEN '2: 128-174.6'
+            WHEN p.actual_price_eur < 249 THEN '3: 174.6-249'
+            WHEN p.actual_price_eur < 513 THEN '4: 249-513'
+            ELSE '5: 513+' END AS price_band,
        p.actual_price_eur, p.model_prediction_eur, p.baseline_prediction_eur,
        p.absolute_error_eur, p.signed_residual_eur,
        p.baseline_absolute_error_eur, p.baseline_signed_residual_eur,

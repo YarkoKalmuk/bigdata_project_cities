@@ -34,8 +34,9 @@ TABLES = {
     "city_metrics": ["city_letter", "city_name"],
     "room_type_metrics": ["city_letter", "city_name", "room_type"],
     "neighbourhood_metrics": ["city_letter", "city_name", "neighbourhood"],
-    "listing_facts": ["city_letter", "city_name", "room_type", "property_type", "distance_band"],
-    "prediction_details": ["city_letter", "city_name", "room_type", "distance_band", "evaluation_split", "pricing_direction"],
+    "listing_facts": ["city_letter", "city_name", "room_type", "property_type", "neighbourhood", "distance_band"],
+    "prediction_details": ["city_letter", "city_name", "room_type", "neighbourhood", "distance_band", "price_band",
+                           "evaluation_split", "pricing_direction"],
     "model_scorecard": ["city_letter", "scope", "evaluation_split"],
 }
 
@@ -45,8 +46,8 @@ You answer questions about short-term rentals (Inside Airbnb, detailed listings)
 CITIES
 - "City A" = Milan, "City B" = Florence: the two training cities. "City C" = Venice, the new client (unseen by the model).
 - Filter cities with city_letter ('A', 'B', 'C') or city_name ('Milan', 'Florence', 'Venice'). city_roles maps them.
-- If a question is about City C / Venice and there are no rows for it, say that Venice has not been loaded or scored yet. Never substitute another city.
-- Every table has snapshot_date. Snapshot is 2026-09-19 for Milan and Florence. If several snapshots exist, use the latest per city unless asked otherwise.
+- Venice is loaded and scored (first unchanged run of the frozen pipeline and model). If a question asks about a city that has no rows, say it has not been loaded yet; never substitute another city.
+- Every table has snapshot_date. Snapshots: Milan and Florence 2026-09-19, Venice 2026-09-16. Mention the snapshot date when comparing cities. If several snapshots exist, use the latest per city unless asked otherwise.
 
 PRICES
 - price is the advertised price per night in EUR (all cities share the currency, no conversion).
@@ -62,10 +63,13 @@ AVAILABILITY AND HOSTS
 
 MODEL
 - The model is version price-v1; it predicts the nightly price. The baseline is the training median price for the same room type and number of guests (accommodates).
-- Errors are only meaningful on evaluation rows: always filter prediction_details with is_evaluation_row = true (held-out test rows for Milan/Florence, all priced rows for an unseen city). Never report errors from training rows.
+- Errors are only meaningful on evaluation rows: always filter prediction_details with is_evaluation_row = true AND model_version = 'price-v1' (evaluation_split 'test' for Milan/Florence = held-out 20 %, 'unseen' for Venice = every priced listing). Never report errors from 'train' rows: they are in-sample and make the model look better.
+- The model and baseline were frozen after Week 1 and run unchanged on Venice; no pipeline fix or model change was needed, so there is no "after changes" result.
 - signed_residual_eur = predicted - actual. Negative = the model UNDER-prices the listing, positive = OVER-prices. pricing_direction holds the same as text.
-- MAE = AVG(absolute_error_eur). For headline MAE per city or for A+B together use model_scorecard (scope 'Milan', 'Florence', 'Milan + Florence', later 'Venice').
-- "Where does the model under-price the most" = group evaluation rows by a dimension (room_type, distance_band, accommodates, city) and rank by AVG(signed_residual_eur) ascending; only groups with at least 20 rows; show the count. Neighbourhood is not available on predictions.
+- MAE = AVG(absolute_error_eur). For headline MAE per city or for A+B together use model_scorecard (scope 'Milan', 'Florence', 'Milan + Florence', 'Venice'). Compare model and baseline on the same rows.
+- "Where does the model under-price the most" = group evaluation rows by neighbourhood (with city) and rank by AVG(signed_residual_eur) ascending; only groups with at least 20 rows; show the count and the city. Room type, distance_band and price_band are other useful dimensions.
+- price_band uses the frozen A/B training quartiles and p95 (<128, 128-174.6, 174.6-249, 249-513, 513+ EUR); distance_band is 0-1 / 1-2 / 2-4 / 4-8 / 8+ km from the city centre.
+- A negative residual means the listing is priced above what the model expects. Do not say a listing is objectively over- or under-priced on the market.
 - Always show the number of listings behind an average, and round money to whole euros.
 """.strip()
 
@@ -81,14 +85,31 @@ WHERE city_letter = 'B'
 ORDER BY listings DESC
 LIMIT 10"""),
     ("Where does the model under-price listings the most?",
-     f"""SELECT city_name, room_type, distance_band, COUNT(*) AS listings,
+     f"""SELECT city_name, neighbourhood, COUNT(*) AS listings,
        ROUND(AVG(signed_residual_eur), 0) AS mean_residual_eur,
-       ROUND(AVG(absolute_error_eur), 0) AS mae_eur
+       ROUND(AVG(absolute_error_eur), 0) AS mae_eur,
+       ROUND(100 * AVG(CASE WHEN signed_residual_eur < 0 THEN 1 ELSE 0 END), 1) AS under_priced_pct
 FROM {BI}.prediction_details
 WHERE is_evaluation_row AND model_version = 'price-v1'
-GROUP BY city_name, room_type, distance_band
+GROUP BY city_name, neighbourhood
 HAVING COUNT(*) >= 20
 ORDER BY mean_residual_eur ASC
+LIMIT 10"""),
+    ("What is the model MAE for Venice compared with Milan and Florence?",
+     f"""SELECT scope, evaluation_split, n AS listings, ROUND(baseline_mae_eur, 2) AS baseline_mae_eur,
+       ROUND(model_mae_eur, 2) AS model_mae_eur, ROUND(100 * improvement_share, 1) AS improvement_vs_baseline_pct
+FROM {BI}.model_scorecard
+WHERE model_version = 'price-v1' AND scope IN ('Venice', 'Milan + Florence')"""),
+    ("Which Venice neighbourhoods account for most of the model error?",
+     f"""SELECT neighbourhood, COUNT(*) AS listings, ROUND(AVG(absolute_error_eur), 0) AS mae_eur,
+       ROUND(AVG(signed_residual_eur), 0) AS mean_residual_eur,
+       ROUND(100 * SUM(absolute_error_eur) / (SELECT SUM(absolute_error_eur) FROM {BI}.prediction_details
+         WHERE is_evaluation_row AND model_version = 'price-v1' AND city_letter = 'C'), 1) AS share_of_error_pct
+FROM {BI}.prediction_details
+WHERE is_evaluation_row AND model_version = 'price-v1' AND city_letter = 'C'
+GROUP BY neighbourhood
+HAVING COUNT(*) >= 20
+ORDER BY share_of_error_pct DESC
 LIMIT 10"""),
     ("What is the model's MAE compared with the baseline in each city?",
      f"""SELECT scope, evaluation_split, n AS listings, ROUND(model_mae_eur, 1) AS model_mae_eur,
@@ -116,6 +137,8 @@ SAMPLE_QUESTIONS = [
     "Which neighbourhoods in City B have the most listings?",
     "Where does the model under-price listings the most?",
     "How much better is the model than the baseline?",
+    "What is the median price in City C?",
+    "How much worse is the model on Venice than on Milan and Florence?",
     "Which city has more listings from multi-listing hosts?",
 ]
 
