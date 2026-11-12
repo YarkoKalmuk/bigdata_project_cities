@@ -1,0 +1,447 @@
+{
+  "purpose": "Reference SQL for the Dashboard/Genie handoff, executed read-only on 2026-11-11 against workspace.airbnb_gold / airbnb_silver.",
+  "results": {
+    "q1_headline_mae": {
+      "sql": "WITH e AS (\n  SELECT * FROM workspace.airbnb_gold.predictions\n  WHERE model_version = 'price-v1'\n    AND actual_price_eur IS NOT NULL\n    AND ((city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND evaluation_split = 'test')\n      OR (city = 'venice' AND snapshot_date = DATE '2026-09-16' AND evaluation_split = 'unseen'\n          AND scoring_run_id = 'venice-2026-09-16-price-v1-score-v1-first-run'))\n)\nSELECT CASE WHEN grouping(city) = 1 THEN 'milan+florence' ELSE city END AS scope,\n       count(*) AS n,\n       round(avg(baseline_absolute_error_eur), 2) AS baseline_mae_eur,\n       round(avg(absolute_error_eur), 2) AS model_mae_eur,\n       round(avg(signed_residual_eur), 2) AS mean_residual_eur,\n       round(avg(CASE WHEN signed_residual_eur < 0 THEN 1.0 ELSE 0.0 END), 3) AS underprediction_rate\nFROM e WHERE city IN ('milan','florence') GROUP BY GROUPING SETS ((city), ())\nUNION ALL\nSELECT 'venice', count(*), round(avg(baseline_absolute_error_eur), 2), round(avg(absolute_error_eur), 2),\n       round(avg(signed_residual_eur), 2), round(avg(CASE WHEN signed_residual_eur < 0 THEN 1.0 ELSE 0.0 END), 3)\nFROM e WHERE city = 'venice'\nORDER BY scope",
+      "statement_id": "01f1de13-baa8-118a-8933-814141cab3cb",
+      "rows": [
+        {
+          "scope": "florence",
+          "n": "2464",
+          "baseline_mae_eur": "97.41",
+          "model_mae_eur": "76.18",
+          "mean_residual_eur": "-12.46",
+          "underprediction_rate": "0.407"
+        },
+        {
+          "scope": "milan",
+          "n": "4399",
+          "baseline_mae_eur": "94.38",
+          "model_mae_eur": "75.72",
+          "mean_residual_eur": "-35.5",
+          "underprediction_rate": "0.458"
+        },
+        {
+          "scope": "milan+florence",
+          "n": "6863",
+          "baseline_mae_eur": "95.47",
+          "model_mae_eur": "75.88",
+          "mean_residual_eur": "-27.23",
+          "underprediction_rate": "0.440"
+        },
+        {
+          "scope": "venice",
+          "n": "8144",
+          "baseline_mae_eur": "142.46",
+          "model_mae_eur": "106.07",
+          "mean_residual_eur": "-77.09",
+          "underprediction_rate": "0.666"
+        }
+      ]
+    },
+    "q2_mae_by_room_type": {
+      "sql": "WITH e AS (\n  SELECT * FROM workspace.airbnb_gold.predictions\n  WHERE model_version = 'price-v1'\n    AND actual_price_eur IS NOT NULL\n    AND ((city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND evaluation_split = 'test')\n      OR (city = 'venice' AND snapshot_date = DATE '2026-09-16' AND evaluation_split = 'unseen'\n          AND scoring_run_id = 'venice-2026-09-16-price-v1-score-v1-first-run'))\n),\nf AS (SELECT city, snapshot_date, listing_id, room_type FROM workspace.airbnb_gold.model_features)\nSELECT CASE WHEN e.city = 'venice' THEN 'venice' ELSE 'milan+florence' END AS population,\n       f.room_type, count(*) AS n,\n       round(avg(e.absolute_error_eur), 2) AS model_mae_eur,\n       round(avg(e.baseline_absolute_error_eur), 2) AS baseline_mae_eur,\n       round(avg(e.signed_residual_eur), 2) AS mean_residual_eur\nFROM e JOIN f USING (city, snapshot_date, listing_id)\nGROUP BY 1, 2 ORDER BY 1, 3 DESC",
+      "statement_id": "01f1de13-bb7a-1b16-b4fb-340892675732",
+      "rows": [
+        {
+          "population": "milan+florence",
+          "room_type": "Entire home/apt",
+          "n": "5968",
+          "model_mae_eur": "79.64",
+          "baseline_mae_eur": "98.94",
+          "mean_residual_eur": "-29.28"
+        },
+        {
+          "population": "milan+florence",
+          "room_type": "Private room",
+          "n": "868",
+          "model_mae_eur": "50.96",
+          "baseline_mae_eur": "73.38",
+          "mean_residual_eur": "-14.73"
+        },
+        {
+          "population": "milan+florence",
+          "room_type": "Shared room",
+          "n": "14",
+          "model_mae_eur": "34.98",
+          "baseline_mae_eur": "14.13",
+          "mean_residual_eur": "31.77"
+        },
+        {
+          "population": "milan+florence",
+          "room_type": "Hotel room",
+          "n": "13",
+          "model_mae_eur": "60.89",
+          "baseline_mae_eur": "62.33",
+          "mean_residual_eur": "15.6"
+        },
+        {
+          "population": "venice",
+          "room_type": "Entire home/apt",
+          "n": "6336",
+          "model_mae_eur": "113.17",
+          "baseline_mae_eur": "152.32",
+          "mean_residual_eur": "-83.05"
+        },
+        {
+          "population": "venice",
+          "room_type": "Private room",
+          "n": "1762",
+          "model_mae_eur": "81.56",
+          "baseline_mae_eur": "108.35",
+          "mean_residual_eur": "-56.56"
+        },
+        {
+          "population": "venice",
+          "room_type": "Hotel room",
+          "n": "35",
+          "model_mae_eur": "77.12",
+          "baseline_mae_eur": "107.3",
+          "mean_residual_eur": "-60.25"
+        },
+        {
+          "population": "venice",
+          "room_type": "Shared room",
+          "n": "11",
+          "model_mae_eur": "31.22",
+          "baseline_mae_eur": "36.96",
+          "mean_residual_eur": "15.05"
+        }
+      ]
+    },
+    "q3_mae_by_neighbourhood_venice": {
+      "sql": "WITH e AS (\n  SELECT * FROM workspace.airbnb_gold.predictions\n  WHERE model_version = 'price-v1'\n    AND actual_price_eur IS NOT NULL\n    AND ((city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND evaluation_split = 'test')\n      OR (city = 'venice' AND snapshot_date = DATE '2026-09-16' AND evaluation_split = 'unseen'\n          AND scoring_run_id = 'venice-2026-09-16-price-v1-score-v1-first-run'))\n),\ns AS (SELECT city, snapshot_date, listing_id, neighbourhood_cleansed FROM workspace.airbnb_silver.listings)\nSELECT s.neighbourhood_cleansed AS neighbourhood, count(*) AS n,\n       round(avg(e.absolute_error_eur), 2) AS model_mae_eur,\n       round(avg(e.signed_residual_eur), 2) AS mean_residual_eur,\n       round(sum(e.absolute_error_eur) / max(t.total_error), 3) AS share_of_total_error\nFROM e JOIN s USING (city, snapshot_date, listing_id)\nCROSS JOIN (SELECT sum(absolute_error_eur) AS total_error FROM e WHERE city = 'venice') t\nWHERE e.city = 'venice'\nGROUP BY 1 HAVING count(*) >= 20\nORDER BY share_of_total_error DESC LIMIT 10",
+      "statement_id": "01f1de13-bc38-1c18-a323-dead12b2a03e",
+      "rows": [
+        {
+          "neighbourhood": "Cannaregio",
+          "n": "1458",
+          "model_mae_eur": "117.26",
+          "mean_residual_eur": "-94.34",
+          "share_of_total_error": "0.198"
+        },
+        {
+          "neighbourhood": "San Marco",
+          "n": "901",
+          "model_mae_eur": "178.08",
+          "mean_residual_eur": "-147.77",
+          "share_of_total_error": "0.186"
+        },
+        {
+          "neighbourhood": "Castello",
+          "n": "1485",
+          "model_mae_eur": "104.18",
+          "mean_residual_eur": "-74.69",
+          "share_of_total_error": "0.179"
+        },
+        {
+          "neighbourhood": "San Polo",
+          "n": "595",
+          "model_mae_eur": "165.18",
+          "mean_residual_eur": "-136.83",
+          "share_of_total_error": "0.114"
+        },
+        {
+          "neighbourhood": "Dorsoduro",
+          "n": "586",
+          "model_mae_eur": "130.29",
+          "mean_residual_eur": "-109.23",
+          "share_of_total_error": "0.088"
+        },
+        {
+          "neighbourhood": "Santa Croce",
+          "n": "563",
+          "model_mae_eur": "112.02",
+          "mean_residual_eur": "-96.63",
+          "share_of_total_error": "0.073"
+        },
+        {
+          "neighbourhood": "Piave 1860",
+          "n": "866",
+          "model_mae_eur": "40.95",
+          "mean_residual_eur": "-2.13",
+          "share_of_total_error": "0.041"
+        },
+        {
+          "neighbourhood": "Lido",
+          "n": "301",
+          "model_mae_eur": "106.48",
+          "mean_residual_eur": "-74.8",
+          "share_of_total_error": "0.037"
+        },
+        {
+          "neighbourhood": "Giudecca",
+          "n": "149",
+          "model_mae_eur": "84.21",
+          "mean_residual_eur": "-61.25",
+          "share_of_total_error": "0.015"
+        },
+        {
+          "neighbourhood": "Marghera",
+          "n": "195",
+          "model_mae_eur": "34.79",
+          "mean_residual_eur": "13.31",
+          "share_of_total_error": "0.008"
+        }
+      ]
+    },
+    "q4_price_band": {
+      "sql": "WITH e AS (\n  SELECT * FROM workspace.airbnb_gold.predictions\n  WHERE model_version = 'price-v1'\n    AND actual_price_eur IS NOT NULL\n    AND ((city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND evaluation_split = 'test')\n      OR (city = 'venice' AND snapshot_date = DATE '2026-09-16' AND evaluation_split = 'unseen'\n          AND scoring_run_id = 'venice-2026-09-16-price-v1-score-v1-first-run'))\n),\nb AS (SELECT *, CASE WHEN city = 'venice' THEN 'venice' ELSE 'milan+florence' END AS population,\n             CASE WHEN actual_price_eur < 128 THEN '1: <128'\n                  WHEN actual_price_eur < 174.6 THEN '2: 128-174.6'\n                  WHEN actual_price_eur < 249 THEN '3: 174.6-249'\n                  WHEN actual_price_eur < 513 THEN '4: 249-513'\n                  ELSE '5: 513+' END AS price_band FROM e)\nSELECT population, price_band, count(*) AS n,\n       round(count(*) / sum(count(*)) OVER (PARTITION BY population), 3) AS share_of_listings,\n       round(avg(absolute_error_eur), 2) AS model_mae_eur,\n       round(sum(absolute_error_eur) / sum(sum(absolute_error_eur)) OVER (PARTITION BY population), 3) AS share_of_total_error\nFROM b GROUP BY 1, 2 ORDER BY 1, 2",
+      "statement_id": "01f1de13-bd6a-160d-a952-a24ee8f9d9e8",
+      "rows": [
+        {
+          "population": "milan+florence",
+          "price_band": "1: <128",
+          "n": "1630",
+          "share_of_listings": "0.238",
+          "model_mae_eur": "35.89",
+          "share_of_total_error": "0.112"
+        },
+        {
+          "population": "milan+florence",
+          "price_band": "2: 128-174.6",
+          "n": "1756",
+          "share_of_listings": "0.256",
+          "model_mae_eur": "30.7",
+          "share_of_total_error": "0.104"
+        },
+        {
+          "population": "milan+florence",
+          "price_band": "3: 174.6-249",
+          "n": "1689",
+          "share_of_listings": "0.246",
+          "model_mae_eur": "39.42",
+          "share_of_total_error": "0.128"
+        },
+        {
+          "population": "milan+florence",
+          "price_band": "4: 249-513",
+          "n": "1440",
+          "share_of_listings": "0.21",
+          "model_mae_eur": "87.99",
+          "share_of_total_error": "0.243"
+        },
+        {
+          "population": "milan+florence",
+          "price_band": "5: 513+",
+          "n": "348",
+          "share_of_listings": "0.051",
+          "model_mae_eur": "618.04",
+          "share_of_total_error": "0.413"
+        },
+        {
+          "population": "venice",
+          "price_band": "1: <128",
+          "n": "1252",
+          "share_of_listings": "0.154",
+          "model_mae_eur": "26.87",
+          "share_of_total_error": "0.039"
+        },
+        {
+          "population": "venice",
+          "price_band": "2: 128-174.6",
+          "n": "1229",
+          "share_of_listings": "0.151",
+          "model_mae_eur": "30.07",
+          "share_of_total_error": "0.043"
+        },
+        {
+          "population": "venice",
+          "price_band": "3: 174.6-249",
+          "n": "1996",
+          "share_of_listings": "0.245",
+          "model_mae_eur": "41.58",
+          "share_of_total_error": "0.096"
+        },
+        {
+          "population": "venice",
+          "price_band": "4: 249-513",
+          "n": "2859",
+          "share_of_listings": "0.351",
+          "model_mae_eur": "95.48",
+          "share_of_total_error": "0.316"
+        },
+        {
+          "population": "venice",
+          "price_band": "5: 513+",
+          "n": "808",
+          "share_of_listings": "0.099",
+          "model_mae_eur": "541.16",
+          "share_of_total_error": "0.506"
+        }
+      ]
+    },
+    "q5_distance_band_venice": {
+      "sql": "WITH e AS (\n  SELECT * FROM workspace.airbnb_gold.predictions\n  WHERE model_version = 'price-v1'\n    AND actual_price_eur IS NOT NULL\n    AND ((city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND evaluation_split = 'test')\n      OR (city = 'venice' AND snapshot_date = DATE '2026-09-16' AND evaluation_split = 'unseen'\n          AND scoring_run_id = 'venice-2026-09-16-price-v1-score-v1-first-run'))\n),\nf AS (SELECT city, snapshot_date, listing_id, dist_center_km FROM workspace.airbnb_gold.model_features)\nSELECT CASE WHEN f.dist_center_km < 1 THEN '1: 0-1 km' WHEN f.dist_center_km < 2 THEN '2: 1-2 km'\n            WHEN f.dist_center_km < 4 THEN '3: 2-4 km' WHEN f.dist_center_km < 8 THEN '4: 4-8 km'\n            ELSE '5: 8+ km' END AS distance_band,\n       count(*) AS n, round(avg(e.absolute_error_eur), 2) AS model_mae_eur,\n       round(avg(e.signed_residual_eur), 2) AS mean_residual_eur\nFROM e JOIN f USING (city, snapshot_date, listing_id)\nWHERE e.city = 'venice' GROUP BY 1 ORDER BY 1",
+      "statement_id": "01f1de13-be21-10f4-96fa-e6f1a856f82a",
+      "rows": [
+        {
+          "distance_band": "1: 0-1 km",
+          "n": "3366",
+          "model_mae_eur": "142.89",
+          "mean_residual_eur": "-113.13"
+        },
+        {
+          "distance_band": "2: 1-2 km",
+          "n": "2382",
+          "model_mae_eur": "107.76",
+          "mean_residual_eur": "-88.21"
+        },
+        {
+          "distance_band": "3: 2-4 km",
+          "n": "373",
+          "model_mae_eur": "103.39",
+          "mean_residual_eur": "-72.48"
+        },
+        {
+          "distance_band": "4: 4-8 km",
+          "n": "171",
+          "model_mae_eur": "71.48",
+          "mean_residual_eur": "-35.68"
+        },
+        {
+          "distance_band": "5: 8+ km",
+          "n": "1852",
+          "model_mae_eur": "40.7",
+          "mean_residual_eur": "-2.03"
+        }
+      ]
+    },
+    "q6_largest_misses_venice": {
+      "sql": "WITH e AS (\n  SELECT * FROM workspace.airbnb_gold.predictions\n  WHERE model_version = 'price-v1'\n    AND actual_price_eur IS NOT NULL\n    AND ((city IN ('milan','florence') AND snapshot_date = DATE '2026-09-19' AND evaluation_split = 'test')\n      OR (city = 'venice' AND snapshot_date = DATE '2026-09-16' AND evaluation_split = 'unseen'\n          AND scoring_run_id = 'venice-2026-09-16-price-v1-score-v1-first-run'))\n)\n(SELECT 'underprediction' AS kind, listing_id, actual_price_eur, round(model_prediction_eur, 2) AS model_prediction_eur,\n        round(signed_residual_eur, 2) AS signed_residual_eur\n FROM e WHERE city = 'venice' ORDER BY signed_residual_eur ASC LIMIT 5)\nUNION ALL\n(SELECT 'overprediction', listing_id, actual_price_eur, round(model_prediction_eur, 2), round(signed_residual_eur, 2)\n FROM e WHERE city = 'venice' ORDER BY signed_residual_eur DESC LIMIT 5)",
+      "statement_id": "01f1de13-beda-19a1-bb37-5a2fccd7ea92",
+      "rows": [
+        {
+          "kind": "underprediction",
+          "listing_id": "1560209843287885749",
+          "actual_price_eur": "12047.0",
+          "model_prediction_eur": "370.82",
+          "signed_residual_eur": "-11676.18"
+        },
+        {
+          "kind": "underprediction",
+          "listing_id": "1648395065584291951",
+          "actual_price_eur": "7473.0",
+          "model_prediction_eur": "1079.2",
+          "signed_residual_eur": "-6393.8"
+        },
+        {
+          "kind": "underprediction",
+          "listing_id": "1642556995479157505",
+          "actual_price_eur": "5734.5",
+          "model_prediction_eur": "160.48",
+          "signed_residual_eur": "-5574.02"
+        },
+        {
+          "kind": "underprediction",
+          "listing_id": "1105544393883648175",
+          "actual_price_eur": "5477.07",
+          "model_prediction_eur": "306.71",
+          "signed_residual_eur": "-5170.36"
+        },
+        {
+          "kind": "underprediction",
+          "listing_id": "1184026459257008703",
+          "actual_price_eur": "5508.93",
+          "model_prediction_eur": "342.28",
+          "signed_residual_eur": "-5166.65"
+        },
+        {
+          "kind": "overprediction",
+          "listing_id": "1722428384412839314",
+          "actual_price_eur": "620.0",
+          "model_prediction_eur": "1305.66",
+          "signed_residual_eur": "685.66"
+        },
+        {
+          "kind": "overprediction",
+          "listing_id": "43251320",
+          "actual_price_eur": "171.47",
+          "model_prediction_eur": "845.77",
+          "signed_residual_eur": "674.3"
+        },
+        {
+          "kind": "overprediction",
+          "listing_id": "1703676690772241856",
+          "actual_price_eur": "731.33",
+          "model_prediction_eur": "1375.32",
+          "signed_residual_eur": "643.99"
+        },
+        {
+          "kind": "overprediction",
+          "listing_id": "1714460968216525852",
+          "actual_price_eur": "518.0",
+          "model_prediction_eur": "1089.8",
+          "signed_residual_eur": "571.8"
+        },
+        {
+          "kind": "overprediction",
+          "listing_id": "1772702468055124356",
+          "actual_price_eur": "194.0",
+          "model_prediction_eur": "735.25",
+          "signed_residual_eur": "541.25"
+        }
+      ]
+    },
+    "q7_guard_no_training_rows": {
+      "sql": "SELECT city, evaluation_split, count(*) AS n,\n       count(absolute_error_eur) AS rows_with_error\nFROM workspace.airbnb_gold.predictions WHERE model_version = 'price-v1'\nGROUP BY ALL ORDER BY 1, 2",
+      "statement_id": "01f1de13-bf99-1bcb-831b-09ac73744ee5",
+      "rows": [
+        {
+          "city": "florence",
+          "evaluation_split": "excluded",
+          "n": "1423",
+          "rows_with_error": "0"
+        },
+        {
+          "city": "florence",
+          "evaluation_split": "test",
+          "n": "2464",
+          "rows_with_error": "2464"
+        },
+        {
+          "city": "florence",
+          "evaluation_split": "train",
+          "n": "9684",
+          "rows_with_error": "9684"
+        },
+        {
+          "city": "milan",
+          "evaluation_split": "excluded",
+          "n": "3684",
+          "rows_with_error": "0"
+        },
+        {
+          "city": "milan",
+          "evaluation_split": "test",
+          "n": "4399",
+          "rows_with_error": "4399"
+        },
+        {
+          "city": "milan",
+          "evaluation_split": "train",
+          "n": "17255",
+          "rows_with_error": "17255"
+        },
+        {
+          "city": "venice",
+          "evaluation_split": "unseen",
+          "n": "8844",
+          "rows_with_error": "8144"
+        }
+      ]
+    },
+    "q8_bi_scorecard_check": {
+      "sql": "SELECT * FROM workspace.airbnb_bi.model_scorecard ORDER BY scope",
+      "statement_id": "01f1de13-c04d-169e-945e-182b1bbb409a",
+      "error": {
+        "error": {
+          "error_code": "BAD_REQUEST",
+          "message": "[INSUFFICIENT_PERMISSIONS] Insufficient privileges:\nPrincipal 'mykolaichuk.pn@ucu.edu.ua' does not have USE SCHEMA on Schema 'workspace.airbnb_bi'. SQLSTATE: 42501"
+        },
+        "sql_state": "42501",
+        "state": "FAILED"
+      }
+    }
+  }
+}

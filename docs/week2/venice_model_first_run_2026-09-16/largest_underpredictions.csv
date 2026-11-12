@@ -1,0 +1,11 @@
+listing_id,room_type,property_type,accommodates,bedrooms,dist_center_km,minimum_nights,actual_price_eur,model_pred,baseline_pred,residual,price_class
+1560209843287885749,Entire home/apt,Entire rental unit,5,2.0,0.71,2,12047.0,370.82,213.0,-11676.18,extreme_high
+1648395065584291951,Entire home/apt,Entire rental unit,10,5.0,0.67,2,7473.0,1079.2,501.0,-6393.8,extreme_high
+1642556995479157505,Entire home/apt,Entire rental unit,5,1.0,3.35,2,5734.5,160.48,213.0,-5574.02,extreme_high
+1105544393883648175,Entire home/apt,Entire condo,6,3.0,0.8,2,5477.07,306.71,271.1,-5170.36,extreme_high
+1184026459257008703,Entire home/apt,Entire rental unit,4,1.0,1.34,31,5508.93,342.28,185.09,-5166.65,extreme_high
+1747385255838470015,Private room,Room in hotel,2,1.0,0.13,1,5019.0,399.24,125.45,-4619.76,extreme_high
+51030242,Entire home/apt,Entire rental unit,16,6.0,1.25,1,4754.0,960.97,778.5,-3793.03,extreme_high
+805026065623230078,Entire home/apt,Entire vacation home,16,11.0,1.16,2,4300.0,1060.64,778.5,-3239.36,high_tail
+33467054,Entire home/apt,Entire rental unit,4,1.0,0.71,2,3449.5,216.47,185.09,-3233.03,high_tail
+1649137290849297199,Entire home/apt,Entire rental unit,8,4.0,0.66,2,3960.0,869.38,377.435,-3090.62,stale_high

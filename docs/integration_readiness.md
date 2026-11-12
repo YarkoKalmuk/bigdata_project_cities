@@ -1,5 +1,16 @@
 # Integrated A/B system: review before the Week 1 freeze
 
+> Historical setup/integration instructions below. Current delivery status is in
+> [README](../README.md), [reproducibility](reproducibility.md) and the
+> [Week 2 engineering handoff](week2/handoff_dashboard_genie_engineering.md).
+> M1 and the first Venice ETL/model runs are complete. Do not rerun setup,
+> registration, ETL or training to reproduce report numbers. Contracts below remain
+> useful; earlier pending-status statements do not describe the current release.
+
+Historical integration procedure. PR #3 has been merged into main, and live A/B
+verification has now passed. See [the M1 freeze record](week1_freeze.md) for the
+current release state, actual Job identity and executed verification evidence.
+
 Status: **integration candidate, not frozen**. No freeze tag, workspace change, model retraining or unseen-city run was performed by this integration.
 
 The latest requirement audit and proposed PR merge order are in

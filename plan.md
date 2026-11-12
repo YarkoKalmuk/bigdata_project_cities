@@ -6,7 +6,7 @@ Build the Northern Italy Airbnb analytics project on Databricks Free Edition, us
 
 Sources: [README.md](README.md) and [assignment instructions](group_assignment_2.pdf).
 
-Implementation is under way on working branches. The responsibilities and milestone gates below remain the agreed plan.
+The sections below retain the agreed responsibilities and original schedule. For actual completion and remaining work, use the dated task board at the end; historical instructions are not approval to rerun completed experiments.
 
 - Use detailed `listings.csv.gz` snapshots. Verify Milan and Florence's recorded dates, and record Venice's snapshot in Week 2.
 - Do not download or explore Venice before Week 1 is complete.
@@ -46,7 +46,7 @@ Maksym's substantial Week 1 EDA work balances his dashboard and Genie work in We
 3. Implement the required baseline: training median price by room type and accommodates. For unseen combinations, fall back to room-type median, then overall training median.
 4. Train an interpretable regression model and compare it with the baseline. Handle unseen categories explicitly.
 5. Report held-out MAE in EUR for Milan, Florence and both together.
-6. Write predictions for every eligible listing to gold. Preserve excluded listings with a reason and no prediction.
+6. Write versioned predictions and explicit status/exclusion reasons to Gold. The final contract retains all listings, including unpriced rows predicted without evaluation error; see `airbnb/scoring.py`.
 7. Label training, held-out and unseen-city rows so dashboard evaluation charts use the correct population.
 
 **Handoff:** Publish model artifacts, preprocessing, baseline lookup, feature list, evaluation results and a reproducible scoring entry point.
@@ -99,10 +99,50 @@ For Venice:
 
 Defaults: use relative working days because no deadline was supplied; keep all three city choices from the README; use no optional reviews/calendar datasets unless the required work is complete.
 
-## Yaropolk's current engineering status
+## Actual task board — 2026-11-12
 
-- Feature 4 Job: three reported successful runs (Milan, Florence, Milan repeat). Post-repeat silver rows/distinct IDs: 25,338/25,338 and 13,571/13,571. Evidence: [run log](docs/pipeline_run_log.md).
-- Feature 5: configuration-driven inputs implemented; Milan/Florence success recorded. User reports completing all runs, but repeat/external-manifest IDs and resolved Git SHA remain TODOs in the log.
-- Feature 6: engineering/EDA and Nazar's model candidate integrated on a review branch; 100 local tests pass after repository corrections. Frozen scorer input resolution now matches ETL. Read-only workspace reconciliation and integrated scorer acceptance remain pending; follow [integration readiness](docs/integration_readiness.md).
-- Shared-data access, integration into main and the joint code/model freeze must be confirmed with the team. Venice remains unseen. Week 2 work is not marked complete.
-- Repository review: existing city-input and integration work is retained; the Job definition is commit-pinned and shared-workspace reference runs are recorded. See [requirement audit and proposed merge order](docs/week1_repository_review.md). No merge, freeze, live Job change or unseen-city access is approved by this status update.
+Statuses refer to evidence, not merely code existence. PR #4 and the documentation
+from PR #5 are now integrated into main with user approval. The original review
+record remains historical. No experiment was rerun and PR #1/#2 remain open.
+This board supersedes the stale branch plan in PR #1 and retains its task IDs.
+
+| ID | Deliverable / owner | Actual status and evidence / next action |
+|---|---|---|
+| SETUP-01 | City claim, team admin, submission deadline / team | Confirmation not present in reviewed repository; team must confirm Teams claim, admin and deadline |
+| SETUP-02 | Shared workspace and repository / Yaropolk | Complete for recorded ETL/model runs; final BI viewer access still requires Maksym's acceptance |
+| EDA-01 | A/B EDA / Maksym | Complete: notebook, `docs/eda_run.html`, [EDA handoff](docs/eda_handoff.md) |
+| EDA-02, MODEL-01 | Leakage and feature allowlist / Maksym, Nazar | Complete: [feature review](docs/model_feature_review.md), [selection](docs/model_selection.md); target-derived fields excluded |
+| ARCH-01 | Architecture / Yaropolk | Complete, integrated: [description + PNG/SVG](docs/architecture.md) reflect frozen ETL, separate scorer and pending Venice BI acceptance |
+| PIPE-01 | Parameterised Bronze / Yaropolk | Complete: A/B freeze evidence and first Venice 8,844 rows |
+| PIPE-02 | Silver typing and quality / Yaropolk | Complete: retained counts/unique keys and explicit flags; [Venice first-run report](docs/week2/venice_first_run_2026-09-16/REPORT.md) |
+| PIPE-03 | Gold metrics/features / Yaropolk | Complete: Venice 8,844 features; 1/4/60 metric rows; [joint report](docs/week2/transfer_report.md) |
+| PIPE-04 | Immutable ETL Job / Yaropolk | Complete: Job 816607442908043; source f408ac01ffdd025fab6df220c8f89b24d3d4fda6 |
+| PIPE-05 | Open city configuration / Yaropolk | Complete: external Venice manifest, unchanged frozen code; no copied city notebooks |
+| PIPE-06 | A/B reproducibility/idempotence / Yaropolk | Complete per [M1 acceptance](docs/week1_freeze.md) and [run log](docs/pipeline_run_log.md); not rerun for this review |
+| MODEL-02, MODEL-03 | Persisted split and training-only baseline / Nazar | Complete: frozen split and 44-row baseline lookup; [baseline evidence](docs/model_baseline_run.md) |
+| MODEL-04, MODEL-05 | Selection and held-out MAE / Nazar | Complete: [selection](docs/model_selection.md), [freeze](docs/week1_freeze.md); combined baseline/model MAE 95.47/75.88 EUR, n=6,863 |
+| MODEL-06, MODEL-07 | Versioned predictions and frozen scorer/artifact / Nazar | Complete: price-v1 / score-v1; [model evidence](docs/week2/venice_model_first_run_2026-09-16/REPORT.md), no retraining |
+| FREEZE-01 | M1 freeze / team, Yaropolk records | Complete: published M1-freeze at 7f76cbe6936e76fa3a7685ac90b40c1ce1c253df; tag unchanged |
+| CITYC-01 | Venice input after M1 / Yaropolk | Complete: 2026-09-16 detailed gzip + separate runtime manifest, original file hash preserved |
+| CITYC-02 | First unchanged Venice ETL / Yaropolk | Complete: run 782550938914199, four tasks successful; 19 protected fingerprints unchanged |
+| CITYC-03 | First frozen-model Venice score / Nazar | Complete, integrated: run 65362888524059; 8,844 predictions / 8,144 evaluated; baseline/model 142.46/106.07 EUR |
+| CITYC-04 | Distribution shifts / Maksym, with Nazar and Yaropolk evidence | Quantitative evidence complete in [joint report](docs/week2/transfer_report.md); Maksym's final visual interpretation/demo pending |
+| FIX-01 | Pipeline fix / Yaropolk | **None / not required**; first ETL succeeded without intervention. No post-fix run or metric |
+| FIX-02 | Model change / Nazar | **None / not required**; frozen artifact handled Venice. No adaptation or post-change model |
+| REPORT-01 | Joint transfer report / Yaropolk + Nazar | Complete, integrated: [report](docs/week2/transfer_report.md), separate first-run evidence preserved |
+| DASH-01, DASH-02 | Overview / comparison pages / Maksym | A/B deployment/assets reported on maksym/dashboard-genie; Venice refresh, reconciliation and approved BI merge pending |
+| DASH-03 | Model transfer page / Maksym + Nazar | Partial: reference SQL/model handoff ready; Venice population/run filters, neighbourhood enrichment and distance-band alignment pending acceptance |
+| GENIE-01, GENIE-02 | Space and verified example answers / Maksym | A/B deployment reported on BI branch; Venice questions/SQL/actual answers and viewer access checks pending |
+| PRES-01 | Presentation and rehearsal / all; Maksym assembles | Engineering [slide points + diagram](docs/week2/handoff_dashboard_genie_engineering.md) and [model outline](docs/week2/handoff_model_slides.md) ready; final deck/PDF, demo and rehearsal pending |
+| REPO-01 | Integration and reproducibility / Yaropolk | PR #4 and documentation from PR #5 integrated into main; PR #1/#2 disposition pending; BI assets and presentation not yet integrated |
+| CONTRIB-01 | Contribution record / all | Complete, integrated: README records delivered work and remaining ownership |
+| SUBMIT-01 | Final repository submission / team admin | Pending approved integration, final BI/deck/access checks and submission confirmation |
+
+### Immediate handoff and safe integration
+
+Maksym can proceed now; he does not need another ETL/model run. Use
+[engineering handoff](docs/week2/handoff_dashboard_genie_engineering.md) and
+[Nazar's SQL/model handoff](docs/week2/handoff_dashboard_genie_model.md).
+The [integration review](docs/week2/integration_review.md) records the original
+merge recommendation and completed main integration. PR #2 can be closed as
+redundant and PR #1 as superseded only after approval. Final BI/presentation review follows.

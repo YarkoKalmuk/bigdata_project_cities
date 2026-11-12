@@ -1,0 +1,91 @@
+{
+  "review_date": "2026-11-12",
+  "scope": "repository/offline only; preserved runtime evidence, not a new live audit",
+  "source_refs": {
+    "main": "bb5b8571c8e53284287251b23a272fed0b8e36d6",
+    "pr1": "9510d714961269b1971781cc9d4010c345b95722",
+    "pr2": "f8e0eba4f5d94b1635ea8ffd5a3fdb67d84badf0",
+    "pr4": "582aa9559f7a1633c8c999ba936c91c6bb2539ea",
+    "bi_branch": "397c34e38d067a7f716d6ea425baf336940b7899"
+  },
+  "freeze": {
+    "tag": "M1-freeze",
+    "tag_object": "ab035707b6ac6470f45fccb79ee9ebb3f5e037dc",
+    "commit": "7f76cbe6936e76fa3a7685ac90b40c1ce1c253df",
+    "unchanged": true,
+    "executable_job_source": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+    "unchanged_paths": [
+      "airbnb",
+      "notebooks",
+      "jobs",
+      "config",
+      "tests"
+    ],
+    "runtime_unchanged_since_pr4": true,
+    "post_freeze_addition": "separate Venice runtime manifest only"
+  },
+  "evidence_indexes": {
+    "venice_first_run_2026-09-16": {
+      "indexed_files": 25,
+      "mismatches": [],
+      "working_tree_matches_committed_bytes": true
+    },
+    "venice_model_first_run_2026-09-16": {
+      "indexed_files": 34,
+      "mismatches": [],
+      "working_tree_matches_committed_bytes": true
+    }
+  },
+  "indexed_files_verified": 59,
+  "metrics": {
+    "population": {
+      "n": 8144,
+      "rows_total": 8844,
+      "rows_unpriced_excluded": 700
+    },
+    "venice_model_mae_eur": 106.06768526451864,
+    "venice_baseline_mae_eur": 142.45822016208285,
+    "improvement_pct": 25.544706971742745,
+    "ab_model_mae_eur": 75.8844478189808,
+    "ab_baseline_mae_eur": 95.4655238234008,
+    "transfer_gap_pct": 39.7752613520213
+  },
+  "tests": {
+    "command": "SPARK_LOCAL_IP=127.0.0.1 python -m unittest discover -s tests -q",
+    "passed": 100,
+    "failed": 0,
+    "runtime_seconds": 25.968,
+    "dependencies": "requirements-test.txt",
+    "environment": "Python 3.12 / Java 21",
+    "warnings": "Spark socket ResourceWarnings; suite OK"
+  },
+  "documentation_checks": {
+    "broken_local_links": [],
+    "svg_xml_valid": true,
+    "png_visually_reviewed": true,
+    "git_diff_check": true
+  },
+  "pr2_already_ancestor_of_main": true,
+  "fix_01": "none / not required",
+  "fix_02": "none / not required",
+  "actions_not_performed": [
+    "Databricks live audit",
+    "Venice execution",
+    "production model retraining",
+    "artifact writes",
+    "frozen pipeline changes",
+    "M1 tag changes",
+    "PR merges",
+    "PR closures"
+  ],
+  "pending": [
+    "approved PR4 integration",
+    "approved stacked documentation follow-up integration",
+    "approved disposition of PR1 and PR2",
+    "Venice BI and Genie acceptance",
+    "BI repository integration",
+    "final presentation and rehearsal",
+    "viewer access verification",
+    "team-admin submission"
+  ]
+}

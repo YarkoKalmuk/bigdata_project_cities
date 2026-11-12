@@ -1,0 +1,18 @@
+[
+  {
+    "table": "airbnb_bronze.listings",
+    "rows": 0
+  },
+  {
+    "table": "airbnb_silver.listings",
+    "rows": 0
+  },
+  {
+    "table": "airbnb_gold.model_features",
+    "rows": 0
+  },
+  {
+    "table": "airbnb_gold.predictions",
+    "rows": 0
+  }
+]

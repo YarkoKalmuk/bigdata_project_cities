@@ -1,0 +1,47 @@
+{
+  "run_at_utc": "2026-11-11T20:40:00Z",
+  "tested_source": "nazar/week2-venice-model-first-run @ origin/main bb5b857; all 21 frozen executable files byte-identical to M1-freeze 7f76cbe (and to ETL Job source f408ac0)",
+  "environment": "Windows 11, Python 3.12.14, OpenJDK 17.0.20.1, PySpark 4.0.1, scikit-learn 1.7.2, numpy 2.3.4, pandas 2.3.3, joblib 1.5.2, scipy 1.16.3 (requirements-test.txt)",
+  "relevant_suites": {
+    "command": "python -m unittest discover -s tests -p <module>.py",
+    "test_scoring": {"ran": 30, "passed": 30},
+    "test_price_model": {"ran": 14, "passed": 14},
+    "test_model": {"ran": 35, "passed": 35},
+    "test_inputs": {"ran": 9, "passed": 9},
+    "test_job_definition": {"ran": 3, "passed": 3},
+    "total": {"ran": 91, "passed": 91, "failed": 0, "errors": 0, "skipped": 0}
+  },
+  "covers": [
+    "artifact loading and SHA-256 refusal (test_hash_mismatch_is_refused, test_load_reproduces_predictions)",
+    "frozen feature/spec/hyperparameter contract (test_matching_contract_passes, test_feature_list_mismatch_is_refused, test_spec_mismatch_is_refused, test_missing_feature_column_is_refused)",
+    "frozen reference data and SQL fingerprint format (test_reference_data_must_be_frozen, test_fingerprint_text_format_matches_sql)",
+    "unknown categories in an unseen city (test_unknown_categories_in_an_unseen_city)",
+    "one row per listing, unpriced rows kept with null errors, residual direction (test_schema_and_one_row_per_listing, test_residual_direction)",
+    "no fitting during scoring (test_scoring_never_fits: fit methods patched to fail)",
+    "official metric reproduction (test_official_metrics_check)",
+    "no overwrite of existing model_version rows (test_conflicting_content_is_refused, test_identical_rerun_is_a_noop, test_first_write_appends)",
+    "scorer reads the same external runtime manifest as the ETL (test_frozen_scorer_uses_the_same_external_manifest)"
+  ],
+  "full_suite": {
+    "command": "SPARK_LOCAL_IP=127.0.0.1 python -m unittest discover -s tests -v",
+    "ran": 100, "passed": 95, "errors": 5, "failed": 0, "seconds": 27.3,
+    "errors_list": [
+      "test_eda_classification_gold_populations_and_feature_safety",
+      "test_eda_nulls_bathrooms_dates_and_location",
+      "test_nonfinite_predictors_are_not_written_as_numbers",
+      "test_prices_quality_and_row_preservation",
+      "test_synthetic_city_runs_through_silver_and_gold"
+    ],
+    "error_cause": "org.apache.spark.SparkException: Python worker exited unexpectedly (crashed) / java.io.EOFException in local Spark Python workers on this Windows + Java 17 machine. All five are silver/gold/EDA Spark tests, not scoring or model tests. Not investigated further and not fixed (no code change permitted). The M1 freeze record shows 100/100 on Linux, Java 21.",
+    "note": "Two test_inputs tests error only when invoked as 'python -m unittest tests.test_inputs' (tests/ not on sys.path); they pass under the documented discover command."
+  },
+  "live_checks_in_databricks": [
+    "notebook 08 at 7f76cbe re-verified artifact bytes/SHA-256, MLflow copy SHA-256, model_artifacts/model_selection rows, selection_record.json hash, code spec hash, feature list, hyperparameters, random_state and scikit-learn 1.7.2 before scoring",
+    "notebook 08 re-verified baseline lookup (44 rows, fingerprint) and persisted A/B split (fingerprint, counts) before scoring",
+    "in-memory and stored reconciliation: 8,844 rows, 0 duplicates, 0 missing, 0 extra, 0 baseline nulls",
+    "independent SQL reproduction of every baseline prediction and fallback level from the frozen lookup (0 mismatches)",
+    "independent SQL reproduction of the A/B official and supplementary MAE from stored test rows",
+    "15 protected full-row fingerprints, artifact/selection/raw-file hashes and model table versions identical before and after scoring",
+    "MLflow experiment 3472336104835299 holds only the frozen run; no run started at or after scoring submission"
+  ]
+}

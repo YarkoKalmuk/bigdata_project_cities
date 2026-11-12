@@ -1,0 +1,243 @@
+{
+  "job_id": 816607442908043,
+  "run_id": 782550938914199,
+  "creator_user_name": "kalmuk.pn@ucu.edu.ua",
+  "number_in_job": 782550938914199,
+  "original_attempt_run_id": 782550938914199,
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "job_parameters": [
+    {
+      "name": "catalog",
+      "default": "workspace",
+      "value": "workspace"
+    },
+    {
+      "name": "city",
+      "default": "milan",
+      "value": "venice"
+    },
+    {
+      "name": "snapshot_date",
+      "default": "2026-09-19",
+      "value": "2026-09-16"
+    },
+    {
+      "name": "source_path",
+      "default": "",
+      "value": ""
+    },
+    {
+      "name": "source_url",
+      "default": "",
+      "value": ""
+    },
+    {
+      "name": "sources_config_path",
+      "default": "",
+      "value": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json"
+    }
+  ],
+  "start_time": 1794427583502,
+  "setup_duration": 0,
+  "execution_duration": 0,
+  "cleanup_duration": 0,
+  "end_time": 1794427734466,
+  "run_duration": 150964,
+  "trigger": "ONE_TIME",
+  "run_name": "airbnb-cities-etl",
+  "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/782550938914199",
+  "run_type": "JOB_RUN",
+  "tasks": [
+    {
+      "run_id": 1105744524605448,
+      "task_key": "validate",
+      "depends_on": [
+        {
+          "task_key": "gold"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/04_validate_pipeline.py",
+        "base_parameters": {
+          "job_id": "{{job.id}}",
+          "job_run_id": "{{job.run_id}}"
+        },
+        "source": "GIT"
+      },
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/1105744524605448",
+      "start_time": 1794427715104,
+      "setup_duration": 2000,
+      "execution_duration": 16000,
+      "cleanup_duration": 1000,
+      "end_time": 1794427734132,
+      "attempt_number": 0,
+      "git_source": {
+        "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+        "git_provider": "gitHub",
+        "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+        "git_snapshot": {
+          "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+        }
+      },
+      "status": {
+        "state": "TERMINATED",
+        "termination_details": {
+          "code": "SUCCESS",
+          "type": "SUCCESS",
+          "message": ""
+        }
+      },
+      "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+    },
+    {
+      "run_id": 307763021962734,
+      "task_key": "bronze",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/01_ingest_bronze.py",
+        "source": "GIT"
+      },
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/307763021962734",
+      "start_time": 1794427583529,
+      "setup_duration": 4000,
+      "execution_duration": 57000,
+      "cleanup_duration": 0,
+      "end_time": 1794427645452,
+      "attempt_number": 0,
+      "git_source": {
+        "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+        "git_provider": "gitHub",
+        "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+        "git_snapshot": {
+          "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+        }
+      },
+      "status": {
+        "state": "TERMINATED",
+        "termination_details": {
+          "code": "SUCCESS",
+          "type": "SUCCESS",
+          "message": ""
+        }
+      },
+      "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+    },
+    {
+      "run_id": 856540313555055,
+      "task_key": "silver",
+      "depends_on": [
+        {
+          "task_key": "bronze"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/02_prepare_silver.py",
+        "source": "GIT"
+      },
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/856540313555055",
+      "start_time": 1794427645919,
+      "setup_duration": 1000,
+      "execution_duration": 45000,
+      "cleanup_duration": 0,
+      "end_time": 1794427692232,
+      "attempt_number": 0,
+      "git_source": {
+        "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+        "git_provider": "gitHub",
+        "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+        "git_snapshot": {
+          "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+        }
+      },
+      "status": {
+        "state": "TERMINATED",
+        "termination_details": {
+          "code": "SUCCESS",
+          "type": "SUCCESS",
+          "message": ""
+        }
+      },
+      "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+    },
+    {
+      "run_id": 134411079440636,
+      "task_key": "gold",
+      "depends_on": [
+        {
+          "task_key": "silver"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/03_build_gold.py",
+        "source": "GIT"
+      },
+      "state": {
+        "life_cycle_state": "TERMINATED",
+        "result_state": "SUCCESS",
+        "state_message": "",
+        "user_cancelled_or_timedout": false
+      },
+      "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/134411079440636",
+      "start_time": 1794427692550,
+      "setup_duration": 1000,
+      "execution_duration": 21000,
+      "cleanup_duration": 0,
+      "end_time": 1794427714770,
+      "attempt_number": 0,
+      "git_source": {
+        "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+        "git_provider": "gitHub",
+        "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+        "git_snapshot": {
+          "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+        }
+      },
+      "status": {
+        "state": "TERMINATED",
+        "termination_details": {
+          "code": "SUCCESS",
+          "type": "SUCCESS",
+          "message": ""
+        }
+      },
+      "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+    }
+  ],
+  "format": "MULTI_TASK",
+  "status": {
+    "state": "TERMINATED",
+    "termination_details": {
+      "code": "SUCCESS",
+      "type": "SUCCESS",
+      "message": ""
+    }
+  },
+  "job_run_id": 782550938914199,
+  "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+}

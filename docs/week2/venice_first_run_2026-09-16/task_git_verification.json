@@ -1,0 +1,42 @@
+[
+  {
+    "task_key": "validate",
+    "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    }
+  },
+  {
+    "task_key": "bronze",
+    "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    }
+  },
+  {
+    "task_key": "silver",
+    "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    }
+  },
+  {
+    "task_key": "gold",
+    "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    }
+  }
+]

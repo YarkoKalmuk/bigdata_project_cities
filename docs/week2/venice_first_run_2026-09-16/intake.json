@@ -1,0 +1,17 @@
+{
+  "downloaded_at_utc": "2026-11-11T20:04:47.692974+00:00",
+  "source_listing": "https://insideairbnb.com/get-the-data/",
+  "source_url": "https://data.insideairbnb.com/italy/veneto/venice/2026-09-16/data/listings.csv.gz",
+  "snapshot_date": "2026-09-16",
+  "http_status": 200,
+  "content_type": "application/x-gzip",
+  "raw_bytes": 5465156,
+  "raw_sha256": "dd14efeb23677a87e13f479802cd581b5e16191762a73e6b1373e263f79bf982",
+  "local_ignored_path": "data/venice/2026-09-16/listings.csv.gz",
+  "raw_volume_path": "/Volumes/workspace/airbnb_bronze/raw_files/venice/2026-09-16/listings.csv.gz",
+  "manifest_volume_path": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json",
+  "manifest_file_sha256": "1abbb22ee73322bbf56a008d1fac2a849024004eb859f9864d45f82c0035dec6",
+  "manifest_canonical_sha256": "84d3e54441a104cb6640b20e8bef56fdbdc97f26ee246608bd60f42f647fee02",
+  "centre_reference": "https://www.wikidata.org/wiki/Q217527",
+  "dataset_opened_or_profiled_before_etl": false
+}

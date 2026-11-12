@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "job_id": 816607442908043,
+    "run_id": 856540313555055,
+    "creator_user_name": "kalmuk.pn@ucu.edu.ua",
+    "number_in_job": 856540313555055,
+    "original_attempt_run_id": 856540313555055,
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    },
+    "job_parameters": [
+      {
+        "name": "catalog",
+        "default": "workspace",
+        "value": "workspace"
+      },
+      {
+        "name": "city",
+        "default": "milan",
+        "value": "venice"
+      },
+      {
+        "name": "snapshot_date",
+        "default": "2026-09-19",
+        "value": "2026-09-16"
+      },
+      {
+        "name": "source_path",
+        "default": "",
+        "value": ""
+      },
+      {
+        "name": "source_url",
+        "default": "",
+        "value": ""
+      },
+      {
+        "name": "sources_config_path",
+        "default": "",
+        "value": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json"
+      }
+    ],
+    "start_time": 1794427645919,
+    "setup_duration": 1000,
+    "execution_duration": 45000,
+    "cleanup_duration": 0,
+    "end_time": 1794427692232,
+    "trigger": "ONE_TIME",
+    "run_name": "silver",
+    "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/856540313555055",
+    "run_type": "JOB_RUN",
+    "parent_run_id": 782550938914199,
+    "tasks": [
+      {
+        "run_id": 856540313555055,
+        "task_key": "silver",
+        "notebook_task": {
+          "notebook_path": "notebooks/02_prepare_silver.py",
+          "source": "GIT"
+        },
+        "state": {
+          "life_cycle_state": "TERMINATED",
+          "result_state": "SUCCESS",
+          "state_message": "",
+          "user_cancelled_or_timedout": false
+        },
+        "run_page_url": "https://dbc-1766f78b-980d.cloud.databricks.com/?o=7474659920821008#job/816607442908043/run/856540313555055",
+        "start_time": 1794427645919,
+        "setup_duration": 1000,
+        "execution_duration": 45000,
+        "cleanup_duration": 0,
+        "end_time": 1794427692232,
+        "attempt_number": 0,
+        "git_source": {
+          "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git",
+          "git_provider": "gitHub",
+          "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+          "git_snapshot": {
+            "used_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6"
+          }
+        },
+        "status": {
+          "state": "TERMINATED",
+          "termination_details": {
+            "code": "SUCCESS",
+            "type": "SUCCESS",
+            "message": ""
+          }
+        },
+        "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+      }
+    ],
+    "task_key": "silver",
+    "format": "MULTI_TASK",
+    "status": {
+      "state": "TERMINATED",
+      "termination_details": {
+        "code": "SUCCESS",
+        "type": "SUCCESS",
+        "message": ""
+      }
+    },
+    "job_run_id": 782550938914199,
+    "effective_performance_target": "PERFORMANCE_OPTIMIZED"
+  },
+  "notebook_output": {}
+}

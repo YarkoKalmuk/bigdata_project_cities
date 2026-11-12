@@ -1,0 +1,13 @@
+{
+  "job_id": "816607442908043",
+  "job_run_id": "782550938914199",
+  "city": "venice",
+  "snapshot_date": "2026-09-16",
+  "bronze_rows": 8844,
+  "silver_rows": 8844,
+  "feature_rows": 8844,
+  "analytical_rows": 8101,
+  "validated_at": "2026-11-11T20:08:50.176Z",
+  "sources_config_path": "/Volumes/workspace/airbnb_bronze/raw_files/config/venice-2026-09-16-first-run.json",
+  "sources_config_sha256": "84d3e54441a104cb6640b20e8bef56fdbdc97f26ee246608bd60f42f647fee02"
+}

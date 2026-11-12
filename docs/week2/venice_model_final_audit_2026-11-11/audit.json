@@ -1,0 +1,293 @@
+{
+  "purpose": "Read-only re-verification of the first unchanged Venice runs before writing the final model transfer report. No Databricks write, scoring, training or job submission was made.",
+  "checked_at_utc": "2026-11-11",
+  "checked_by": "Mykolaichuk Nazar (Databricks CLI profile, read-only SQL and API GETs)",
+  "repository_commit_checked": "7ec51d6",
+  "evidence_hashes": {
+    "basis": "SHA-256 of committed (LF) bytes at 7ec51d6 vs each evidence_index.json",
+    "directories": {
+      "docs/week2/venice_first_run_2026-09-16": {
+        "files_checked": 25,
+        "all_match": true,
+        "mismatches": []
+      },
+      "docs/week2/venice_model_first_run_2026-09-16": {
+        "files_checked": 34,
+        "all_match": true,
+        "mismatches": []
+      }
+    }
+  },
+  "jobs_api": {
+    "782550938914199": "exists; job 816607442908043 airbnb-cities-etl; TERMINATED/SUCCESS",
+    "7825509389114199": "Error: Run 7825509389114199 does not exist.",
+    "65362888524059": "exists; job 794227027925555 airbnb-venice-score-v1-first-run-M1-freeze; TERMINATED/SUCCESS",
+    "latest_workspace_job_run": "65362888524059 (no job run of any kind started after the Venice scoring run)"
+  },
+  "mlflow": {
+    "experiment_id": "3472336104835299",
+    "runs": 1,
+    "only_run": "a08250c6bcb5415c9591c6427e3d6bf7 (frozen training run)"
+  },
+  "unity_catalog_registered_models_in_airbnb_gold": 0,
+  "protected_fingerprints": {
+    "objects": 15,
+    "all_equal_to_recorded_protected_after": true,
+    "statement_ids": {
+      "airbnb_bronze.listings": "01f1de13-1f57-1eac-89c1-ee6e3db8a171",
+      "airbnb_bronze.ingestion_manifest": "01f1de13-20b4-1596-ac5f-35a71664807e",
+      "airbnb_silver.listings": "01f1de13-2188-1d13-ad0e-4989124c4c1b",
+      "airbnb_gold.city_metrics": "01f1de13-226f-1429-b727-8379c838c3c9",
+      "airbnb_gold.room_type_metrics": "01f1de13-2344-1acc-8914-9cebe7ad69b8",
+      "airbnb_gold.neighbourhood_metrics": "01f1de13-241f-1ca6-a020-e3ed219518fb",
+      "airbnb_gold.model_features": "01f1de13-24fb-1a6f-9d17-782431c62f72",
+      "airbnb_gold.pipeline_validations": "01f1de13-25d2-1fb3-9412-51c89c86c787",
+      "airbnb_gold.predictions": "01f1de13-26a1-10aa-a51f-01af2f6224b0",
+      "airbnb_gold.model_split": "01f1de13-2774-1381-9618-c72dfd7bcf02",
+      "airbnb_gold.baseline_lookup": "01f1de13-28b9-19eb-9790-d81410f541b1",
+      "airbnb_gold.model_selection": "01f1de13-2984-16f0-aca5-197d28d9bfda",
+      "airbnb_gold.model_candidate_metrics": "01f1de13-2a5b-16be-917f-bcdb403e42af",
+      "airbnb_gold.model_artifacts": "01f1de13-2b26-146a-92a5-879f7dd7a894",
+      "airbnb_gold.model_evaluation": "01f1de13-2bec-1a6d-b90d-525629d3ea43"
+    }
+  },
+  "latest_table_versions": {
+    "model_features": {
+      "version": "5",
+      "operation": "WRITE",
+      "timestamp": "2026-11-11T20:08:31.000Z",
+      "statement_id": "01f1de13-2cc8-1f02-b0b3-12c565ea71ca"
+    },
+    "model_split": {
+      "version": "0",
+      "operation": "CREATE TABLE AS SELECT",
+      "timestamp": "2026-11-11T16:31:35.000Z",
+      "statement_id": "01f1de13-2e0d-1472-a7e5-2907b840c411"
+    },
+    "baseline_lookup": {
+      "version": "0",
+      "operation": "CREATE TABLE AS SELECT",
+      "timestamp": "2026-11-11T16:31:44.000Z",
+      "statement_id": "01f1de13-2f3c-1757-b918-da82c342ea50"
+    },
+    "model_artifacts": {
+      "version": "0",
+      "operation": "CREATE TABLE AS SELECT",
+      "timestamp": "2026-11-11T16:52:51.000Z",
+      "statement_id": "01f1de13-3076-1dec-a034-c66bc1ebf797"
+    },
+    "model_selection": {
+      "version": "0",
+      "operation": "CREATE TABLE AS SELECT",
+      "timestamp": "2026-11-11T16:50:49.000Z",
+      "statement_id": "01f1de13-31a7-1c27-a506-ce65832e470f"
+    },
+    "model_candidate_metrics": {
+      "version": "0",
+      "operation": "CREATE TABLE AS SELECT",
+      "timestamp": "2026-11-11T16:50:52.000Z",
+      "statement_id": "01f1de13-32d2-1c63-859b-4c865a955bee"
+    },
+    "model_evaluation": {
+      "version": "0",
+      "operation": "CREATE TABLE AS SELECT",
+      "timestamp": "2026-11-11T16:52:42.000Z",
+      "statement_id": "01f1de13-3402-1953-bd0b-0b25ab059382"
+    },
+    "predictions": {
+      "version": "3",
+      "operation": "WRITE",
+      "timestamp": "2026-11-11T20:46:33.000Z",
+      "statement_id": "01f1de13-352c-108e-95af-388f545bc8da"
+    },
+    "pipeline_validations": {
+      "version": "5",
+      "operation": "WRITE",
+      "timestamp": "2026-11-11T20:08:52.000Z",
+      "statement_id": "01f1de13-366b-1d3b-bd97-da9763080abd"
+    }
+  },
+  "venice_scoring_runs_in_predictions": {
+    "statement_id": "01f1de13-3a97-139c-9945-ac85b05e7e35",
+    "rows": [
+      {
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run",
+        "n": "8844",
+        "first_at": "2026-11-11T20:45:38.000Z",
+        "last_at": "2026-11-11T20:45:38.000Z"
+      }
+    ]
+  },
+  "predictions_scope": {
+    "statement_id": "01f1de13-37a9-19c8-882d-939c23959aba",
+    "rows": [
+      {
+        "city": "florence",
+        "snapshot_date": "2026-09-19",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "772231092119601",
+        "evaluation_split": "excluded",
+        "n": "1423"
+      },
+      {
+        "city": "florence",
+        "snapshot_date": "2026-09-19",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "772231092119601",
+        "evaluation_split": "test",
+        "n": "2464"
+      },
+      {
+        "city": "florence",
+        "snapshot_date": "2026-09-19",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "772231092119601",
+        "evaluation_split": "train",
+        "n": "9684"
+      },
+      {
+        "city": "milan",
+        "snapshot_date": "2026-09-19",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "772231092119601",
+        "evaluation_split": "excluded",
+        "n": "3684"
+      },
+      {
+        "city": "milan",
+        "snapshot_date": "2026-09-19",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "772231092119601",
+        "evaluation_split": "test",
+        "n": "4399"
+      },
+      {
+        "city": "milan",
+        "snapshot_date": "2026-09-19",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "772231092119601",
+        "evaluation_split": "train",
+        "n": "17255"
+      },
+      {
+        "city": "venice",
+        "snapshot_date": "2026-09-16",
+        "model_version": "price-v1",
+        "scoring_version": "score-v1",
+        "scoring_run_id": "venice-2026-09-16-price-v1-score-v1-first-run",
+        "evaluation_split": "unseen",
+        "n": "8844"
+      }
+    ]
+  },
+  "model_artifacts": {
+    "statement_id": "01f1de13-39d8-1c6b-895a-c9ed29365a5f",
+    "rows": [
+      {
+        "model_version": "price-v1",
+        "artifact_path": "/Volumes/workspace/airbnb_gold/model_artifacts/price-v1/model.joblib",
+        "artifact_sha256": "c0416cde7f652342ce5217a936a6aa0a60d2476cc059c7e970b0c8001640fb2c",
+        "selected_candidate": "hgb_leaves_31_iter_400",
+        "selected_family": "hgb_log",
+        "selected_params_json": "{\"l2_regularization\":1.0,\"learning_rate\":0.05,\"max_iter\":400,\"max_leaf_nodes\":31,\"min_samples_leaf\":40}",
+        "spec_sha256": "acd5e6e0e6a0badec0d34b4d2266c6485bba6135c679d92169db8a419992ea99",
+        "selection_record_sha256": "9122ca565f036895a0b41fff61f1ac39bfa5066ea0a4ef8195bb8c0402af49db",
+        "code_revision": "d1c2bd6",
+        "training_snapshots": "milan=2026-09-19;florence=2026-09-19",
+        "split_salt": "airbnb-v1",
+        "train_rows": "26939",
+        "sklearn_version": "1.7.2",
+        "fit_seconds": "13.63319346999998",
+        "mlflow_run_id": "a08250c6bcb5415c9591c6427e3d6bf7"
+      }
+    ]
+  },
+  "headline_recomputed": {
+    "venice": {
+      "statement_id": "01f1de13-3861-1bd1-be95-51cc7a63b5fd",
+      "rows": [
+        {
+          "n": "8144",
+          "model_mae": "106.06768526451864",
+          "baseline_mae": "142.45822016208285",
+          "model_mean_residual": "-77.09013552425543",
+          "baseline_mean_residual": "-110.15377271611075",
+          "model_median_ae": "46.769108829828276",
+          "mean_actual": "301.26807220039296",
+          "median_actual": "231.34",
+          "mean_model_pred": "224.1779366761374",
+          "model_under_rate": "0.66613",
+          "model_beats_baseline_rate": "0.73797",
+          "model_rmse": "297.5499520028042",
+          "baseline_rmse": "336.3816731509281",
+          "baseline_median_ae": "72.5",
+          "model_under": "5425",
+          "model_over": "2719",
+          "model_exact": "0",
+          "baseline_under": "5640",
+          "baseline_over": "2500",
+          "baseline_exact": "4"
+        }
+      ]
+    },
+    "milan_florence_test": {
+      "statement_id": "01f1de13-3920-1d14-9483-8977f9c9f062",
+      "rows": [
+        {
+          "g": "florence",
+          "n": "2464",
+          "model_mae": "76.17608368869574",
+          "baseline_mae": "97.41181412337652",
+          "model_mean_residual": "-12.463683030918553",
+          "baseline_mean_residual": "-60.219586038961396",
+          "model_median_ae": "37.99344711159472",
+          "mean_actual": "253.86036525974072",
+          "median_actual": "195.5",
+          "mean_model_pred": "241.39668222882216",
+          "model_under_rate": "0.40666",
+          "model_beats_baseline_rate": "0.61323",
+          "model_over": "1462"
+        },
+        {
+          "g": "milan+florence",
+          "n": "6863",
+          "model_mae": "75.8844478189808",
+          "baseline_mae": "95.4655238234008",
+          "model_mean_residual": "-27.23178319404152",
+          "baseline_mean_residual": "-47.09399970858124",
+          "model_median_ae": "33.98980343008003",
+          "mean_actual": "231.33063529068912",
+          "median_actual": "175.67",
+          "mean_model_pred": "204.09885209664728",
+          "model_under_rate": "0.43975",
+          "model_beats_baseline_rate": "0.64156",
+          "model_over": "3845"
+        },
+        {
+          "g": "milan",
+          "n": "4399",
+          "model_mae": "75.7210946062105",
+          "baseline_mae": "94.37535348942961",
+          "model_mean_residual": "-35.50379928904839",
+          "baseline_mean_residual": "-39.742000454648654",
+          "model_median_ae": "32.33968640360601",
+          "mean_actual": "218.71111843600832",
+          "median_actual": "165.0",
+          "mean_model_pred": "183.2073191469601",
+          "model_under_rate": "0.45829",
+          "model_beats_baseline_rate": "0.65742",
+          "model_over": "2383"
+        }
+      ]
+    }
+  },
+  "conclusion": "First-run evidence intact. predictions is still at v3 (the first Venice append); one Venice scoring_run_id; price-v1 is the only model version; A/B prediction slice fingerprint unchanged."
+}

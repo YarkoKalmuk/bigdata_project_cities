@@ -1,5 +1,39 @@
 # Databricks ETL Pipeline Run Log
 
+## Executed Week 1 freeze verification
+
+Live verification on 2026-09-19 A/B snapshots passed all 24 integration checks, including
+counts, model coverage, reference fingerprints, server-side file hashes and
+held-out MAE reproduction. The Jobs API confirmed the three shared submit runs
+below succeeded. See [freeze evidence](week1_freeze_verification.json).
+
+No persistent ETL Job existed in the shared workspace. The approved immutable
+definition was registered as **816607442908043**, pinned to
+`f408ac01ffdd025fab6df220c8f89b24d3d4fda6`, without an automatic schedule.
+Explicit A/B acceptance runs are recorded separately after their completion.
+This replaces the earlier Job ID as the current shared-workspace Job identity;
+historical run IDs below are retained with their original provenance.
+
+The verification read data and hashed files inside Databricks. A/B Job acceptance
+refreshes only ETL outputs; no model/prediction data is modified. Generic city input compatibility
+passed synthetic ETL/scorer tests; the older feature 5 external-manifest run TODOs
+are not newly certified. The authoritative current milestone is
+[M1 freeze](week1_freeze.md).
+
+New registered-Job acceptance runs completed successfully, with all four tasks
+successful under immutable Git source `f408ac01ffdd025fab6df220c8f89b24d3d4fda6`:
+
+| City | Run ID | Result |
+|---|---|---|
+| Milan | 27941700122958 | SUCCESS |
+| Florence | 367666271706452 | SUCCESS |
+
+Post-run checks passed again: Bronze/Silver/feature/metric Delta versions are
+**4**, counts remain 25,338 / 13,571, and model/reference table versions remain
+**0**. Predictions reached Delta **2** through `OPTIMIZE`; all 25 columns are
+row-identical to version **1** (zero differences). A/B MAE and artifact/reference
+hashes remain unchanged. The full local suite passed again (100 tests, no skips).
+
 ## Shared-workspace Week 1 reference runs
 
 These are the shared-workspace runs requested by Nazar and recorded in

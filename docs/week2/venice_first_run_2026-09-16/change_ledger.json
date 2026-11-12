@@ -1,0 +1,11 @@
+{
+  "first_run_id": 782550938914199,
+  "freeze_tag": "M1-freeze",
+  "pipeline_fixes_applied": [],
+  "model_changes_applied": [],
+  "pipeline_reruns_or_repairs": 0,
+  "model_scoring_runs": 0,
+  "status": "STOPPED_BEFORE_FIXES",
+  "preparation_and_reporting_events": "preparation_events.jsonl",
+  "future_rule": "Classify pipeline fixes separately from model changes under a new revision/run; never overwrite first-run evidence."
+}

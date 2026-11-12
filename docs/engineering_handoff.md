@@ -1,5 +1,15 @@
 # Yaropolk's engineering handoff
 
+> Historical setup/integration instructions below. Current delivery status is in
+> [README](../README.md), [reproducibility](reproducibility.md) and the
+> [Week 2 engineering handoff](week2/handoff_dashboard_genie_engineering.md).
+> M1 and the first Venice ETL/model runs are complete. Do not rerun setup,
+> registration, ETL or training to reproduce report numbers. Contracts below remain
+> useful; earlier pending-status statements do not describe the current release.
+
+Current milestone: [M1 Week 1 freeze](week1_freeze.md). Local and live A/B checks
+have passed; the implementation/candidate notes below are historical context.
+
 Current next step: [feature 6 integration readiness](integration_readiness.md). Feature 5 has two recorded successful A/B runs; its repeat/external-manifest details still need recording. This handoff's input contract remains valid, and scorer 08 now accepts the same manifest path.
 
 ## Current status

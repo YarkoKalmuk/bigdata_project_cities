@@ -1,0 +1,115 @@
+{
+  "job_id": 816607442908043,
+  "settings": {
+    "description": "One city/snapshot per run: bronze \u2192 silver \u2192 gold \u2192 validation. Run Milan and Florence sequentially before the Week 1 freeze.",
+    "email_notifications": {},
+    "format": "MULTI_TASK",
+    "git_source": {
+      "git_commit": "f408ac01ffdd025fab6df220c8f89b24d3d4fda6",
+      "git_provider": "gitHub",
+      "git_url": "https://github.com/YarkoKalmuk/bigdata_project_cities.git"
+    },
+    "max_concurrent_runs": 1,
+    "name": "airbnb-cities-etl",
+    "parameters": [
+      {
+        "default": "workspace",
+        "name": "catalog"
+      },
+      {
+        "default": "milan",
+        "name": "city"
+      },
+      {
+        "default": "2026-09-19",
+        "name": "snapshot_date"
+      },
+      {
+        "default": "",
+        "name": "source_path"
+      },
+      {
+        "default": "",
+        "name": "source_url"
+      },
+      {
+        "default": "",
+        "name": "sources_config_path"
+      }
+    ],
+    "queue": {
+      "enabled": true
+    },
+    "tags": {
+      "owner": "yaropolk",
+      "project": "bigdata_project_cities"
+    },
+    "tasks": [
+      {
+        "disabled": false,
+        "email_notifications": {},
+        "notebook_task": {
+          "notebook_path": "notebooks/01_ingest_bronze.py",
+          "source": "GIT"
+        },
+        "run_if": "ALL_SUCCESS",
+        "task_key": "bronze",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "bronze"
+          }
+        ],
+        "disabled": false,
+        "email_notifications": {},
+        "notebook_task": {
+          "notebook_path": "notebooks/02_prepare_silver.py",
+          "source": "GIT"
+        },
+        "run_if": "ALL_SUCCESS",
+        "task_key": "silver",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "silver"
+          }
+        ],
+        "disabled": false,
+        "email_notifications": {},
+        "notebook_task": {
+          "notebook_path": "notebooks/03_build_gold.py",
+          "source": "GIT"
+        },
+        "run_if": "ALL_SUCCESS",
+        "task_key": "gold",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "gold"
+          }
+        ],
+        "disabled": false,
+        "email_notifications": {},
+        "notebook_task": {
+          "base_parameters": {
+            "job_id": "{{job.id}}",
+            "job_run_id": "{{job.run_id}}"
+          },
+          "notebook_path": "notebooks/04_validate_pipeline.py",
+          "source": "GIT"
+        },
+        "run_if": "ALL_SUCCESS",
+        "task_key": "validate",
+        "timeout_seconds": 0
+      }
+    ],
+    "timeout_seconds": 3600,
+    "webhook_notifications": {}
+  }
+}
